@@ -1,1 +1,0 @@
-# sistem.intersocs.ie

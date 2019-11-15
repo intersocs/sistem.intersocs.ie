@@ -1,0 +1,390 @@
+{
+  "schedule": [
+    {
+      "date": "2020-02-29",
+      "groups": [
+        {
+          "time": "10:00 am",
+          "sessions": [
+            {
+              "name": "Opening",
+              "timeStart": "10:00 am",
+              "timeEnd": "10:15 am",
+              "location": "Dining Hall",
+              "tracks": ["Food"],
+              "id": "1"
+            }
+          ]
+        },
+        {
+          "time": "10:15 am",
+          "sessions": [
+            {
+              "name": "Diamond Speaker",
+              "location": "Main Hall",
+              "description": "Diamond Topics Here",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "10:15 am",
+              "timeEnd": "11:00 am",
+              "tracks": ["Speaker"],
+              "id": "2"
+            }
+          ]
+        },
+        {
+          "time": "11:00 am",
+          "sessions": [
+            {
+              "name": "Break",
+              "location": "Anywhere",
+              "description": "Break",
+              "timeStart": "11:00 am",
+              "timeEnd": "11:15 am",
+              "tracks": ["Food"],
+              "id": "3"
+            }
+          ]
+        },
+        {
+          "time": "11:15 am",
+          "sessions": [
+            {
+              "name": "Speaker 2",
+              "location": "Main Hall",
+              "description": "Speaker 2",
+              "speakerNames": ["Karl Kitten"],
+              "timeStart": "11:15 am",
+              "timeEnd": "12:00 am",
+              "tracks": ["Speaker"],
+              "id": "4"
+            },
+            {
+              "name": "Accessibility in Tech",
+              "location": "Panel Room",
+              "description": "Accessibility in Tech",
+              "speakerNames": ["Lionel Lion"],
+              "timeStart": "11:15 am",
+              "timeEnd": "12:00 am",
+              "tracks": ["Panel"],
+              "id": "5"
+            },
+            {
+              "name": "Platinum Workshop",
+              "location": "Workshop Room",
+              "description": "Platinum Workshop",
+              "speakerNames": ["Rachel Rabbit"],
+              "timeStart": "11:15 am",
+              "timeEnd": "1:00 pm",
+              "tracks": ["Workshop"],
+              "id": "6"
+            }
+          ]
+        },
+        {
+          "time": "12:00 pm",
+          "sessions": [
+            {
+              "name": "Break",
+              "location": "Dining Hall",
+              "description": "Break",
+              "timeStart": "12:00 pm",
+              "timeEnd": "12:15 pm",
+              "tracks": ["Food"],
+              "id": "7"
+            }
+          ]
+        },
+        {
+          "time": "12:15 am",
+          "sessions": [
+            {
+              "name": "Speaker 3",
+              "location": "Main Hall",
+              "description": "Speaker 3",
+              "speakerNames": ["Paul Puppy"],
+              "timeStart": "12:15 am",
+              "timeEnd": "1:00 pm",
+              "tracks": ["Speaker"],
+              "id": "8"
+            },
+            {
+              "name": "Women in Tech",
+              "location": "Panel Room",
+              "description": "Women in Tech",
+              "speakerNames": ["Gino Giraffe"],
+              "timeStart": "12:15 am",
+              "timeEnd": "1:00 pm",
+              "tracks": ["Panel"],
+              "id": "9"
+            }
+          ]
+        },
+        {
+          "time": "1:00 pm",
+          "sessions": [
+            {
+              "name": "Lunch",
+              "location": "Dining Hall",
+              "description": "Food Yum",
+              "speakerNames": ["Burt Bear", "Charlie Cheetah"],
+              "timeStart": "1:00 pm",
+              "timeEnd": "2:00 pm",
+              "tracks": ["Food"],
+              "id": "10"
+            }
+          ]
+        },
+        {
+          "time": "2:00 pm",
+          "sessions": [
+            {
+              "name": "Speaker 4",
+              "location": "Main Hall",
+              "description": "Speaker 4",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "2:00 pm",
+              "timeEnd": "2:45 pm",
+              "tracks": ["Speaker"],
+              "id": "11"
+            },
+            {
+              "name": "Gaming Panel",
+              "location": "Panel Room",
+              "description": "Gaming Yo",
+              "speakerNames": ["Rachel Rabbit"],
+              "timeStart": "2:00 pm",
+              "timeEnd": "2:45 pm",
+              "tracks": ["Panel"],
+              "id": "12"
+            },
+            {
+              "name": "Workshop 2",
+              "location": "Workshop Room",
+              "description": "Workshops Yum",
+              "speakerNames": ["Rachel Rabbit"],
+              "timeStart": "2:00 pm",
+              "timeEnd": "3:15 pm",
+              "tracks": ["Workshops"],
+              "id": "13"
+            }
+          ]
+        },
+        {
+          "time": "3:00 pm",
+          "sessions": [
+            {
+              "name": "Speaker 5",
+              "location": "Main Hall",
+              "description": "Speaker 5",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "3:00 pm",
+              "timeEnd": "3:45 pm",
+              "tracks": ["Speaker"],
+              "id": "14"
+            },
+            {
+              "name": "Lightning Talks",
+              "location": "Panel Room",
+              "description": "Electrifying",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "3:00 pm",
+              "timeEnd": "4:30 pm",
+              "tracks": ["Lightning"],
+              "id": "15"
+            },
+            {
+              "name": "Workshop 4",
+              "location": "Workshop Room",
+              "description": "Workshop 4",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "3:30 pm",
+              "timeEnd": "4:45 pm",
+              "tracks": ["Workshop"],
+              "id": "16"
+            }
+          ]
+        },
+        {
+          "time": "4:00 pm",
+          "sessions": [
+            {
+              "name": "Speaker 6",
+              "location": "Main Hall",
+              "description": "Speaker 6",
+              "speakerNames": ["Ted Turtle"],
+              "timeStart": "4:00 pm",
+              "timeEnd": "4:45 pm",
+              "tracks": ["Speaker"],
+              "id": "17"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "speakers": [
+    {
+      "name": "Burt Bear",
+      "profilePic": "assets/img/speakers/bear.jpg",
+      "twitter": "ionicframework",
+      "about": "Burt is a Bear.",
+      "location": "Everywhere",
+      "email": "burt@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "1"
+    },
+    {
+      "name": "Charlie Cheetah",
+      "profilePic": "assets/img/speakers/cheetah.jpg",
+      "twitter": "ionicframework",
+      "about": "Charlie is a Cheetah.",
+      "location": "Everywhere",
+      "email": "charlie@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "2"
+    },
+    {
+      "name": "Donald Duck",
+      "profilePic": "assets/img/speakers/duck.jpg",
+      "twitter": "ionicframework",
+      "about": "Donald is a Duck.",
+      "location": "Everywhere",
+      "email": "donald@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "3"
+    },
+    {
+      "name": "Eva Eagle",
+      "profilePic": "assets/img/speakers/eagle.jpg",
+      "twitter": "ionicframework",
+      "about": "Eva is an Eagle.",
+      "location": "Everywhere",
+      "email": "eva@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "4"
+    },
+    {
+      "name": "Ellie Elephant",
+      "profilePic": "assets/img/speakers/elephant.jpg",
+      "twitter": "ionicframework",
+      "about": "Ellie is an Elephant.",
+      "location": "Everywhere",
+      "email": "ellie@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "5"
+    },
+    {
+      "name": "Gino Giraffe",
+      "profilePic": "assets/img/speakers/giraffe.jpg",
+      "twitter": "ionicframework",
+      "about": "Gino is a Giraffe.",
+      "location": "Everywhere",
+      "email": "gino@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "6"
+    },
+    {
+      "name": "Isabella Iguana",
+      "profilePic": "assets/img/speakers/iguana.jpg",
+      "twitter": "ionicframework",
+      "about": "Isabella is an Iguana.",
+      "location": "Everywhere",
+      "email": "isabella@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "7"
+    },
+    {
+      "name": "Karl Kitten",
+      "profilePic": "assets/img/speakers/kitten.jpg",
+      "twitter": "ionicframework",
+      "about": "Karl is a Kitten.",
+      "location": "Everywhere",
+      "email": "karl@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "8"
+    },
+    {
+      "name": "Lionel Lion",
+      "profilePic": "assets/img/speakers/lion.jpg",
+      "twitter": "ionicframework",
+      "about": "Lionel is a Lion.",
+      "location": "Everywhere",
+      "email": "lionel@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "9"
+    },
+    {
+      "name": "Molly Mouse",
+      "profilePic": "assets/img/speakers/mouse.jpg",
+      "twitter": "ionicframework",
+      "about": "Molly is a Mouse.",
+      "location": "Everywhere",
+      "email": "molly@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "10"
+    },
+    {
+      "name": "Paul Puppy",
+      "profilePic": "assets/img/speakers/puppy.jpg",
+      "twitter": "ionicframework",
+      "about": "Paul is a Puppy.",
+      "location": "Everywhere",
+      "email": "paul@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "11"
+    },
+    {
+      "name": "Rachel Rabbit",
+      "profilePic": "assets/img/speakers/rabbit.jpg",
+      "twitter": "ionicframework",
+      "about": "Rachel is a Rabbit.",
+      "location": "Everywhere",
+      "email": "rachel@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "12"
+    },
+    {
+      "name": "Ted Turtle",
+      "profilePic": "assets/img/speakers/turtle.jpg",
+      "twitter": "ionicframework",
+      "about": "Ted is a Turtle.",
+      "location": "Everywhere",
+      "email": "ted@example.com",
+      "phone": "+1-541-754-3010",
+      "id": "13"
+    }
+  ],
+
+  "map": [
+    {
+      "name": "UCD Student Centre",
+      "lat": 53.308318,
+      "lng": -6.227911,
+      "center": true
+    }
+  ],
+
+  "tracks": [
+    {
+      "name": "Panel",
+      "icon": "document"
+    },
+    {
+      "name": "Food",
+      "icon": "restaurant"
+    },
+    {
+      "name": "Speaker",
+      "icon": "person"
+    },
+    {
+      "name": "Workshop",
+      "icon": "construct"
+    },
+    {
+      "name": "Lightning",
+      "icon": "flash"
+    }
+  ]
+}
