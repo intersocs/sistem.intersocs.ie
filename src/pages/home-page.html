@@ -1,0 +1,1128 @@
+<html><head></head><body><div hidden="" by-polymer-bundler=""><dom-module id="fade-animations" assetpath="../elements/">
+    <template>
+        <style>@keyframes fadeInUp{from{opacity:0;transform:translate3d(0, 100%, 0);}to{opacity:1;transform:none;}}@keyframes fadeInAttendeesCount{from{opacity:0;transform:translate3d(200px, 170px, 0);}to{transform:translate3d(0, 0, 0);}}@keyframes fadeInSessionsCount{from{opacity:0;transform:translate3d(200px, -170px, 0px);}to{transform:translate3d(0, 0, 0);}}@keyframes fadeInTracksCount{from{opacity:0;transform:translate3d(180px, -170px, 0px);}to{transform:translate3d(0, 0, 0);}}@keyframes fadeInDaysCount{from{opacity:0;transform:translate3d(180px, 170px, 0px);}to{transform:translate3d(0, 0, 0);}}</style>
+    </template>
+</dom-module>
+
+<dom-module id="scale-animations" assetpath="../elements/">
+    <template>
+        <style>@keyframes grow{from{transform:scale(0);}to{transform:scale(1);}}</style>
+    </template>
+</dom-module><dom-module id="about-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment flex-reverse">:host{display:block;}.container{padding-top:64px;}.content{display:grid;grid-gap:32px;grid-template-columns:1fr;}.statistics-block{width:100%;display:grid;grid-gap:32px 16px;grid-template-columns:repeat(2, 1fr);}.numbers{font-size:40px;}.numbers::after{content:"";display:block;height:2px;width:64px;background-color:var(--default-primary-color);}.label{margin-top:4px;}@media (min-width: 640px){.content{grid-gap:64px;grid-template-columns:repeat(auto-fit, minmax(400px, 1fr));}.statistics-block{grid-gap:32px;}.numbers{font-size:56px;}}</style>
+
+    <div class="container">
+
+      <div class="content">
+
+        <div>
+          <h1 class="container-title">About</h1>
+          <p>GDG DevFest Ukraine brings together the world class experts in Android, Web and Cloud technologies to Lviv for 2 days of sessions, workshops and showcases.</p>
+          <a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - Explore featured session" target="_blank" rel="noopener noreferrer">
+            <paper-button class="animated icon-right">
+              <span class="cta-label">Explore featured session</span>
+              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+            </paper-button>
+          </a>
+
+          <p>Described by many as 'Google I/O of Ukraine', our team creates DevFest to be the best place for experience sharing in a phenomenal atmosphere.</p>
+          <paper-button class="animated icon-right" on-tap="_playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - See how it was in 2016">
+            <span>See how it was in 2016</span>
+            <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+          </paper-button>
+        </div>
+
+        <div class="statistics-block">
+
+          <div class="item">
+            <div class="numbers">900</div>
+            <div class="label">Attendees</div>
+          </div>
+
+          <div class="item">
+            <div class="numbers">2</div>
+            <div class="label">Days</div>
+          </div>
+
+          <div class="item">
+            <div class="numbers">50</div>
+            <div class="label">Sessions</div>
+          </div>
+
+          <div class="item">
+            <div class="numbers">4</div>
+            <div class="label">Tracks</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    class AboutBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'about-block';
+      }
+
+      _playVideo() {
+        uiActions.toggleVideoDialog({
+          title: '',
+          youtubeId: 'TdpbgRgz6eE',
+          disableControls: true,
+          opened: true,
+        });
+      }
+    }
+
+    window.customElements.define(AboutBlock.is, AboutBlock);
+  </script>
+</dom-module>
+<dom-module id="speakers-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;}.speakers-wrapper{margin:40px 0 32px;display:grid;grid-template-columns:repeat(2, 1fr);grid-gap:32px 16px;}.speaker{text-align:center;cursor:pointer;}.photo{width:72px;height:72px;background-color:var(--accent-color);border-radius:50%;overflow:hidden;transform:translateZ(0);}.badges{position:absolute;top:0;left:calc(50% + 24px);}.badge{margin-left:-10px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;transition:transform var(--animation);}.badge:hover{transform:scale(1.1);}.badge:nth-of-type(2){transform:translate(0, 100%);}.badge:nth-of-type(2):hover{transform:translate3d(0, 100%, 20px) scale(1.1);}.badge-icon{--iron-icon-width:12px;--iron-icon-height:12px;color:#fff;}.company-logo{margin-top:6px;width:100%;height:16px;}.description{color:var(--primary-text-color);}.name{margin-top:8px;line-height:1.1;}.origin{margin-top:4px;font-size:14px;line-height:1.1;}.cta-button{margin-top:24px;}@media (min-width: 640px){.photo{width:128px;height:128px;}.name{font-size:24px;}}@media (min-width: 812px){.speakers-wrapper{grid-template-columns:repeat(3, 1fr);}.speaker:last-of-type{display:none;}.badges{left:calc(50% + 32px);}.badge:nth-of-type(2){transform:translate(25%, 75%);}.badge:nth-of-type(2):hover{transform:translate3d(25%, 75%, 20px) scale(1.1);}.badge:nth-of-type(3){transform:translate(10%, 180%);}.badge:nth-of-type(3):hover{transform:translate3d(10%, 180%, 20px) scale(1.1);}}@media (min-width: 1024px){.speakers-wrapper{grid-template-columns:repeat(4, 1fr);}.speaker:last-of-type{display:block;}}</style>
+
+    <div class="container">
+      <h1 class="container-title">Speakers</h1>
+
+      <div class="speakers-wrapper">
+        <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">
+          <div class="speaker" on-tap="_openSpeaker" ga-on="click" ga-event-category="speaker" ga-event-action="open details" ga-event-label$="[[speaker.name]]">
+            <div relative="">
+              <plastic-image class="photo" srcset="[[speaker.photoUrl]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+              <div class="badges" layout="" horizontal="">
+                <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
+                  <a class$="badge [[badge.name]]-b" href$="[[badge.link]]" target="_blank" rel="noopener noreferrer" title$="[[badge.description]]" layout="" horizontal="" center-center="">
+                    <iron-icon class="badge-icon" icon="hoverboard:[[badge.name]]"></iron-icon>
+                  </a>
+                </template>
+              </div>
+            </div>
+
+            <plastic-image class="company-logo" srcset="{{speaker.companyLogoUrl}}" sizing="contain" lazy-load="" preload="" fade=""></plastic-image>
+
+            <div class="description">
+              <text-truncate lines="1">
+                <h3 class="name">[[speaker.name]]</h3>
+              </text-truncate>
+              <text-truncate lines="1">
+                <div class="origin">[[speaker.country]]</div>
+              </text-truncate>
+            </div>
+
+          </div>
+        </template>
+      </div>
+
+      <a href="/speakers/">
+        <paper-button class="cta-button animated icon-right">
+          <span>View all speakers</span>
+          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+        </paper-button>
+      </a>
+
+    </div>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class SpeakersBlock extends UtilsFunctions(SpeakersHoC(
+        // eslint-disable-next-line no-undef
+        ReduxMixin(Polymer.GestureEventListeners(Polymer.Element))
+    )) {
+      static get is() {
+        return 'speakers-block';
+      }
+
+      static get properties() {
+        return {
+          speakersRaw: {
+            type: Object,
+            statePath: 'speakers.list',
+            observer: '_generateSpeakers',
+          },
+        };
+      }
+
+      _openSpeaker(e) {
+        window.history.pushState({}, null, '/speakers/');
+        window.history.pushState({}, null, `/speakers/${e.model.speaker.id}/`);
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }
+
+      _generateSpeakers(speakers) {
+        const filteredSpeakers = this.speakers
+            .filter((speaker) => speaker.featured);
+        const randomSpeakers = this.randomOrder(filteredSpeakers.length ? filteredSpeakers : speakers);
+        this.set('featuredSpeakers', randomSpeakers.slice(0, 4));
+      }
+    }
+
+    window.customElements.define(SpeakersBlock.is, SpeakersBlock);
+  </script>
+</dom-module>
+<dom-module id="latest-posts-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;}.posts-wrapper{display:grid;grid-template-columns:1fr;grid-gap:16px;}.image{width:100%;height:128px;border-top-left-radius:var(--border-radius);border-top-right-radius:var(--border-radius);}.details{padding:16px;}.title{font-size:20px;line-height:1.2;}.description{margin-top:8px;color:var(--secondary-text-color);}.date{margin-top:16px;font-size:12px;text-transform:uppercase;color:var(--secondary-text-color);}.cta-button{margin-top:24px;}@media (min-width: 640px){.posts-wrapper{grid-template-columns:repeat(3, 1fr);}.post:last-of-type{display:none;}}@media (min-width: 812px){.posts-wrapper{grid-template-columns:repeat(4, 1fr);}.post:last-of-type{display:flex;}}</style>
+
+    <div class="container">
+      <h1 class="container-title">The latest news</h1>
+
+      <div class="posts-wrapper">
+        <template is="dom-repeat" items="[[posts]]" as="post">
+          <a href$="/blog/posts/[[post.id]]/" class="post card" ga-on="click" ga-event-category="blog" ga-event-action="open post" ga-event-label$="[[post.title]]" flex="" layout="" vertical="">
+            <plastic-image class="image" srcset="[[post.image]]" style$="background-color: [[post.backgroundColor]];" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+            <div class="details" layout="" vertical="" justified="" flex-auto="">
+              <div>
+                <text-truncate lines="2">
+                  <h3 class="title">[[post.title]]</h3>
+                </text-truncate>
+                <text-truncate lines="3">
+                  <marked-element class="description" markdown="[[post.brief]]">
+                    <div slot="markdown-html"></div>
+                  </marked-element>
+                </text-truncate>
+              </div>
+              <div class="date">[[getDate(post.published)]]</div>
+            </div>
+          </a>
+        </template>
+      </div>
+
+      <a href="/blog/">
+        <paper-button class="cta-button animated icon-right">
+          <span>View all stories</span>
+          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+        </paper-button>
+      </a>
+    </div>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class LatestPostsBlock extends UtilsFunctions(ReduxMixin(Polymer.Element)) {
+      static get is() {
+        return 'latest-posts-block';
+      }
+
+      static get properties() {
+        return {
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          posts: Array,
+          postsList: {
+            type: Array,
+            statePath: 'blog.list',
+            observer: '_transformPosts',
+          },
+          postsFetching: {
+            type: Boolean,
+            statePath: 'blog.fetching',
+          },
+          postsFetchingError: {
+            type: Object,
+            statePath: 'blog.fetchingError',
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        if (!this.postsFetching && (!this.postsList || !this.postsList.length)) {
+          this.dispatch(blogActions.fetchList());
+        }
+      }
+
+      _transformPosts(postsList) {
+        this.set('posts', postsList.slice(0, 4));
+      }
+    }
+
+    window.customElements.define(LatestPostsBlock.is, LatestPostsBlock);
+  </script>
+</dom-module>
+<dom-module id="tickets-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;}.tickets-wrapper{text-align:center;}.tickets{margin:32px 0 24px;}.ticket-item{margin:16px 8px;width:100%;text-align:center;color:var(--primary-text-color);background-color:var(--default-background-color);}.ticket-item[in-demand]{transform:scale(1.05);box-shadow:var(--box-shadow-primary-color);border-top:2px solid var(--default-primary-color);z-index:1;}.ticket-item[in-demand]:hover{box-shadow:var(--box-shadow-primary-color-hover);}.ticket-item[sold-out]{opacity:.5;filter:grayscale(1);cursor:not-allowed;}.ticket-item[sold-out]:hover{box-shadow:0 0 2px 0 rgba(0, 0, 0, 0.07), 0 2px 2px 0 rgba(0, 0, 0, 0.15);}.header{padding:24px 0 0;font-size:16px;}.content{padding:0 24px;}.type-description{font-size:12px;color:var(--secondary-text-color);}.ticket-price-wrapper{margin:24px 0;white-space:nowrap;}.price{color:var(--default-primary-color);font-size:40px;}.discount{font-size:14px;color:var(--accent-color);}.sold-out{display:none;font-size:14px;text-transform:uppercase;height:32px;color:var(--secondary-text-color);}.additional-info{margin:16px auto 0;max-width:480px;font-size:14px;color:var(--secondary-text-color);}.actions{padding:24px;position:relative;}.tickets-placeholder{display:grid;width:100%;}paper-button[disabled]{background-color:var(--primary-color-transparent);font-size:12px;}@media (min-width: 640px){.tickets-placeholder{grid-template-columns:repeat(auto-fill, 200px);}.ticket-item{max-width:200px;}.ticket-item[in-demand]{transform:scale(1.15);}}</style>
+
+    <div class="tickets-wrapper container">
+      <h1 class="container-title">Tickets</h1>
+      <content-loader class="tickets-placeholder" card-padding="24px" card-height="216px" border-radius="var(--border-radius)" title-top-position="32px" title-height="42px" title-width="70%" load-from="-70%" load-to="130%" animation-time="1s" items-count="5" hidden$="[[contentLoaderVisibility]]">
+      </content-loader>
+
+      <div class="tickets" layout="" horizontal="" wrap="" center-justified="">
+        <template is="dom-repeat" items="[[tickets]]" as="ticket">
+          <a class="ticket-item card" href$="[[ticket.url]]" target="_blank" rel="noopener noreferrer" sold-out$="[[ticket.soldOut]]" in-demand$="[[ticket.inDemand]]" on-tap="_onTicketTap" ga-on="click" ga-event-category="ticket" ga-event-action="buy_click" ga-event-label$="[[ticket.name]]" layout="" vertical="">
+            <div class="header">
+              <h4>[[ticket.name]]</h4>
+            </div>
+            <div class="content" layout="" vertical="" flex-auto="">
+              <div class="ticket-price-wrapper">
+                <div class="price">[[ticket.currency]][[ticket.price]]</div>
+                <div class="discount">[[_getDiscount(ticket)]]</div>
+              </div>
+              <div class="type-description" layout="" vertical="" flex-auto="" center-justified="">
+                <div class="ticket-dates" hidden$="[[!ticket.starts]]">[[ticket.starts]] - [[ticket.ends]]</div>
+                <div class="ticket-info">[[ticket.info]]</div>
+              </div>
+            </div>
+            <div class="actions">
+              <div class="sold-out" block$="[[ticket.soldOut]]">
+                You missed it!
+              </div>
+              <paper-button primary="" hidden$="[[ticket.soldOut]]" disabled$="[[!ticket.available]]">
+                [[_getButtonText(ticket.available)]]
+              </paper-button>
+            </div>
+          </a>
+        </template>
+      </div>
+
+      <div class="additional-info">*Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.</div>
+
+    </div>
+
+  </template>
+
+  <script>
+
+    class TicketsBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'tickets-block';
+      }
+
+      static get properties() {
+        return {
+          tickets: {
+            type: Array,
+            statePath: 'tickets.list',
+            observer: '_ticketsChanged',
+          },
+          ticketsFetching: {
+            type: Boolean,
+            statePath: 'tickets.fetching',
+          },
+          ticketsFetchingError: {
+            type: Object,
+            statePath: 'tickets.fetchingError',
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          contentLoaderVisibility: Boolean,
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        // eslint-disable-next-line no-undef
+        HOVERBOARD.Elements.Tickets = this;
+      }
+
+      _ticketsChanged(tickets) {
+        if (tickets && tickets.length) {
+          this.set('contentLoaderVisibility', true);
+        }
+      }
+
+      _getDiscount(ticket) {
+        const primaryTicket = this.tickets.find((ticket) => ticket.primary);
+        const maxPrice = primaryTicket && primaryTicket.price;
+        if (!ticket.regular || ticket.primary || ticket.soldOut || !maxPrice) return;
+        const discount = 100 - parseInt(ticket.price) * 100 / parseInt(maxPrice);
+        return ((discount) => `Save ${discount}% today`)(Math.round(discount));
+      }
+
+      _onTicketTap(e) {
+        if (e.model.ticket.soldOut || !e.model.ticket.available) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }
+
+      _getButtonText(available) {
+        return available ? 'Buy ticket' : 'Not available yet';
+      }
+    }
+
+    window.customElements.define(TicketsBlock.is, TicketsBlock);
+  </script>
+</dom-module>
+<dom-module id="partners-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;}.block-title{margin:24px 0 8px;}.logos-wrapper{display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));grid-gap:8px;}.logo-item{padding:12px;}.logo-img{height:84px;width:100%;}.cta-button{margin-top:24px;color:var(--default-primary-color);}@media (min-width: 640px){.logos-wrapper{grid-template-columns:repeat(4, 1fr);}}@media (min-width: 812px){.logos-wrapper{grid-template-columns:repeat(5, 1fr);}}</style>
+
+    <div class="container">
+      <h1 class="container-title">Partners</h1>
+
+      <template is="dom-repeat" items="[[partners]]" as="block">
+          <h4 class="block-title">[[block.title]]</h4>
+          <div class="logos-wrapper">
+            <template is="dom-repeat" items="[[block.items]]" as="logo">
+              <a class="logo-item" href$="[[logo.url]]" title$="[[logo.name]]" target="_blank" rel="noopener noreferrer" layout="" horizontal="" center-center="">
+                <plastic-image class="logo-img" srcset="[[logo.logoUrl]]" sizing="contain" lazy-load="" preload="" fade=""></plastic-image>
+              </a>
+            </template>
+          </div>
+      </template>
+
+      <paper-button class="cta-button animated icon-right" on-tap="_addPotentialPartner">
+        <span>Become a partner</span>
+        <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+      </paper-button>
+    </div>
+
+  </template>
+
+  <script>
+
+    class PartnersBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'partners-block';
+      }
+
+      static get properties() {
+        return {
+          partners: {
+            type: Array,
+            statePath: 'partners.list',
+          },
+          partnersFetching: {
+            type: Boolean,
+            statePath: 'partners.fetching',
+          },
+          partnersFetchingError: {
+            type: Object,
+            statePath: 'partners.fetchingError',
+          },
+          partnerAdding: {
+            type: Boolean,
+            statePath: 'partners.adding',
+            observer: '_partnerAddingChanged',
+          },
+          partnerAddingError: {
+            type: Object,
+            statePath: 'partners.addingError',
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        if (!this.partnersFetching && (!this.partners || !this.partners.length)) {
+          this.dispatch(partnersActions.fetchPartners());
+        }
+      }
+
+      _addPotentialPartner() {
+        dialogsActions.openDialog(DIALOGS.SUBSCRIBE, {
+          title: 'Become a partner!',
+          submitLabel: 'Submit',
+          firstFieldLabel: 'Full Name',
+          secondFieldLabel: 'Company Name',
+          submit: (data) => {
+            this.dispatch(partnersActions.addPartner(data));
+          },
+        });
+      }
+
+      _partnerAddingChanged(newPartnerAdding, oldPartnerAdding) {
+        if (oldPartnerAdding && !newPartnerAdding) {
+          if (this.partnerAddingError) {
+            this.dispatch(dialogsActions.setDialogError(DIALOGS.SUBSCRIBE));
+          } else {
+            dialogsActions.closeDialog(DIALOGS.SUBSCRIBE);
+            toastActions.showToast({ message: 'We will contact you soon!' });
+          }
+        }
+      }
+    }
+
+    window.customElements.define(PartnersBlock.is, PartnersBlock);
+  </script>
+</dom-module>
+<dom-module id="featured-videos" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;--video-item-height:200px;}.videos-wrapper{position:relative;overflow:hidden;}.video-list{margin-bottom:-20px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;}.videos{transition:transform var(--slideAnimation);will-change:transition;transform:translateX(0);}.slide-icon{display:none;}.video-item{width:300px;}.video-item:not(:last-of-type){padding-right:18px;}.video-item:hover .video-play-icon{transform:scale(1.2) translateZ(0);}.thumbnail{width:100%;height:var(--video-item-height);overflow:hidden;border-radius:var(--border-radius);}.thumbnail-image{background-color:var(--secondary-background-color);}.image-overlay{background-color:rgba(0, 0, 0, 0.4);}.video-play-icon{width:60px;height:60px;color:#fff;opacity:0.8;transform:translateZ(0);transition:transform var(--animation);}.video-title{margin-top:8px;font-family:var(--font-family);color:var(--secondary-text-color);}.cta-button{margin-top:24px;}@media (min-width: 640px){:host{--video-item-height:256px;}.video-item{width:calc(var(--max-container-width) / 3 - 16px);cursor:pointer;}.video-item:not(:last-of-type){padding-right:30px;}.slide-icon{margin:8px;width:40px;height:40px;position:absolute;z-index:1;top:calc(var(--video-item-height) / 2 - 25px);display:block;opacity:0.9;background-color:#fff;border-radius:50%;color:var(--default-primary-color);transition:opacity var(--animation);display:block;}.slide-icon:last-of-type{right:0;}}</style>
+    <div class="container">
+      <div class="header" layout="" horizontal="" justified="" center="" wrap="">
+        <h1 class="container-title">DFUA'16 featured videos</h1>
+      </div>
+
+      <div class="videos-wrapper" layout="" flex="" horizontal="">
+        <paper-icon-button class="last-video slide-icon" icon="hoverboard:chevron-left" on-tap="shiftContentLeft" ga-on="click" ga-event-category="video-list-arrow" ga-event-action="click" ga-event-label="left" hidden$="[[_leftArrowHidden]]"></paper-icon-button>
+        <div id="videoList" class="video-list" layout="" flex="" horizontal="">
+          <div id="videos" class="videos" layout="" horizontal="">
+             <template is="dom-repeat" items="[[videos]]" as="block" index-as="index">
+              <div class="video-item" on-tap="playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label$="[[block.title]]">
+                <div class="thumbnail" relative="" layout="" horizontal="" center-center="">
+                  <plastic-image id="image[[index]]" class="thumbnail-image" srcset="[[block.thumbnail]]" sizing="cover" lazy-load="" preload="" fade="" fit=""></plastic-image>
+                  <div class="image-overlay" fit=""></div>
+                  <paper-icon-button class="video-play-icon" icon="hoverboard:play"></paper-icon-button>
+                </div>
+                <h4 class="video-title">[[block.title]]</h4>
+              </div>
+            </template>
+          </div>
+        </div>
+        <paper-icon-button class="next-video slide-icon" icon="hoverboard:chevron-right" on-tap="shiftContentRight" ga-on="click" ga-event-category="video-list-arrow" ga-event-action="click" ga-event-label="right" hidden$="[[_rightArrowHidden]]">
+        &gt;</paper-icon-button>
+      </div>
+      <a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" target="_blank" rel="noopener noreferrer">
+        <paper-button class="cta-button animated icon-right">
+          <span>See all videos</span>
+          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+        </paper-button>
+      </a>
+    </div>
+  </template>
+
+  <script>
+    class FeaturedVideos extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'featured-videos';
+      }
+
+      static get properties() {
+        return {
+          videos: {
+            type: Array,
+            statePath: 'videos.list',
+          },
+          videosFetching: {
+            type: Boolean,
+            statePath: 'videos.fetching',
+          },
+          videosFetchingError: {
+            type: Object,
+            statePath: 'videos.fetchingError',
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          _leftArrowHidden: {
+            type: Boolean,
+            value: true,
+          },
+          _rightArrowHidden: {
+            type: Boolean,
+            value: false,
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.dispatch(videosActions.fetchVideos());
+      }
+
+      shiftContentLeft() {
+        const {
+          cardWidth,
+          currentPosition,
+        } = this.getVideosDetails();
+
+        let newX = currentPosition + cardWidth;
+
+        if (currentPosition < 0) {
+          const adjustToLeft = newX > 0 || (Math.abs(0 - Math.abs(newX)) < cardWidth);
+
+          if (adjustToLeft) {
+            newX = 0;
+          }
+
+          this.transformVideoList(this.$.videos, newX);
+
+          if (newX == 0) {
+            this._leftArrowHidden = true;
+          }
+          else {
+            this._rightArrowHidden = false;
+          }
+        }
+      }
+
+      shiftContentRight() {
+        const {
+          cardWidth,
+          maxRightPosition,
+          currentPosition,
+        } = this.getVideosDetails();
+
+        let newX = currentPosition - cardWidth;
+
+        if (currentPosition >= maxRightPosition) {
+          const adjustToRight = newX < maxRightPosition ||
+              (Math.abs(maxRightPosition) - Math.abs(newX) < cardWidth);
+
+          if (adjustToRight) {
+            newX = maxRightPosition;
+          }
+
+          this.transformVideoList(this.$.videos, newX);
+
+          if (newX == maxRightPosition) {
+            this._rightArrowHidden = true;
+          }
+          else {
+            this._leftArrowHidden = false;
+          }
+        }
+      }
+
+      getVideosDetails() {
+        const videos = this.shadowRoot.querySelectorAll('.video-item');
+        const cardRect = videos[videos.length - 1].getBoundingClientRect();
+        const cardWidth = cardRect.width;
+        const videosContainerWidth = parseInt(getComputedStyle(this.$.videoList, null)
+            .getPropertyValue('width'));
+        const videosWidth = parseInt(getComputedStyle(this.$.videos, null)
+            .getPropertyValue('width'));
+        const maxRightPosition = -(videosWidth - videosContainerWidth) - 16;
+        const currentPosition = parseInt(getComputedStyle(this.$.videos, null)
+            .getPropertyValue('transform').split(',')[4]);
+
+        return {
+          cardWidth,
+          maxRightPosition,
+          currentPosition,
+        };
+      }
+
+      getVideoListWidth() {
+        const videos = this.shadowRoot.querySelectorAll('.video-item');
+        const cardRect = videos[videos.length - 1].getBoundingClientRect();
+        return cardRect.width * videos.length;
+      }
+
+      transformVideoList(el, newPosition) {
+        el.style.transform = 'translate3d(' + newPosition + 'px, 0, 0)';
+      }
+
+      playVideo(e) {
+        const presenters = e.model.__data.block.speakers
+          ? (` by ${e.model.__data.block.speakers}`)
+          : '';
+        const title = e.model.__data.block.title + presenters;
+        const youtubeId = e.model.__data.block.youtubeId;
+
+        uiActions.toggleVideoDialog({
+          title: title,
+          youtubeId: youtubeId,
+          disableControls: true,
+          opened: true,
+        });
+      }
+    }
+
+    window.customElements.define(FeaturedVideos.is, FeaturedVideos);
+
+  </script>
+</dom-module>
+<dom-module id="subscribe-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:flex;width:100%;background:var(--default-primary-color);color:#fff;padding:16px 0;}.description{font-size:24px;line-height:1.5;margin:0 0 16px;}paper-button{color:#fff;}paper-button[disabled]{background:var(--default-primary-color);color:#fff;}@media (min-width: 640px){:host{padding:32px 0;}.description{font-size:32px;margin:0 0 24px;text-align:center;}}</style>
+
+    <div class="container" layout="" vertical="" center$="[[viewport.isTabletPlus]]">
+      <div class="description"> Get notified about the important conference updates</div>
+      <div class="cta-button">
+        <paper-button class="animated icon-right" disabled$="[[subscribed]]" on-tap="_subscribe" ga-on="click" ga-event-category="attendees" ga-event-action="subscribe" ga-event-label="subscribe block">
+          <span class="cta-label">[[ctaLabel]]</span>
+          <iron-icon icon$="hoverboard:[[ctaIcon]]"></iron-icon>
+        </paper-button>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    class SubscribeBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'subscribe-block';
+      }
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            statePath: 'user',
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          subscribed: {
+            type: Boolean,
+            statePath: 'subscribed',
+            observer: '_handleSubscribed',
+          },
+          ctaIcon: {
+            type: String,
+            value: 'arrow-right-circle',
+          },
+          ctaLabel: {
+            type: String,
+            value: 'Subscribe',
+          },
+        };
+      }
+
+      _handleSubscribed(subscribed) {
+        if (subscribed) {
+          this.ctaIcon = 'checked';
+          this.ctaLabel = 'Subscribed';
+        }
+        else {
+          this.ctaIcon = 'arrow-right-circle';
+          this.ctaLabel = 'Subscribe';
+        }
+      }
+
+      _subscribe() {
+        let userData = {};
+
+        if (this.user.signedIn) {
+          const fullNameSplit = this.user.displayName.split(' ');
+          userData = {
+            firstFieldValue: fullNameSplit[0],
+            secondFieldValue: fullNameSplit[1],
+          };
+        }
+
+        if (this.user.email) {
+          this._subscribeAction(Object.assign({}, { email: this.user.email }, userData));
+        } else {
+          dialogsActions.openDialog(DIALOGS.SUBSCRIBE, {
+            title: 'Get the latest updates, insights and news about GDG DevFest Ukraine sent to your inbox.',
+            submitLabel: ' Subscribe',
+            firstFieldLabel: 'First Name',
+            secondFieldLabel: 'Last Name',
+            firstFieldValue: userData.firstFieldValue,
+            secondFieldValue: userData.secondFieldValue,
+            submit: (data) => this._subscribeAction(data),
+          });
+        }
+      }
+
+      _subscribeAction(data) {
+        this.dispatch(subscribeActions.subscribe(data));
+      }
+    }
+
+    window.customElements.define(SubscribeBlock.is, SubscribeBlock);
+  </script>
+</dom-module>
+<dom-module id="gallery-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;}.photos-grid{margin:64px auto;display:grid;width:100%;min-height:400px;height:calc(100vh - 40px);max-height:750px;grid-template-columns:repeat(3, 1fr);grid-template-rows:repeat(5, 1fr);grid-gap:2px;}.grid-item{background-color:var(--secondary-background-color);}.grid-item:first-child{grid-area:1 / 1 / 3 / 4;}.grid-item:nth-child(2){grid-area:3 / 1 / 5 / 3;}.grid-item:nth-child(3){grid-area:3 / 3 / 3 / 3;}.grid-item:nth-child(4){grid-area:4 / 3 / 4 / 3;}.grid-item:nth-child(5){grid-area:5 / 1 / 5 / 1;}.grid-item:nth-child(6){display:none;}.grid-item:nth-child(7){display:none;}.grid-item:nth-child(8){display:none;}.gallery-info{padding:16px;background-color:var(--default-primary-color);color:var(--text-primary-color);z-index:1;grid-area:5 / 2 / 5 / 4;}paper-button{margin-top:16px;color:var(--text-primary-color);}@media (min-width: 640px){.photos-grid{height:calc(100vh - 64px);grid-template-columns:repeat(5, 1fr);grid-template-rows:repeat(3, 1fr);}.grid-item:first-child{grid-area:1 / 1 / 1 / 3;}.grid-item:nth-child(2){grid-area:1 / 3 / 2 / 5;}.grid-item:nth-child(3){grid-area:1 / 5 / 3 / 5;}.grid-item:nth-child(4){grid-area:2 / 1 / 2 / 1;}.grid-item:nth-child(5){grid-area:2 / 2 / 2 / 2;}.grid-item:nth-child(6){grid-area:3 / 1 / 3 / 3;display:block;}.grid-item:nth-child(7){grid-area:3 / 3 / 3 / 3;display:block;}.grid-item:nth-child(8){grid-area:3 / 4 / 3 / 6;display:block;}.gallery-info{padding:24px;grid-area:2 / 3 / 2 / 5;}}</style>
+
+    <div class="photos-grid">
+      <template is="dom-repeat" items="[[gallery]]" as="photo">
+        <plastic-image class="grid-item" srcset="[[photo.url]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+      </template>
+      <div class="gallery-info" layout="" vertical="" justified="">
+        <div>
+          <h2>#dfua16 highlights</h2>
+          <p>This year's festival built lots of excitement. Check out photos from featured talks, hands-on learning sessions, and after-hours fun.</p>
+        </div>
+        <a href="https://goo.gl/photos/H8s3CtPexCzkLqSt9" target="_blank" rel="noopener noreferrer">
+          <paper-button>See all photos</paper-button>
+        </a>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    class GalleryBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'gallery-block';
+      }
+
+      static get properties() {
+        return {
+          gallery: {
+            type: Array,
+            statePath: 'gallery.list',
+          },
+          galleryFetching: {
+            type: Boolean,
+            statePath: 'gallery.fetching',
+          },
+          galleryFetchingError: {
+            type: Object,
+            statePath: 'gallery.fetchingError',
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        if (!this.gallery || !this.gallery.length) {
+          this.dispatch(galleryActions.fetchGallery());
+        }
+      }
+    }
+
+    window.customElements.define(GalleryBlock.is, GalleryBlock);
+  </script>
+</dom-module>
+<script>'use strict';
+
+{
+  let initCalled;
+  const callbackPromise = new Promise((r) => window.__initGoodMap = r);
+
+  function loadGoogleMaps(apiKey) {
+    if (!initCalled) {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?' +
+        (apiKey ? `key=${apiKey}&` : '') +
+        'callback=__initGoodMap';
+      document.head.appendChild(script);
+      initCalled = true;
+    }
+    return callbackPromise;
+  }
+
+  customElements.define('good-map', class extends HTMLElement {
+    static get observedAttributes() {
+      return ['api-key', 'zoom', 'latitude', 'longitude', 'map-options'];
+    }
+
+    attributeChangedCallback(name, oldVal, val) {
+      switch (name) {
+        case 'api-key':
+          this.apiKey = val;
+          break;
+        case 'zoom':
+        case 'latitude':
+        case 'longitude':
+          this[name] = parseFloat(val);
+          break;
+        case 'map-options':
+          this.mapOptions = JSON.parse(val);
+          break
+      }
+    }
+
+    constructor() {
+      super();
+
+      this.map = null;
+      this.apiKey = null;
+      this.zoom = null;
+      this.latitude = null;
+      this.longitude = null;
+      this.mapOptions = {};
+    }
+
+    connectedCallback() {
+      loadGoogleMaps(this.apiKey).then(() => {
+        if (!this.mapOptions.zoom) {
+          this.mapOptions.zoom = this.zoom || 0;
+        }
+        if (!this.mapOptions.center) {
+          this.mapOptions.center = {
+            lat: this.latitude || 0,
+            lng: this.longitude || 0
+          };
+        }
+        this.map = new google.maps.Map(this, this.mapOptions);
+        this.dispatchEvent(new CustomEvent('google-map-ready', { detail: this.map }));
+      });
+    }
+  });
+}
+</script>
+<dom-module id="map-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{margin:32px auto;display:block;position:relative;}.description-card{margin:0 -16px;padding:16px;background-color:var(--default-primary-color);color:var(--text-primary-color);}.bottom-info{margin-top:24px;}.directions{--paper-icon-button:{width:48px;height:48px;color:var(--text-primary-color);};}@media (min-width: 640px){:host{margin:64px auto 72px;}good-map{display:block;height:640px;}.description-card{margin:0;padding:24px;max-width:320px;transform:translateY(80px);border-radius:var(--border-radius);}.address{font-size:12px;}}</style>
+
+    <template is="dom-if" if="[[viewport.isTabletPlus]]">
+      <good-map id="map" api-key="AIzaSyBu9LI-hY4NfUOPJJKuV3BfQm7edLr2-aE" latitude="48" longitude="8" zoom="5" map-options="[[options]]"></good-map>
+    </template>
+
+    <div class="container" layout="" vertical="" end-justified="" fit$="[[viewport.isTabletPlus]]">
+      <div class="description-card" layout="" vertical="" justified="">
+        <div>
+          <h2>Location</h2>
+          <p>Newly built Pivdennyi Expo is a long-awaited exhibition center in Lviv, which can fulfill the needs of the large-scale event</p>
+        </div>
+        <div class="bottom-info" layout="" horizontal="" justified="" center="">
+          <span class="address">36 Shchyretska St, Lviv, Ukraine</span>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=36 Shchyretska St, Lviv, Ukraine" target="_blank" rel="noopener noreferrer">
+            <paper-icon-button class="directions" icon="hoverboard:directions"></paper-icon-button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    class MapBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'map-block';
+      }
+
+      static get properties() {
+        return {
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          options: {
+            type: Object,
+            value: () => (
+              {
+                disableDefaultUI: true,
+                disableDoubleClickZoom: true,
+                scrollwheel: false,
+                draggable: false,
+                styles: [{
+                  stylers: [{
+                    lightness: 40,
+                  }, {
+                    visibility: 'on',
+                  }, {
+                    gamma: 0.9,
+                  }, {
+                    weight: 0.4,
+                  }],
+                }, {
+                  elementType: 'labels',
+                  stylers: [{
+                    visibility: 'on',
+                  }],
+                }, {
+                  featureType: 'water',
+                  stylers: [{
+                    color: '#5dc7ff',
+                  }],
+                }, {
+                  featureType: 'road',
+                  stylers: [{
+                    visibility: 'off',
+                  }],
+                }],
+              }
+            ),
+          },
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('dom-change', () => {
+          this.shadowRoot.querySelector('#map').addEventListener('google-map-ready', (e) => {
+            if (!this.viewport.isTabletPlus) return;
+            new google.maps.Marker({
+              position: {
+                lat: parseFloat('49.809841'),
+                lng: parseFloat('23.972805'),
+              },
+              icon: {
+                url: 'images/map-marker.svg',
+                anchor: new google.maps.Point(25, 50),
+                scaledSize: new google.maps.Size(50, 50),
+              },
+              map: e.detail,
+            });
+          }, { once: true });
+        }, { once: true });
+      }
+    }
+
+    window.customElements.define(MapBlock.is, MapBlock);
+  </script>
+</dom-module>
+<dom-module id="about-organizer-block" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;}.block:not(:last-of-type){margin-bottom:32px;}.team-icon{--iron-icon-height:160px;--iron-icon-width:160px;--iron-icon-fill-color:var(--default-primary-color);max-width:50%;}.image-link{width:80%;height:80%;}.organizers-photo{width:100%;height:100%;}.description{color:var(--secondary-text-color);}paper-button{margin:0;}</style>
+
+    <div class="container" layout="" horizontal="">
+      <div layout="" horizontal="" center-center="" flex="" hidden$="[[viewport.isPhone]]">
+
+        <a href="/team" class="image-link" ga-on="click" ga-event-category="link" ga-event-action="open" ga-event-label="open team page">
+          <plastic-image class="organizers-photo" srcset="/images/team.jpg" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+        </a>
+      </div>
+
+      <div class="description-block" flex="">
+        
+        <div class="block">
+          <h2>Organizer</h2>
+
+          <marked-element class="description" markdown="<a href='http://lviv.gdg.org.ua' target='_blank'>GDG Lviv</a> with support of 10 GDGs from all around Ukraine is proud organizer of DevFest Ukraine">
+            <div slot="markdown-html"></div>
+          </marked-element>
+          <a href="/team">
+            <paper-button class="cta-button animated icon-right">
+              <span>Open team page</span>
+              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+            </paper-button>
+          </a>
+        </div>
+        
+        <div class="block">
+          <h2>What is a GDG?</h2>
+
+          <marked-element class="description" markdown="A Google Developer Group is a community of volunteers who create exciting projects and share experiences about Google technologies.">
+            <div slot="markdown-html"></div>
+          </marked-element>
+          <a href="https://developers.google.com/groups/" target="_blank" rel="noopener noreferrer">
+            <paper-button class="cta-button animated icon-right">
+              <span>Read more</span>
+              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+            </paper-button>
+          </a>
+        </div>
+        
+        <div class="block">
+          <h2>What is DevFest?</h2>
+
+          <marked-element class="description" markdown="DevFests are community-led developer events hosted by Google Developer Groups around the globe.">
+            <div slot="markdown-html"></div>
+          </marked-element>
+          <a href="https://devfest.withgoogle.com/" target="_blank" rel="noopener noreferrer">
+            <paper-button class="cta-button animated icon-right">
+              <span>Read more</span>
+              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+            </paper-button>
+          </a>
+        </div>
+        
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class AboutOrganizerBlock extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'about-organizer-block';
+      }
+
+      static get properties() {
+        return {
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+        };
+      }
+    }
+
+    customElements.define(AboutOrganizerBlock.is, AboutOrganizerBlock);
+  </script>
+</dom-module>
+</div><dom-module id="home-page">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;height:100%;}hero-block{font-size:24px;text-align:center;}.hero-logo{--iron-image-width:100%;max-width:240px;}.info-items{margin:24px auto;font-size:22px;}.info-items > *:not(:first-of-type){margin-top:4px;}.action-buttons{margin:0 -8px;font-size:14px;}.action-buttons paper-button{margin:8px;}.action-buttons .watch-video{color:#fff;}.action-buttons iron-icon{--iron-icon-fill-color:currentColor;margin-right:8px;}.scroll-down{margin-top:24px;color:currentColor;user-select:none;cursor:pointer;}.scroll-down svg{width:24px;opacity:0.6;}.scroll-down .stroke{stroke:currentColor;}.scroll-down .scroller{fill:currentColor;animation:updown 2s infinite;}@keyframes updown{0%{transform:translate(0, 0);}50%{transform:translate(0, 5px);}100%{transform:translate(0, 0);}}@media (min-height: 500px){hero-block{height:calc(100vh + 57px);max-height:calc(100vh + 1px);}.home-content{margin-top:-48px;}.scroll-down{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;}}@media (min-width: 812px){hero-block{height:calc(100vh + 65px);}.hero-logo{max-width:320px;}.info-items{margin:48px auto;font-size:28px;line-height:1.1;}}</style>
+
+    <polymer-helmet active="[[active]]"></polymer-helmet>
+
+    <hero-block id="hero" background-image="/images/backgrounds/home.jpg" background-color="#673ab7" font-color="#FFF" active="[[active]]" hide-logo="">
+      <div class="home-content" layout="" vertical="" center="">
+        <plastic-image class="hero-logo" srcset="/images/logo.svg" alt="GDG DevFest Season 2018"></plastic-image>
+        <div class="info-items">
+          <div class="info-item">Lviv. October 12-13, 2018</div>
+          <div class="info-item">Join the commuity, learn new things!</div>
+        </div>
+
+
+        <div class="action-buttons" layout="" horizontal="" center-justified="" wrap="">
+          <paper-button class="watch-video" on-tap="_playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="hero block - view highlights">
+            <iron-icon icon="hoverboard:movie"></iron-icon>
+            View Highlights
+          </paper-button>
+          <paper-button on-tap="_scrollToTickets" ga-on="click" ga-event-category="tickets" ga-event-action="scroll" ga-event-label="hero block - scroll to tickets" primary="" invert="">
+            <iron-icon icon="hoverboard:ticket"></iron-icon>
+            Buy ticket
+          </paper-button>
+        </div>
+
+        <div class="scroll-down" on-tap="_scrollNextBlock">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_2" x="0px" y="0px" viewBox="0 0 25.166666 37.8704414" enable-background="new 0 0 25.166666 37.8704414" xml:space="preserve">
+        <path class="stroke" fill="none" stroke="#c7c4b8" stroke-width="2.5" stroke-miterlimit="10" d="M12.5833445 36.6204414h-0.0000229C6.3499947 36.6204414 1.25 31.5204487 1.25 25.2871208V12.5833216C1.25 6.3499947 6.3499951 1.25 12.5833216 1.25h0.0000229c6.2333269 0 11.3333216 5.0999947 11.3333216 11.3333216v12.7037992C23.916666 31.5204487 18.8166714 36.6204414 12.5833445 36.6204414z"></path>
+        <path class="scroller" fill="#c7c4b8" d="M13.0833359 19.2157116h-0.9192753c-1.0999985 0-1.9999971-0.8999996-1.9999971-1.9999981v-5.428606c0-1.0999994 0.8999987-1.9999981 1.9999971-1.9999981h0.9192753c1.0999985 0 1.9999981 0.8999987 1.9999981 1.9999981v5.428606C15.083334 18.315712 14.1833344 19.2157116 13.0833359 19.2157116z"></path>
+    </svg>
+          <i class="icon icon-arrow-down"></i>
+        </div>
+      </div>
+    </hero-block>
+    <about-block></about-block>
+    <speakers-block></speakers-block>
+    <subscribe-block></subscribe-block>
+    <tickets-block></tickets-block>
+    <gallery-block></gallery-block>
+    <about-organizer-block></about-organizer-block>
+    <featured-videos></featured-videos>
+    <latest-posts-block></latest-posts-block>
+    <map-block></map-block>
+    <partners-block></partners-block>
+    <footer-block></footer-block>
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class HomePage extends ScrollFunctions(ReduxMixin(Polymer.Element)) {
+      static get is() {
+        return 'home-page';
+      }
+
+      static get properties() {
+        return {
+          active: Boolean,
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+        };
+      }
+
+      _playVideo() {
+        uiActions.toggleVideoDialog({
+          title: '',
+          youtubeId: 'TdpbgRgz6eE',
+          disableControls: true,
+          opened: true,
+        });
+      }
+
+      _scrollToTickets() {
+        // eslint-disable-next-line no-undef
+        const toolbarHeight = HOVERBOARD.Elements.HeaderToolbar.getBoundingClientRect().height - 1;
+        // eslint-disable-next-line no-undef
+        const ticketsBlockPositionY = HOVERBOARD.Elements.Tickets.getBoundingClientRect().top
+          - toolbarHeight;
+        this.scrollToY(ticketsBlockPositionY, 600, 'easeInOutSine');
+      }
+
+      _scrollNextBlock() {
+        const heroHeight = this.$.hero.getBoundingClientRect().height - 64;
+        this.scrollToY(heroHeight, 600, 'easeInOutSine');
+      }
+    }
+
+    window.customElements.define(HomePage.is, HomePage);
+
+  </script>
+</dom-module>
+
+</body></html>
