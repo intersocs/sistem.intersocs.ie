@@ -1,0 +1,39 @@
+<html><head></head><body><dom-module id="faq-page">
+  <template>
+    <style>:host{display:block;}</style>
+
+    <polymer-helmet title="FAQs | GDG DevFest Season 2018" description="Find you answer right here!" active="[[active]]"></polymer-helmet>
+
+    <hero-block background-image="" background-color="#fff" font-color="#424242" active="[[active]]">
+      <div class="hero-title">FAQs</div>
+      <p class="hero-description"></p>
+    </hero-block>
+
+    <md-content md-source="[[source]]"></md-content>
+
+    <footer-block></footer-block>
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class FaqPage extends Polymer.Element {
+      static get is() {
+        return 'faq-page';
+      }
+
+      static get properties() {
+        return {
+          active: Boolean,
+          source: {
+            type: String,
+            value: '/data/faq.md',
+          },
+        };
+      }
+    }
+
+    window.customElements.define(FaqPage.is, FaqPage);
+  </script>
+</dom-module>
+</body></html>
