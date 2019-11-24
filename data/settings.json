@@ -1,21 +1,21 @@
 {
   "organizer": {
-    "name": "GDG Lviv",
-    "twitter": "gdglviv",
+    "name": "SISTEM 2020",
+    "twitter": "sistem",
     "blog": "https://medium.com/gdg-lviv",
-    "url": "http://lviv.gdg.org.ua/"
+    "url": "http://sistem.intersocs.ie/"
   },
-  "startDate": "2017-10-013T09:00:00+03:00",
-  "endDate": "2017-10-14T19:00:00+03:00",
+  "startDate": "2020-02-29T09:00:00+00:00",
+  "endDate": "2020-02-29T17:00:00+00:00",
   "webapp": {
-    "shortName": "DevFest",
+    "shortName": "SISTEM",
     "themeColor": "#673AB7",
     "backgroundColor": "#673AB7"
   },
   "dateFormat": {
-    "locale": "en-US"
+    "locale": "en-GB"
   },
-  "hashtag": "DevFest",
+  "hashtag": "SISTEM",
   "disabledSchedule": false,
   "navigation": [
     {
@@ -37,16 +37,11 @@
       "route": "team",
       "permalink": "/team/",
       "label": "Team"
-    },
-    {
-      "route": "blog",
-      "permalink": "/blog/",
-      "label": "Blog"
     }
   ],
   "heroSettings": {
     "home": {
-      "description": "Join the commuity, learn new things!",
+      "description": "Join the community, learn new things!",
       "background": {
         "color": "#673ab7",
         "image": "/images/backgrounds/home.jpg"
@@ -113,20 +108,20 @@
   },
   "location": {
     "label": "Location",
-    "name": "Planeta kino",
-    "city": "Lviv",
-    "short": "Lviv, Ukraine",
-    "address": "36 Shchyretska St, Lviv, Ukraine",
+    "name": "UCD Student Center",
+    "city": "Dublin",
+    "short": "UCD, Dublin",
+    "address": "UCD Student Center, Ireland",
     "pointer": {
-      "latitude": 49.809841,
-      "longitude": 23.972805,
-      "zoom": 5
+      "latitude": 53.308318,
+      "longitude": -6.227911,
+      "zoom": 13
     },
     "mapCenter": {
-      "latitude": 48,
-      "longitude": 8
+      "latitude": 53.308318,
+      "longitude": -6.227911
     },
-    "description": "Newly built Pivdennyi Expo is a long-awaited exhibition center in Lviv, which can fulfill the needs of the large-scale event"
+    "description": "SISTEM 2020 will be held in the Student Center in UCD"
   },
   "mediaQueries": {
     "xs": {

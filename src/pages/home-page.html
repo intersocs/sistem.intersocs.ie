@@ -18,48 +18,38 @@
 
         <div>
           <h1 class="container-title">About</h1>
-          <p>GDG DevFest Ukraine brings together the world class experts in Android, Web and Cloud technologies to Lviv for 2 days of sessions, workshops and showcases.</p>
+          <p>SISTEM is Ireland's largest tech conference for students, with the mission to inspire the next generation of tech. SISTEM 2020 will take place in University College Dublin. This is our third year organising this conference and the event has grown in scale and ambition since our first edition in 2018. Over 200 of Ireland's most engaged students in computing are expected to attend this event.</p>
           <a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - Explore featured session" target="_blank" rel="noopener noreferrer">
-            <paper-button class="animated icon-right">
-              <span class="cta-label">Explore featured session</span>
-              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-            </paper-button>
-          </a>
 
-          <p>Described by many as 'Google I/O of Ukraine', our team creates DevFest to be the best place for experience sharing in a phenomenal atmosphere.</p>
-          <paper-button class="animated icon-right" on-tap="_playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - See how it was in 2016">
-            <span>See how it was in 2016</span>
-            <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-          </paper-button>
-        </div>
+        </a></div><a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - Explore featured session" target="_blank" rel="noopener noreferrer">
 
         <div class="statistics-block">
 
           <div class="item">
-            <div class="numbers">900</div>
+            <div class="numbers">250</div>
             <div class="label">Attendees</div>
           </div>
 
           <div class="item">
-            <div class="numbers">2</div>
+            <div class="numbers">1</div>
             <div class="label">Days</div>
           </div>
 
           <div class="item">
-            <div class="numbers">50</div>
+            <div class="numbers">23</div>
             <div class="label">Sessions</div>
           </div>
 
           <div class="item">
-            <div class="numbers">4</div>
+            <div class="numbers">3</div>
             <div class="label">Tracks</div>
           </div>
 
         </div>
-      </div>
-    </div>
+      </a></div><a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - Explore featured session" target="_blank" rel="noopener noreferrer">
+    </a></div><a href="https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="about block - Explore featured session" target="_blank" rel="noopener noreferrer">
 
-  </template>
+  </a></template>
 
   <script>
     class AboutBlock extends ReduxMixin(Polymer.Element) {
@@ -285,8 +275,6 @@
           </a>
         </template>
       </div>
-
-      <div class="additional-info">*Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.</div>
 
     </div>
 
@@ -704,7 +692,7 @@
           this._subscribeAction(Object.assign({}, { email: this.user.email }, userData));
         } else {
           dialogsActions.openDialog(DIALOGS.SUBSCRIBE, {
-            title: 'Get the latest updates, insights and news about GDG DevFest Ukraine sent to your inbox.',
+            title: 'Get the latest updates and news about Sistem sent to your inbox.',
             submitLabel: ' Subscribe',
             firstFieldLabel: 'First Name',
             secondFieldLabel: 'Last Name',
@@ -733,10 +721,10 @@
       </template>
       <div class="gallery-info" layout="" vertical="" justified="">
         <div>
-          <h2>#dfua16 highlights</h2>
-          <p>This year's festival built lots of excitement. Check out photos from featured talks, hands-on learning sessions, and after-hours fun.</p>
+          <h2>#SISTEM 2019 highlights</h2>
+          <p>See the Highlights of Last years Conference</p>
         </div>
-        <a href="https://goo.gl/photos/H8s3CtPexCzkLqSt9" target="_blank" rel="noopener noreferrer">
+        <a href="https://photos.app.goo.gl/LzYGWNUyr2qwoXLe8" target="_blank" rel="noopener noreferrer">
           <paper-button>See all photos</paper-button>
         </a>
       </div>
@@ -853,18 +841,18 @@
     <style include="shared-styles flex flex-alignment positioning">:host{margin:32px auto;display:block;position:relative;}.description-card{margin:0 -16px;padding:16px;background-color:var(--default-primary-color);color:var(--text-primary-color);}.bottom-info{margin-top:24px;}.directions{--paper-icon-button:{width:48px;height:48px;color:var(--text-primary-color);};}@media (min-width: 640px){:host{margin:64px auto 72px;}good-map{display:block;height:640px;}.description-card{margin:0;padding:24px;max-width:320px;transform:translateY(80px);border-radius:var(--border-radius);}.address{font-size:12px;}}</style>
 
     <template is="dom-if" if="[[viewport.isTabletPlus]]">
-      <good-map id="map" api-key="AIzaSyBu9LI-hY4NfUOPJJKuV3BfQm7edLr2-aE" latitude="48" longitude="8" zoom="5" map-options="[[options]]"></good-map>
+      <good-map id="map" api-key="AIzaSyBbKLHdozLNGOD7e1i0jhAGhbkEA8B-1KI" latitude="53.308318" longitude="-6.227911" zoom="13" map-options="[[options]]"></good-map>
     </template>
 
     <div class="container" layout="" vertical="" end-justified="" fit$="[[viewport.isTabletPlus]]">
       <div class="description-card" layout="" vertical="" justified="">
         <div>
           <h2>Location</h2>
-          <p>Newly built Pivdennyi Expo is a long-awaited exhibition center in Lviv, which can fulfill the needs of the large-scale event</p>
+          <p>SISTEM 2020 will be held in the Student Center in UCD</p>
         </div>
         <div class="bottom-info" layout="" horizontal="" justified="" center="">
-          <span class="address">36 Shchyretska St, Lviv, Ukraine</span>
-          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=36 Shchyretska St, Lviv, Ukraine" target="_blank" rel="noopener noreferrer">
+          <span class="address">UCD Student Center, Ireland</span>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=UCD Student Center, Ireland" target="_blank" rel="noopener noreferrer">
             <paper-icon-button class="directions" icon="hoverboard:directions"></paper-icon-button>
           </a>
         </div>
@@ -933,8 +921,8 @@
             if (!this.viewport.isTabletPlus) return;
             new google.maps.Marker({
               position: {
-                lat: parseFloat('49.809841'),
-                lng: parseFloat('23.972805'),
+                lat: parseFloat('53.308318'),
+                lng: parseFloat('-6.227911'),
               },
               icon: {
                 url: 'images/map-marker.svg',
@@ -968,40 +956,12 @@
         <div class="block">
           <h2>Organizer</h2>
 
-          <marked-element class="description" markdown="<a href='http://lviv.gdg.org.ua' target='_blank'>GDG Lviv</a> with support of 10 GDGs from all around Ukraine is proud organizer of DevFest Ukraine">
+          <marked-element class="description" markdown="SISTEM is the product of collaboration with Ireland's Leading Networking and Computer Societies. See our Team page for all the participating societies.">
             <div slot="markdown-html"></div>
           </marked-element>
           <a href="/team">
             <paper-button class="cta-button animated icon-right">
               <span>Open team page</span>
-              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-            </paper-button>
-          </a>
-        </div>
-        
-        <div class="block">
-          <h2>What is a GDG?</h2>
-
-          <marked-element class="description" markdown="A Google Developer Group is a community of volunteers who create exciting projects and share experiences about Google technologies.">
-            <div slot="markdown-html"></div>
-          </marked-element>
-          <a href="https://developers.google.com/groups/" target="_blank" rel="noopener noreferrer">
-            <paper-button class="cta-button animated icon-right">
-              <span>Read more</span>
-              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-            </paper-button>
-          </a>
-        </div>
-        
-        <div class="block">
-          <h2>What is DevFest?</h2>
-
-          <marked-element class="description" markdown="DevFests are community-led developer events hosted by Google Developer Groups around the globe.">
-            <div slot="markdown-html"></div>
-          </marked-element>
-          <a href="https://devfest.withgoogle.com/" target="_blank" rel="noopener noreferrer">
-            <paper-button class="cta-button animated icon-right">
-              <span>Read more</span>
               <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
             </paper-button>
           </a>
@@ -1038,10 +998,10 @@
 
     <hero-block id="hero" background-image="/images/backgrounds/home.jpg" background-color="#673ab7" font-color="#FFF" active="[[active]]" hide-logo="">
       <div class="home-content" layout="" vertical="" center="">
-        <plastic-image class="hero-logo" srcset="/images/logo.svg" alt="GDG DevFest Season 2018"></plastic-image>
+        <plastic-image class="hero-logo" srcset="/images/logo.svg" alt="SISTEM 2020"></plastic-image>
         <div class="info-items">
-          <div class="info-item">Lviv. October 12-13, 2018</div>
-          <div class="info-item">Join the commuity, learn new things!</div>
+          <div class="info-item">Dublin. February 29, 2020</div>
+          <div class="info-item">Join the community, learn new things!</div>
         </div>
 
 
@@ -1071,8 +1031,6 @@
     <tickets-block></tickets-block>
     <gallery-block></gallery-block>
     <about-organizer-block></about-organizer-block>
-    <featured-videos></featured-videos>
-    <latest-posts-block></latest-posts-block>
     <map-block></map-block>
     <partners-block></partners-block>
     <footer-block></footer-block>
