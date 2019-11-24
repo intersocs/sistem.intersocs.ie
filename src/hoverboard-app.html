@@ -25946,7 +25946,7 @@ Polymer.IronLazyPagesBehavior = [
     }
 
     getDate(date) {
-      return new Date(date).toLocaleString('en-US', {
+      return new Date(date).toLocaleString('en-GB', {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -28118,7 +28118,7 @@ const filtersReducer = (state = initialState.filters, action) => {
         <paper-icon-button icon="hoverboard:menu" hidden$="[[viewport.isLaptopPlus]]" aria-label="menu" on-tap="openDrawer"></paper-icon-button>
       </div>
       <div layout="" horizontal="" center="" flex="">
-        <a class="toolbar-logo" href="/" hidden$="[[!viewport.isLaptopPlus]]" layout="" horizontal="" title="GDG DevFest Season 2018"></a>
+        <a class="toolbar-logo" href="/" hidden$="[[!viewport.isLaptopPlus]]" layout="" horizontal="" title="SISTEM 2020"></a>
       </div>
 
       <paper-tabs class="nav-items" selected="[[route.route]]" attr-for-selected="name" hidden$="[[!viewport.isLaptopPlus]]" role="navigation" noink="">
@@ -28139,12 +28139,6 @@ const filtersReducer = (state = initialState.filters, action) => {
           <a href="/team/" layout="" vertical="" center-center="">Team</a>
         </paper-tab>
         
-        <paper-tab name="blog" class="nav-item" link="">
-          <a href="/blog/" layout="" vertical="" center-center="">Blog</a>
-        </paper-tab>
-        
-
-        <paper-tab class="signin-tab" on-tap="signIn" link="" hidden$="[[user.signedIn]]">Sign in</paper-tab>
 
         <a href$="[[_getTicketUrl(tickets)]]" target="_blank" rel="noopener noreferrer" ga-on="click" ga-event-category="ticket button" ga-event-action="buy_click">
           <paper-button class="buy-button" primary="">Buy ticket</paper-button>
@@ -28471,7 +28465,7 @@ const filtersReducer = (state = initialState.filters, action) => {
         }
         case 'twitter': {
           height = 253;
-          const text = `Check out ${title} at #DevFest: ${shareUrl}`;
+          const text = `Check out ${title} at #SISTEM: ${shareUrl}`;
           url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
           break;
         }
@@ -30243,28 +30237,9 @@ const filtersReducer = (state = initialState.filters, action) => {
       <div class="col-heading">About</div>
       <ul class="nav">
         
-        <li><a href="http://lviv.gdg.org.ua/" target="_blank" rel="noopener noreferrer">GDG Lviv</a></li>
+        <li><a href="https://sistem.intersocs.ie" target="_blank" rel="noopener noreferrer">SISTEM</a></li>
         
-        <li><a href="https://developers.google.com/groups/" target="_blank" rel="noopener noreferrer">GDG</a></li>
-        
-        <li><a href="https://devfest.withgoogle.com/" target="_blank" rel="noopener noreferrer">DevFest</a></li>
-        
-        <li><a href="https://devfest.gdg.org.ua/team/" target="_blank" rel="noopener noreferrer">Meet the Team</a></li>
-        
-      </ul>
-    </div>
-    
-    <div class="col" layout="" vertical="" wrap="" flex-auto="">
-      <div class="col-heading">Explore Past DevFests</div>
-      <ul class="nav">
-        
-        <li><a href="http://gdg-devfest-ua.appspot.com/" target="_blank" rel="noopener noreferrer">DFUA 2013</a></li>
-        
-        <li><a href="https://dfua14.firebaseapp.com//" target="_blank" rel="noopener noreferrer">DFUA 2014</a></li>
-        
-        <li><a href="https://dfua15.firebaseapp.com/" target="_blank" rel="noopener noreferrer">DFUA 2015</a></li>
-        
-        <li><a href="https://dfua16.firebaseapp.com/" target="_blank" rel="noopener noreferrer">DFUA 2016</a></li>
+        <li><a href="https://sistem.intersocs.ie/team/" target="_blank" rel="noopener noreferrer">Meet the Team</a></li>
         
       </ul>
     </div>
@@ -30273,13 +30248,7 @@ const filtersReducer = (state = initialState.filters, action) => {
       <div class="col-heading">Event Resources</div>
       <ul class="nav">
         
-        <li><a href="https://devfest.gdg.org.ua/assets/GDG_DevFest_2016_partnership_proposition.pdf" target="_blank" rel="noopener noreferrer">Partnership Proposition</a></li>
-        
-        <li><a href="https://devfest.gdg.org.ua/assets/GDG_DevFest_2016_partnership_proposition.pdf" target="_blank" rel="noopener noreferrer">Info Partnership Proposition</a></li>
-        
-        <li><a href="https://devfest.gdg.org.ua/assets/GDG_DevFest_2016_partnership_proposition.pdf" target="_blank" rel="noopener noreferrer">Media Kit</a></li>
-        
-        <li><a href="https://drive.google.com/open?id=10tPuu_7ASM8C70SotqRqIW5Uzos9BzALilMMQPg_JvA" target="_blank" rel="noopener noreferrer">Call for Papers</a></li>
+        <li><a href="https://drive.google.com/open?id=1w3BaQdC15d0JSQsmN3cQoOhnDCo9KAJY" target="_blank" rel="noopener noreferrer">Partnership Proposition</a></li>
         
         <li><a href="/faq/">FAQs</a></li>
         
@@ -30312,8 +30281,8 @@ const filtersReducer = (state = initialState.filters, action) => {
 
     <div class="nav-inline" layout="" flex="">
 
-      <a href="http://lviv.gdg.org.ua/" target="_blank" rel="noopener noreferrer">
-        <plastic-image class="footer-logo" srcset="../../images/organizer-logo.svg" sizing="contain" alt="GDG Lviv" lazy-load=""></plastic-image>
+      <a href="http://sistem.intersocs.ie/" target="_blank" rel="noopener noreferrer">
+        <plastic-image class="footer-logo" srcset="../../images/organizer-logo.svg" sizing="contain" alt="SISTEM 2020" lazy-load=""></plastic-image>
       </a>
 
       <div class="copyright">
@@ -30490,9 +30459,9 @@ const filtersReducer = (state = initialState.filters, action) => {
 
       <app-drawer id="drawer" slot="drawer" opened="[[ui.isDrawerOpened]]" swipe-open="">
         <app-toolbar layout="" vertical="" start="">
-          <plastic-image class="toolbar-logo" srcset="/images/logo-monochrome.svg" alt="GDG DevFest Season 2018"></plastic-image>
-          <h2 class="dates">October 12-13, 2018</h2>
-          <h3 class="location">Lviv, Ukraine</h3>
+          <plastic-image class="toolbar-logo" srcset="/images/logo-monochrome.svg" alt="SISTEM 2020"></plastic-image>
+          <h2 class="dates">February 29, 2020</h2>
+          <h3 class="location">UCD, Dublin</h3>
         </app-toolbar>
 
         <div class="drawer-content" layout="" vertical="" justified="" flex="">
@@ -30505,8 +30474,6 @@ const filtersReducer = (state = initialState.filters, action) => {
             <a href="/schedule/" path="schedule" on-tap="closeDrawer">Schedule</a>
             
             <a href="/team/" path="team" on-tap="closeDrawer">Team</a>
-            
-            <a href="/blog/" path="blog" on-tap="closeDrawer">Blog</a>
             
           </iron-selector>
 
@@ -30532,10 +30499,8 @@ const filtersReducer = (state = initialState.filters, action) => {
 
         <iron-lazy-pages attr-for-selected="data-route" selected="[[route.route]]" selected-attribute="active" hide-immediately="">
           <home-page data-route="home" data-path="pages/home-page.html"></home-page>
-          <blog-page data-route="blog" data-path="pages/blog-page.html" route="[[subroute]]"></blog-page>
           <schedule-page data-route="schedule" data-path="pages/schedule-page.html" route="[[subroute]]"></schedule-page>
           <speakers-page data-route="speakers" data-path="pages/speakers-page.html" route="[[subroute]]"></speakers-page>
-          <previous-speakers-page data-route="previous-speakers" data-path="pages/previous-speakers-page.html" route="[[subroute]]"></previous-speakers-page>
           <team-page data-route="team" data-path="pages/team-page.html"></team-page>
           <faq-page data-route="faq" data-path="pages/faq-page.html"></faq-page>
           <coc-page data-route="coc" data-path="pages/coc-page.html"></coc-page>
@@ -30544,20 +30509,14 @@ const filtersReducer = (state = initialState.filters, action) => {
       </app-header-layout>
     </app-drawer-layout>
 
-    <video-dialog opened="[[ui.videoDialog.opened]]" video-title="[[ui.videoDialog.title]]" youtube-id="[[ui.videoDialog.youtubeId]]" entry-animation="scale-up-animation" exit-animation="fade-out-animation" disable-controls="[[!ui.videoDialog.disableControls]]" fit="" fixed-top=""></video-dialog>
 
 
     <speaker-details opened="[[dialogs.speaker.isOpened]]" speaker="[[dialogs.speaker.data]]" with-backdrop="[[viewport.isTabletPlus]]" no-cancel-on-outside-click="[[viewport.isPhone]]"></speaker-details>
-
-    <previous-speaker-details opened="[[dialogs.previousSpeaker.isOpened]]" speaker="[[dialogs.previousSpeaker.data]]" with-backdrop="[[viewport.isTabletPlus]]" no-cancel-on-outside-click="[[viewport.isPhone]]"></previous-speaker-details>
 
     <session-details opened="[[dialogs.session.isOpened]]" session="[[dialogs.session.data]]" with-backdrop="[[viewport.isTabletPlus]]" no-cancel-on-outside-click="[[viewport.isPhone]]"></session-details>
 
     <subscribe-dialog opened="[[dialogs.subscribe.isOpened]]" data="[[dialogs.subscribe.data]]" with-backdrop="" no-cancel-on-outside-click="[[viewport.isPhone]]">
     </subscribe-dialog>
-
-    <signin-dialog opened="[[dialogs.signin.isOpened]]" with-backdrop="">
-    </signin-dialog>
 
     <hoverboard-analytics></hoverboard-analytics>
     <toast-element></toast-element>
@@ -33095,7 +33054,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
           data2: String,
           _defaultTitle: {
             type: String,
-            value: 'GDG DevFest Season 2018',
+            value: 'SISTEM 2020',
           },
           _defaultDescription: {
             type: String,
@@ -33111,7 +33070,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
           },
           _defaultData1: {
             type: String,
-            value: 'Planeta kino',
+            value: 'UCD Student Center',
           },
           _defaultLabel2: {
             type: String,
