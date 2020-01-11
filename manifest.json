@@ -3,8 +3,8 @@
   "short_name": "SISTEM",
   "start_url": "./?utm_source=web_app_manifest",
   "display": "standalone",
-  "background_color": "#673AB7",
-  "theme_color": "#673AB7",
+  "background_color": "#FFB500",
+  "theme_color": "#FF6DAF",
   "icons": [
     {
       "src": "images/manifest/icon-48.png",

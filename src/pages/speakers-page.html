@@ -73,7 +73,7 @@
   <template>
     <style include="shared-styles flex flex-alignment positioning">:host{display:block;height:100%;}.container{display:grid;grid-template-columns:1fr;grid-gap:16px;min-height:80%;}.speaker{padding:32px 24px;background:var(--primary-background-color);text-align:center;transition:box-shadow var(--animation);}.speaker:hover{box-shadow:var(--box-shadow);}.photo{width:128px;height:128px;background-color:var(--secondary-background-color);border-radius:50%;overflow:hidden;transform:translateZ(0);}.badges{position:absolute;top:0;left:calc(50% + 32px);}.badge{margin-left:-10px;width:24px;height:24px;border-radius:50%;border:2px solid #fff;transition:transform var(--animation);}.badge:hover{transform:scale(1.1);}.badge:nth-of-type(2){transform:translate(25%, 75%);}.badge:nth-of-type(2):hover{transform:translate3d(25%, 75%, 20px) scale(1.1);}.badge:nth-of-type(3){transform:translate(10%, 180%);}.badge:nth-of-type(3):hover{transform:translate3d(10%, 180%, 20px) scale(1.1);}.badge-icon{--iron-icon-width:12px;--iron-icon-height:12px;color:#fff;}.company-logo{width:100%;height:16px;}.description{color:var(--primary-text-color);}.name{margin-top:8px;line-height:1;}.origin{margin-top:4px;font-size:14px;line-height:1.1;}.bio{margin-top:16px;color:var(--secondary-text-color);}.contacts{margin-top:16px;}.social-icon{--paper-icon-button:{padding:6px;width:32px;height:32px;};color:var(--secondary-text-color);}paper-progress{width:100%;--paper-progress-active-color:var(--default-primary-color);--paper-progress-secondary-color:var(--default-primary-color);}@media (min-width: 640px){.container{grid-template-columns:repeat(2, 1fr);}}@media (min-width: 812px){.container{grid-template-columns:repeat(3, 1fr);}}@media (min-width: 1024px){.container{grid-template-columns:repeat(4, 1fr);}}</style>
 
-    <polymer-helmet title="Speakers | SISTEM 2020" description="Hear from the Googlers, Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners." active="[[_setHelmetData(active, isSpeakerDialogOpened, isSessionDialogOpened)]]"></polymer-helmet>
+    <polymer-helmet title="Speakers | SISTEM 2020" description="Hear from the Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners." active="[[_setHelmetData(active, isSpeakerDialogOpened, isSessionDialogOpened)]]"></polymer-helmet>
 
     <iron-location query="{{queryParams}}"></iron-location>
 
@@ -81,7 +81,7 @@
 
     <hero-block background-image="" background-color="#FFF" font-color="#424242" active="[[active]]">
       <div class="hero-title">Speakers</div>
-      <p class="hero-description">Hear from the Googlers, Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.</p>
+      <p class="hero-description">Hear from the Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.</p>
     </hero-block>
 
     <paper-progress indeterminate="" hidden$="[[contentLoaderVisibility]]"></paper-progress>

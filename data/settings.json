@@ -2,15 +2,15 @@
   "organizer": {
     "name": "SISTEM 2020",
     "twitter": "sistem",
-    "blog": "https://medium.com/gdg-lviv",
+    "blog": "",
     "url": "http://sistem.intersocs.ie/"
   },
   "startDate": "2020-02-29T09:00:00+00:00",
   "endDate": "2020-02-29T17:00:00+00:00",
   "webapp": {
     "shortName": "SISTEM",
-    "themeColor": "#673AB7",
-    "backgroundColor": "#673AB7"
+    "themeColor": "#FF6DAF",
+    "backgroundColor": "#FFB500"
   },
   "dateFormat": {
     "locale": "en-GB"
@@ -43,8 +43,8 @@
     "home": {
       "description": "Join the community, learn new things!",
       "background": {
-        "color": "#673ab7",
-        "image": "/images/backgrounds/home.jpg"
+        "color": "#FF6DAF",
+        "image": "/images/backgrounds/home.webp"
       },
       "fontColor": "#FFF"
     },
@@ -58,8 +58,8 @@
     },
     "speakers": {
       "title": "Speakers",
-      "metaDescription": "Hear from the Googlers, Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.",
-      "description": "Hear from the Googlers, Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.",
+      "metaDescription": "Hear from the Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.",
+      "description": "Hear from the Partners, and Guest Speakers who are building the future of cloud. Check back often as we add more speakers, including our customers and partners.",
       "background": {
         "color": "#FFF"
       },
@@ -173,7 +173,7 @@
       }
     ]
   },
-  "mailto": "devfest@gdg.org.ua",
+  "mailto": "arthur1coll@gmail.com",
   "signInProviders": {
     "providersData": [
       {
