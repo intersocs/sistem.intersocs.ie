@@ -154,7 +154,7 @@
     }
   },
   "galleryBlock": {
-    "title": "#SISTEM 2019 highlights",
+    "title": "#SISTEM2019 highlights",
     "description": "See the Highlights of Last years Conference",
     "callToAction": {
       "label": "See all photos",
@@ -215,7 +215,7 @@
     "blocks": [
       {
         "title": "Organizer",
-        "description": "SISTEM is the product of collaboration with Ireland's Leading Networking and Computer Societies. See our Team page for all the participating societies.",
+        "description": "SISTEM is the product of collaboration Of Ireland's Networking and Computer Societies. See our Team page for all the participating societies.",
         "callToAction": {
           "label": "Open team page",
           "link": "/team"

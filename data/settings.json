@@ -108,10 +108,10 @@
   },
   "location": {
     "label": "Location",
-    "name": "UCD Student Center",
+    "name": "O’Brien Centre of Science, UCD",
     "city": "Dublin",
     "short": "UCD, Dublin",
-    "address": "UCD Student Center, Ireland",
+    "address": "UCD, Ireland",
     "pointer": {
       "latitude": 53.308318,
       "longitude": -6.227911,
@@ -121,7 +121,7 @@
       "latitude": 53.308318,
       "longitude": -6.227911
     },
-    "description": "SISTEM 2020 will be held in the Student Center in UCD"
+    "description": "SISTEM 2020 will be held in the O’Brien Centre of Science in UCD"
   },
   "mediaQueries": {
     "xs": {
@@ -143,15 +143,15 @@
     "follow": [
       {
         "name": "facebook",
-        "url": "https://www.facebook.com/TUCompSoc/"
+        "url": "https://www.facebook.com/ucdnetsoc/"
       },
       {
         "name": "twitter",
-        "url": "https://twitter.com/RedbrickDCU"
+        "url": "https://twitter.com/intent/tweet?text=#sistem2020"
       },
       {
         "name": "instagram",
-        "url": "https://www.instagram.com/redbrickdcu/"
+        "url": "https://www.instagram.com/ucdnetsoc/"
       }
     ],
     "share": [
@@ -161,11 +161,11 @@
       },
       {
         "name": "twitter",
-        "url": "https://twitter.com/intent/tweet?text="
+        "url": "https://twitter.com/intent/tweet?text=#sistem2020"
       }
     ]
   },
-  "mailto": "arthur1coll@gmail.com",
+  "mailto": "Schedule: change the date tab to “February 29”",
   "signInProviders": {
     "providersData": [
       {
