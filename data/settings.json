@@ -41,7 +41,7 @@
   ],
   "heroSettings": {
     "home": {
-      "description": "Join the community, learn new things!",
+      "description": "A tech conference by students, for students",
       "background": {
         "color": "#FF6DAF",
         "image": "/images/backgrounds/home.webp"
@@ -109,7 +109,7 @@
   "location": {
     "label": "Location",
     "name": "O’Brien Centre of Science, UCD",
-    "city": "Dublin",
+    "city": "University College, Dublin",
     "short": "UCD, Dublin",
     "address": "UCD, Ireland",
     "pointer": {
@@ -165,7 +165,7 @@
       }
     ]
   },
-  "mailto": "Schedule: change the date tab to “February 29”",
+  "mailto": "internet.society@ucd.ie",
   "signInProviders": {
     "providersData": [
       {
