@@ -1,36 +1,9 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-
-<link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/iron-lazy-pages/iron-lazy-pages.html">
-
-<link rel="import" href="../mixins/scroll-functions.html">
-
-<dom-module id="blog-page">
+<html><head></head><body><dom-module id="blog-page">
   <template>
-    <style>
+    <style>:host{display:block;height:100%;}iron-lazy-pages{min-height:100%;}</style>
+    <app-route route="[[_route]]" pattern="/:page" data="{{routeData}}" tail="{{subRoute}}"></app-route>
 
-      :host {
-        display: block;
-        height: 100%;
-      }
-
-      iron-lazy-pages {
-        min-height: 100%;
-      }
-
-    </style>
-    <app-route
-      route="[[_route]]"
-      pattern="/:page"
-      data="{{routeData}}"
-      tail="{{subRoute}}"
-    ></app-route>
-
-    <iron-lazy-pages
-      attr-for-selected="data-route"
-      selected="[[routeData.page]]"
-      selected-attribute="active"
-    >
+    <iron-lazy-pages attr-for-selected="data-route" selected="[[routeData.page]]" selected-attribute="active">
       <blog-list-page data-route="" data-path="./blog-list-page.html"></blog-list-page>
       <post-page data-route="posts" data-path="./post-page.html" route="[[subRoute]]"></post-page>
     </iron-lazy-pages>
@@ -71,3 +44,4 @@
     window.customElements.define(BlogPage.is, BlogPage);
   </script>
 </dom-module>
+</body></html>

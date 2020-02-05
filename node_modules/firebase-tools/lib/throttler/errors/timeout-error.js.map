@@ -1,1 +1,0 @@
-{"version":3,"file":"timeout-error.js","sourceRoot":"","sources":["../../../src/throttler/errors/timeout-error.ts"],"names":[],"mappings":";;AAAA,6CAAqC;AAErC,MAAqB,YAAa,SAAQ,oBAAS;IACjD,YAAY,QAAgB,EAAE,OAAe;QAC3C,KAAK,CAAC,QAAQ,EAAE,mBAAmB,OAAO,KAAK,CAAC,CAAC;IACnD,CAAC;CACF;AAJD,+BAIC"}
