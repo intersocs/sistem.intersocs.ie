@@ -1,0 +1,692 @@
+<html><head></head><body><div hidden="" by-polymer-bundler=""><script>
+  (function() {
+  'use strict';
+
+  Polymer({
+    is: 'app-route-converter',
+
+    behaviors: [Polymer.AppRouteConverterBehavior]
+  });
+  })();
+</script>
+<dom-module id="iron-pages" assetpath="../../bower_components/iron-pages/">
+
+  <template>
+    <style>:host{display:block;}:host > ::slotted(:not(slot):not(.iron-selected)){display:none !important;}</style>
+
+    <slot></slot>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'iron-pages',
+
+      behaviors: [Polymer.IronResizableBehavior, Polymer.IronSelectableBehavior],
+
+      properties: {
+
+        // as the selected page is the only one visible, activateEvent
+        // is both non-sensical and problematic; e.g. in cases where a user
+        // handler attempts to change the page and the activateEvent
+        // handler immediately changes it back
+        activateEvent: {type: String, value: null}
+
+      },
+
+      observers: ['_selectedPageChanged(selected)'],
+
+      _selectedPageChanged: function(selected, old) {
+        this.async(this.notifyResize);
+      }
+    });
+  </script>
+</dom-module>
+<dom-module id="sticky-element" assetpath="../elements/">
+  <template>
+    <style>:host{display:block;}#content::before{position:absolute;right:0;bottom:-5px;left:0;width:100%;height:5px;content:"";transition:opacity 0.4s;pointer-events:none;opacity:0;box-shadow:inset 0 5px 6px -3px rgba(0, 0, 0, 0.4);will-change:opacity;}.sticked{margin-top:56px;position:fixed;top:0;right:0;left:0;z-index:9;}#content.sticked::before{opacity:1;}@media (min-width: 812px){.sticked{margin-top:64px;}}</style>
+
+    <div id="trigger"></div>
+    <div id="content">
+      <slot></slot>
+    </div>
+
+  </template>
+
+  <script>
+
+    class StickyElement extends Polymer.Element {
+      static get is() {
+        return 'sticky-element';
+      }
+
+      static get properties() {
+        return {
+          active: {
+            type: Boolean,
+            observer: '_toggleListener',
+          },
+        };
+      }
+
+      constructor() {
+        super();
+        this._onScroll = this._onScroll.bind(this);
+      }
+
+      _toggleListener(active) {
+        if (active) {
+          window.addEventListener('scroll', this._onScroll);
+        } else {
+          window.removeEventListener('scroll', this._onScroll);
+          this.$.content.classList.remove('sticked');
+        }
+      }
+
+      _onScroll() {
+        if (this.waiting) {
+          return;
+        }
+        this.waiting = true;
+        clearTimeout(this.endScrollHandle);
+
+        this._toggleSticky();
+
+        setTimeout(() => {
+          this.waiting = false;
+        }, 100);
+
+        this.endScrollHandle = setTimeout(() => {
+          this._toggleSticky();
+        }, 200);
+      }
+
+      _toggleSticky() {
+        const scrollTop = this.$.trigger.getBoundingClientRect().top;
+        if (scrollTop > 64 && this.$.content.classList.contains('sticked')) {
+          this.$.content.classList.remove('sticked');
+          this.dispatchEvent(new CustomEvent('element-sticked', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              sticked: false,
+            },
+          }));
+        } else if (scrollTop <= 64 && !this.$.content.classList.contains('sticked')) {
+          this.style.height = `${this.$.content.offsetHeight}px`;
+          this.$.content.classList.add('sticked');
+          this.dispatchEvent(new CustomEvent('element-sticked', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              sticked: true,
+            },
+          }));
+        }
+      }
+    }
+
+    window.customElements.define(StickyElement.is, StickyElement);
+  </script>
+</dom-module>
+<dom-module id="header-bottom-toolbar" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;background-color:var(--primary-background-color);}app-toolbar{margin:0 auto;padding:0 16px;height:auto;max-width:var(--max-container-width);}.nav-items{--paper-tabs-selection-bar-color:var(--default-primary-color);--paper-tabs:{height:64px;};width:100%;}.nav-item a{padding:0 14px;color:var(--primary-text-color);}@media (min-width: 640px){app-toolbar{padding:0 36px;}}</style>
+
+
+    <iron-location query="{{queryParams}}"></iron-location>
+
+    <app-toolbar class="bottom-toolbar">
+
+      <content-loader class="nav-items" card-padding="15px" card-width="105px" card-margin="0 14px 0 0" card-height="64px" avatar-size="0" avatar-circle="0" title-top-position="20px" title-height="24px" title-width="75%" load-from="-240%" load-to="350%" blur-width="80px" items-count="2" layout="" horizontal="" hidden$="[[contentLoaderVisibility]]">
+      </content-loader>
+
+      <paper-tabs class="nav-items" selected="[[route.subRoute]]" attr-for-selected="day" hidden$="[[!contentLoaderVisibility]]" scrollable="" hide-scroll-buttons="" noink="">
+        <template is="dom-repeat" items="[[schedule]]" as="day">
+          <paper-tab class="nav-item" day="[[day.date]]" link="">
+            <a href$="[[_addQueryParams(day.date, queryParams)]]" layout="" vertical="" center-center="">[[day.dateReadable]]</a>
+          </paper-tab>
+        </template>
+        <paper-tab class="nav-item" day="my-schedule" hidden$="[[!user.signedIn]]" link="">
+          <a href$="[[_addQueryParams('my-schedule', queryParams)]]" layout="" vertical="" center-center="">My Schedule</a>
+        </paper-tab>
+      </paper-tabs>
+    </app-toolbar>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class HeaderBottomToolbar extends UtilsFunctions(ReduxMixin(Polymer.Element)) {
+      static get is() {
+        return 'header-bottom-toolbar';
+      }
+
+      static get properties() {
+        return {
+          route: {
+            type: String,
+            statePath: 'routing',
+          },
+          schedule: {
+            type: Array,
+            statePath: 'schedule',
+          },
+          contentLoaderVisibility: {
+            type: Boolean,
+            value: false,
+          },
+          user: {
+            type: Object,
+            statePath: 'user',
+          },
+        };
+      }
+
+      static get observers() {
+        return [
+          '_scheduleChanged(schedule)',
+        ];
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        // eslint-disable-next-line no-undef
+        HOVERBOARD.Elements.StickyHeaderToolbar = this;
+      }
+
+      _scheduleChanged(schedule) {
+        if (schedule.length) {
+          this.contentLoaderVisibility = true;
+        }
+      }
+
+      _addQueryParams(tab, queryParams) {
+        return `/schedule/${tab}${queryParams ? `?${queryParams}` : ''}`;
+      }
+    }
+
+    customElements.define(HeaderBottomToolbar.is, HeaderBottomToolbar);
+  </script>
+</dom-module>
+<dom-module id="session-element" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;background-color:var(--primary-background-color);border-bottom:1px solid var(--border-light-color);height:100%;border-radius:var(--border-radius);}.session{height:100%;color:var(--primary-text-color);overflow:hidden;}.session:hover{background-color:var(--additional-background-color);}.session-icon{--iron-icon-width:88px;--iron-icon-height:88px;--iron-icon-fill-color:var(--border-light-color);position:absolute;right:40px;bottom:-4px;}.session-header,
+      .session-content,
+      .session-footer{padding:16px;z-index:1;}.session-header{padding-bottom:8px;}.language{margin-left:8px;font-size:12px;text-transform:uppercase;color:var(--secondary-text-color);}.session-content{padding-top:0;padding-bottom:40px;}.bookmark-session{color:var(--secondary-text-color);}.session[featured] .bookmark-session{color:var(--default-primary-color);}.bookmark-session:hover{color:var(--default-primary-color);}.session-title{font-size:20px;line-height:1.2;}.session-description{margin-top:8px;}.session-meta{margin:0;padding:0;font-size:12px;color:var(--secondary-text-color);}.session-footer{font-size:14px;}.speakers{margin-top:10px;}.speaker:not(:last-of-type){padding-bottom:10px;}.speaker-photo{margin-right:12px;width:32px;height:32px;background-color:var(--secondary-background-color);border-radius:50%;overflow:hidden;transform:translateZ(0);}.speaker-name{margin-bottom:4px;line-height:1.2;}.speaker-title{font-size:12px;line-height:1;}@media (min-width: 640px){:host{border:1px solid var(--border-light-color);border-top:0;}}@media (min-width: 812px){:host{border:1px solid var(--border-light-color);}}</style>
+
+    <a class="session" href$="/schedule/[[dayName]]?[[toggleQueryParam(queryParams, 'sessionId', session.id)]]" featured$="[[isFeatured]]" layout="" vertical="" relative="">
+      <iron-icon class="session-icon" icon="hoverboard:[[session.icon]]"></iron-icon>
+
+      <div class="session-header" layout="" horizontal="" justified="">
+        <div flex="">
+          <h3 class="session-title">[[session.title]]</h3>
+          <text-truncate lines="3">
+            <div class="session-description">[[summary]]</div>
+          </text-truncate>
+        </div>
+        <span class="language">[[slice(session.language, 2)]]</span>
+      </div>
+
+      <div class="session-content" flex="" layout="" horizontal="" justified="">
+        <div class="session-meta">
+          <div hidden$="[[!session.complexity]]">[[session.complexity]]</div>
+        </div>
+      </div>
+
+      <div class="session-footer">
+        <div layout="" horizontal="" justified="" center-aligned="">
+          <div class="session-meta" flex="">
+            <span hidden$="[[!session.duration.hh]]">[[session.duration.hh]] hour[[_getEnding(session.duration.hh)]]</span>
+            <span hidden$="[[!session.duration.mm]]">[[session.duration.mm]] min[[_getEnding(session.duration.mm)]]</span>
+          </div>
+          <div hidden$="[[!session.tags.length]]">
+            <template is="dom-repeat" items="[[session.tags]]" as="tag">
+              <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+            </template>
+          </div>
+        </div>
+
+        <div class="speakers" hidden$="[[!session.speakers.length]]">
+          <template is="dom-repeat" items="[[session.speakers]]" as="speaker">
+            <div class="speaker" layout="" horizontal="" center="">
+              <plastic-image class="speaker-photo" srcset="[[speaker.photoUrl]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+
+              <div class="speaker-details" flex="">
+                <div class="speaker-name">[[speaker.name]]</div>
+                <div class="speaker-title">[[_join(speaker.company, speaker.country)]]</div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+      </div>
+
+    </a>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class SessionElement extends UtilsFunctions(
+        ReduxMixin(Polymer.GestureEventListeners(Polymer.Element))
+    ) {
+      static get is() {
+        return 'session-element';
+      }
+
+      static get properties() {
+        return {
+          user: Object,
+          session: Object,
+          featuredSessions: Object,
+          queryParams: String,
+          sessionColor: {
+            type: String,
+            computed: 'getVariableColor(session.mainTag)',
+          },
+          isFeatured: {
+            type: String,
+            computed: '_isFeatured(featuredSessions, session.id)',
+          },
+          summary: {
+            type: String,
+            computed: '_summary(session.description)',
+          },
+        };
+      }
+
+      _isFeatured(featuredSessions, sessionId) {
+        if (!featuredSessions || !sessionId) return false;
+        return featuredSessions[sessionId];
+      }
+
+      _getEnding(number) {
+        return number > 1 ? 's' : '';
+      }
+
+      _summary(description = '') {
+        const indexes = [
+          description.indexOf('\n'),
+          description.indexOf('<br'),
+          description.length,
+        ].filter((index) => index > 0);
+        return description.slice(0, Math.min(...indexes));
+      }
+
+      _getFeaturedSessionIcon(featuredSessions, sessionId) {
+        return this.isFeatured ? 'bookmark-check' : 'bookmark-plus';
+      }
+
+      _toggleFeaturedSession(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!this.user.signedIn) {
+          toastActions.showToast({
+            message: 'Sign in to save sessions',
+            action: {
+              title: 'Sign in',
+              callback: () => {
+                dialogsActions.openDialog(DIALOGS.SIGNIN);
+              },
+            },
+          });
+          return;
+        }
+
+        const sessions = Object.assign({}, this.featuredSessions, {
+          [this.session.id]: !this.featuredSessions[this.session.id] ? true : null,
+        });
+
+        this.dispatch(sessionsActions.setUserFeaturedSessions(this.user.uid, sessions));
+      }
+
+      _join(company, country) {
+        return [company, country].filter(Boolean).join(' / ');
+      }
+    }
+
+    window.customElements.define(SessionElement.is, SessionElement);
+  </script>
+</dom-module>
+<dom-module id="schedule-day" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment positioning">:host{display:block;--tracks-number:3;}.start-time{margin-top:16px;padding:8px 16px;color:var(--secondary-text-color);letter-spacing:-0.04em;border-bottom:1px solid var(--border-light-color);}.hours{font-size:24px;font-weight:300;}.minutes{font-size:16px;}.add-session{padding:8px;grid-column-end:-1 !important;background-color:var(--primary-background-color);border-bottom:1px solid var(--border-light-color);font-size:14px;color:var(--secondary-text-color);}.add-session:hover{background-color:var(--additional-background-color);}.add-session-icon{--iron-icon-width:14px;margin-right:8px;}@media (min-width: 812px){:host{margin-left:auto;display:block;max-width:calc(100% - 64px);}.grid{display:grid;grid-column-gap:16px;grid-row-gap:32px;grid-template-columns:repeat(var(--tracks-number), 1fr);}.start-time{margin:0;padding:0;text-align:right;transform:translateX(calc(-100% - 16px));border-bottom:0;}.hours{font-size:32px;}.subsession:not(:last-of-type){margin-bottom:16px;}.add-session{border:1px solid var(--border-light-color);}}</style>
+
+    <div class="grid" style$="--tracks-number: [[day.tracks.length]];">
+      <template is="dom-repeat" items="[[day.timeslots]]" as="timeslot" index-as="timeslotIndex">
+
+        <div id$="[[timeslot.startTime]]" class="start-time" style$="grid-area: [[_getTimePosition(timeslotIndex)]]">
+          <span class="hours">[[_splitText(timeslot.startTime, ':', 0)]]</span>
+          <span class="minutes">[[_splitText(timeslot.startTime, ':', 1)]]</span>
+        </div>
+
+
+        <a class="add-session" href$="/schedule/[[day.date]]#[[timeslot.startTime]]" hidden$="[[!_showAddSession(timeslot, onlyFeatured)]]" style$="grid-area: [[timeslot.sessions.0.gridArea]]" layout="" horizontal="" center-center="">
+          <iron-icon class="add-session-icon" icon="hoverboard:add-circle-outline"></iron-icon>
+          <span>Browse sessions</span>
+        </a>
+
+        <template is="dom-repeat" items="[[timeslot.sessions]]" as="session" index-as="sessionIndex" filter="_isNotEmpty">
+          <div class="session" style$="grid-area: [[session.gridArea]]" layout="" vertical="">
+            <template is="dom-repeat" items="[[_filterSessions(session.items, selectedFilters)]]" as="subSession">
+              <session-element class="subsession" day-name="[[name]]" session="[[subSession]]" user="[[user]]" featured-sessions="[[featuredSessions]]" query-params="[[queryParams]]"></session-element>
+            </template>
+          </div>
+
+        </template>
+
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class ScheduleDay extends UtilsFunctions(ScrollFunctions(Polymer.Element)) {
+      static get is() {
+        return 'schedule-day';
+      }
+
+      static get properties() {
+        return {
+          active: {
+            type: Boolean,
+            observer: '_pageVisible',
+          },
+          day: Object,
+          name: String,
+          user: Object,
+          featuredSessions: Object,
+          onlyFeatured: Boolean,
+          viewport: Object,
+          selectedFilters: Object,
+          queryParams: String,
+        };
+      }
+
+      _pageVisible(active) {
+        if (active && window.location.hash) {
+          const selectedTime = window.location.hash.slice(1);
+          if (selectedTime) {
+            requestAnimationFrame(() => {
+              const targetElement = this.shadowRoot.querySelector(`[id="${selectedTime}"]`);
+              const offset = this.offsetTop(targetElement);
+              // eslint-disable-next-line no-undef
+              const toolbarHeight = HOVERBOARD.Elements.HeaderToolbar
+                  .getBoundingClientRect().height - 1;
+              // eslint-disable-next-line no-undef
+              const stickyToolbarHeight = HOVERBOARD.Elements.StickyHeaderToolbar
+                  .getBoundingClientRect().height;
+              const additionalMargin = this.viewport.isTabletPlus ? 8 : 0;
+              const scrollTargetY = offset - toolbarHeight - stickyToolbarHeight - additionalMargin;
+              this.scrollToY(scrollTargetY, 1500, 'easeInOutSine');
+            });
+          }
+        }
+      }
+
+      _getTimePosition(timeslotIndex) {
+        return `${timeslotIndex + 1} / 1`;
+      }
+
+      _splitText(text, divider, index) {
+        return text.split(divider)[index];
+      }
+
+      _showAddSession(timeslot, onlyFeatured) {
+        return onlyFeatured && !timeslot.sessions.reduce((aggregator, sessionBlock) =>
+          aggregator + sessionBlock.items.length
+            , 0);
+      }
+
+      _isNotEmpty(sessionBlock) {
+        return !!sessionBlock.items.length;
+      }
+
+      _filterSessions(sessions, selectedFilters) {
+        if (!selectedFilters) return sessions;
+        return sessions.filter((session) => {
+          return (
+            !selectedFilters.tag
+            || !selectedFilters.tag.length
+            || session.tags
+            && !!session.tags.filter((tag) =>
+              selectedFilters.tag.includes(this.generateClassName(tag))).length
+          ) && (
+            !selectedFilters.complexity
+            || !selectedFilters.complexity.length
+            || session.complexity
+            && selectedFilters.complexity.includes(this.generateClassName(session.complexity))
+          );
+        });
+      }
+    }
+
+    window.customElements.define(ScheduleDay.is, ScheduleDay);
+  </script>
+</dom-module>
+<dom-module id="my-schedule" assetpath="../elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;}.date{margin:16px;font-size:24px;}.date:not(:first-of-type){margin-top:64px;}@media (min-width: 640px){.date{margin-left:64px;font-size:32px;}}</style>
+
+    <template is="dom-repeat" items="[[featuredSchedule]]" as="day">
+      <div class="date">[[day.dateReadable]]</div>
+
+      <schedule-day name$="[[day.date]]" day="[[day]]" user="[[user]]" featured-sessions="[[featuredSessions]]" selected-filters="[[selectedFilters]]" viewport="[[viewport]]" query-params="[[queryParams]]" only-featured=""></schedule-day>
+
+    </template>
+  </template>
+
+  <script>
+
+    class MySchedule extends ReduxMixin(Polymer.Element) {
+      static get is() {
+        return 'my-schedule';
+      }
+
+      static get properties() {
+        return {
+          schedule: Array,
+          featuredSchedule: Array,
+          featuredSessions: Object,
+          selectedFilters: Object,
+          queryParams: String,
+          viewport: Object,
+          user: Object,
+        };
+      }
+
+      static get observers() {
+        return [
+          '_filterSchedule(schedule, featuredSessions)',
+        ];
+      }
+
+      _filterSchedule(schedule, featuredSessions) {
+        if (schedule.length) {
+          this.featuredSchedule = schedule.map((day) => Object.assign({}, day, {
+            timeslots: day.timeslots.map((timeslot) => Object.assign({}, timeslot, {
+              sessions: timeslot.sessions.map((sessionBlock) => Object.assign({}, sessionBlock, {
+                items: sessionBlock.items.filter((session) => featuredSessions[session.id]),
+              })),
+            })),
+          }));
+        }
+      }
+    }
+
+    customElements.define(MySchedule.is, MySchedule);
+  </script>
+</dom-module>
+</div><dom-module id="schedule-page">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;height:100%;}.container{min-height:80%;}paper-progress{width:100%;--paper-progress-active-color:var(--default-primary-color);--paper-progress-secondary-color:var(--default-primary-color);}@media (max-width: 640px){.container{padding:0 0 32px;}}@media (min-width: 640px){:host{background-color:#fff;}}</style>
+
+    <polymer-helmet title="Schedule | SISTEM 2020" description="Choose your sessions to visit" active="[[_setHelmetData(active, isSpeakerDialogOpened, isSessionDialogOpened)]]"></polymer-helmet>
+
+    <iron-location query="{{queryParams}}"></iron-location>
+
+    <app-route route="{{appRoute}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}" query-params="{{nQueryParams}}"></app-route>
+
+    <app-route route="[[route]]" pattern="/:day" data="{{routeData}}"></app-route>
+
+    <hero-block background-image="" background-color="#fff" font-color="#424242" active="[[active]]">
+      <div class="hero-title">Schedule</div>
+      <p class="hero-description"></p>
+      <sticky-element slot="bottom" active="[[active]]">
+        <header-bottom-toolbar></header-bottom-toolbar>
+      </sticky-element>
+    </hero-block>
+
+    <paper-progress indeterminate="" hidden$="[[contentLoaderVisibility]]"></paper-progress>
+
+    <filter-menu filters="[[_filters]]" selected="[[_selectedFilters]]"></filter-menu>
+
+    <div class="container">
+      <content-loader card-padding="15px" card-margin="16px 0" card-height="140px" avatar-size="0" avatar-circle="0" title-top-position="20px" title-height="42px" title-width="70%" load-from="-20%" load-to="80%" blur-width="300px" items-count="2" hidden$="[[contentLoaderVisibility]]" layout="">
+      </content-loader>
+
+      <iron-pages attr-for-selected="name" selected="[[subRoute]]" selected-attribute="active">
+        <template is="dom-repeat" items="[[schedule]]" as="day">
+          <schedule-day name$="[[day.date]]" day="[[day]]" user="[[user]]" featured-sessions="[[featuredSessions]]" selected-filters="[[_selectedFilters]]" viewport="[[viewport]]" query-params="[[queryParams]]"></schedule-day>
+        </template>
+        <my-schedule name="my-schedule" schedule="[[schedule]]" user="[[user]]" featured-sessions="[[featuredSessions]]" selected-filters="[[_selectedFilters]]" viewport="[[viewport]]" query-params="[[queryParams]]"></my-schedule>
+      </iron-pages>
+    </div>
+
+    <footer-block></footer-block>
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class SchedulePage extends UtilsFunctions(ReduxMixin(SessionsHoC(SpeakersHoC(Polymer.Element)))) {
+      static get is() {
+        return 'schedule-page';
+      }
+
+      static get properties() {
+        return {
+          route: Object,
+          queryParams: Object,
+          active: Boolean,
+          schedule: {
+            type: Array,
+            statePath: 'schedule',
+          },
+          featuredSessions: {
+            type: Object,
+            statePath: 'sessions.featured',
+          },
+          user: {
+            type: Object,
+            statePath: 'user',
+          },
+          subRoute: {
+            type: Object,
+            statePath: 'routing.subRoute',
+          },
+          isSpeakerDialogOpened: {
+            type: Object,
+            statePath: 'dialogs.speaker.isOpened',
+          },
+          isSessionDialogOpened: {
+            type: Object,
+            statePath: 'dialogs.session.isOpened',
+          },
+          contentLoaderVisibility: String,
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          filters: {
+            type: Object,
+            statePath: 'filters',
+            observer: '_onFiltersLoad',
+          },
+          _selectedFilters: Object,
+        };
+      }
+
+      static get observers() {
+        return [
+          '_setDay(active, routeData.day, schedule)',
+          '_openSessionDetails(active, sessions, _selectedFilters.sessionId)',
+          '_fetchFeaturedSessions(active, sessions, user.uid)',
+          '_scheduleChanged(schedule, _selectedFilters)',
+          '_sessionsAndSpeakersChanged(sessions, speakers)',
+          '_paramsUpdated(queryParams)',
+        ];
+      }
+
+      _sessionsAndSpeakersChanged(sessions, speakers) {
+        if (!this.schedule.length
+          && sessions && sessions.length && speakers && speakers.length) {
+          this.dispatch(scheduleActions.fetchSchedule());
+        }
+      }
+
+      _scheduleChanged(schedule) {
+        if (schedule.length) {
+          this.contentLoaderVisibility = 'hidden';
+        }
+      }
+
+      _fetchFeaturedSessions(active, sessions, userUid) {
+        if (active && userUid && sessions && sessions.length &&
+          (!this.featuredSessions || !Object.keys(this.featuredSessions).length)) {
+          this.dispatch(sessionsActions.fetchUserFeaturedSessions(userUid));
+        }
+      }
+
+      _setDay(active, day, schedule) {
+        if (active && schedule.length) {
+          const selectedDay = day || schedule[0].date;
+          routingActions.setSubRoute(selectedDay);
+        }
+      }
+
+      _openSessionDetails(active, sessions, id) {
+        if (sessions && sessions.length) {
+          requestAnimationFrame(() => {
+            if (active && id) {
+              dialogsActions.openDialog(DIALOGS.SESSION, this.sessionsMap[id[0]]);
+            } else {
+              this.isSpeakerDialogOpened && dialogsActions.closeDialog(DIALOGS.SPEAKER);
+              this.isSessionDialogOpened && dialogsActions.closeDialog(DIALOGS.SESSION);
+            }
+          });
+        }
+      }
+
+      _setHelmetData(active, isSpeakerDialogOpened, isSessionDialogOpened) {
+        return active && !isSpeakerDialogOpened && !isSessionDialogOpened;
+      }
+
+      _onFiltersLoad(filters) {
+        this.set('_filters', [{
+          title: 'Tags',
+          key: 'tag',
+          items: filters.tags,
+        }, {
+          title: 'Complexity',
+          key: 'complexity',
+          items: filters.complexity,
+        }]);
+      }
+
+      _paramsUpdated(queryParams) {
+        this.set('_selectedFilters', this.parseQueryParamsFilters(queryParams));
+      }
+    }
+
+    window.customElements.define(SchedulePage.is, SchedulePage);
+
+  </script>
+</dom-module>
+
+</body></html>

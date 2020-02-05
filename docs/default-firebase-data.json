@@ -1,0 +1,778 @@
+{
+  "blog" : {
+    "c4p" : {
+      "backgroundColor" : "#3647a5",
+      "brief" : "GDG DevFest Ukraine was announced, for the sixth year in a row, the conference will bring together 900 developers, managers and...",
+      "content" : "GDG DevFest Ukraine was announced, for the sixth year in a row, the conference will bring together 900 developers, managers and entrepreneurs on **October 13-14** to Lviv.  This year our team is doing big advancement in the content, we're building an extra stage to accommodate more visitors and provide three fully independent tracks on Android, Web and Google Cloud topics.  Our focus is the content. **We’re looking for speakers like you**, who are ready to rock the stage and deliver the best talk or workshop in the field.  \"I've been to conferences all over the world and what you've created in Lviv is world class. It's easily first league of conferences.\" - Piotr Tuszynski, DevFest '16 Keynote Speaker  <div layout horizontal center-justified> <a href=\"http://bit.ly/df17-c4p\" rel=\"noopener noreferrer\">   <paper-button primary>Submit a proposal</paper-button> </a> </div>  ## Why is it cool to speak at the DevFest?  DevFest Ukraine is not an ordinary tech conference, besides selecting only the best speakers, we help them to succeed in delivering an exceptional quality talk on the stage.  Here are few perks that all our speakers get:  - **Expences covered**. Hotel for 3 nights, travel costs and entrance to exclusive speaker parties are covered for all speakers. - **Professional video recording**. We work with experienced video production companies to create session recording of the best quality. Stage, screen, audio, all is recorded separately and combined later. Check the [session videos from the last year](https://www.youtube.com/watch?v=VOwUnBkqmo4). - **Exposure**. By being a speaker, you are proving your level of expertise to a potential business partners or employers. Your talk will be promoted in our online resources and recording published in YouTube channel with more than 35k views. - **Unique networking**. Being a speaker means you’ll have the unique chance to network with other speakers - the best experts in the industry. - **Coaching**. We're in the same boat, after being selected as a speaker our program committee will help you to deliver the best talk possible. We provide information about the audience, presentation templates, feedback on the slides, all to help you to prepare.  \"It was a best DevFest I ever attended. So professional, so much enthusiasm from the community. You managed to bring the vibe of Google I/O to Ukraine.\" - David Vávra, DevFest '16 Speaker  ## What are we looking for?  We're looking for **experience-based talks**, the information that can not be found in the documentation or easily googled. We're looking for your stories, your struggles, research results and experiences with the frontier tools or technologies. Check the [list of topics](https://docs.google.com/document/d/18eGvBr6wdlXsfiZM4EK6SubfL3G1RWj-ABTBN9pngNg/edit?usp=sharing) we're interested in (it is not full and updated all the time).  ### Format  You can submit as many talks as you want. This year we accept submissions in two formats:   - 40 minutes sessions.   - 2(or 3) hours workshops.  ### Talks that will not pass initial review  - Talks about a specific tool/library/project explaining how it works or how to use it.  - Talks whose focus is pitching a company or project. It’s cool that you mention your company during the presentation, but it shouldn’t be the focus of the talk.  - Proposals that are not in English.  - Recruitment talks to attract talent.  We strongly recommend you check out [speaking.io](http://speaking.io/) website from Zach Holman. It includes good tips and guidelines for speakers.   ## Timeline  **Call for Papers submission deadline is July 1, 2017.** Submission results will be announced by July 16.   Any questions? Email organizers at [devfest@gdg.org.ua](mailto:devfest@gdg.org.ua)  <div layout horizontal center-justified> <a href=\"http://bit.ly/df17-c4p\" rel=\"noopener noreferrer\">   <paper-button primary>Submit a proposal</paper-button> </a> </div>",
+      "image" : "/images/posts/c4p.jpg",
+      "published" : "2017-02-12",
+      "source" : "/data/posts/2017-02-12-c4p.md",
+      "title" : "We're looking for speakers"
+    }
+  },
+  "gallery" : [
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0432.JPG.webp?alt=media&token=8ad2554d-a917-47ba-b814-0932b56220f2",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0408.JPG.webp?alt=media&token=e4f937f5-c948-4153-8e09-9e0e39b0db73",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0342.JPG.webp?alt=media&token=6b7d5e75-3967-42ac-8e32-f637a31528c1",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0350.JPG.webp?alt=media&token=f48a0a37-edc1-4d57-bef6-b0d7d0b4fd8a",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0277.JPG.webp?alt=media&token=db0a2c5c-cf6b-4a4a-aa18-17d7b16ee67e",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0516.JPG.webp?alt=media&token=c6655609-9d90-4de6-80f8-2ff355fff906",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0410.JPG.webp?alt=media&token=4e87902d-a96b-44f0-8aae-859f2af9eca5",
+    "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/DSC_0454.JPG.webp?alt=media&token=4982ddfb-bc7c-4b24-b09b-85bedb854287"
+  ],
+  "notifications" : {
+    "config" : {
+      "icon" : "",
+      "timezone" : "+00:00"
+    },
+    "messages" : { },
+    "subscribers" : { },
+    "test" : { },
+    "users" : { }
+  },
+  "partners" : [ {
+    "logos" : [ {
+      "order" : 0,
+      "logoUrl" : "../images/logos/mastercard.svg",
+      "name" : "Mastercard",
+      "url" : "https://www.mastercard.ie/en-ie.html"
+    } ],
+    "order" : 1,
+    "title" : "Diamond"
+  }, {
+    "logos" : [
+    {
+      "order" : 0,
+      "logoUrl" : "../images/logos/microsoft.svg",
+      "name" : "Microsoft",
+      "url" : "https://microsoft.ie/"
+    }],
+    "order" : 0,
+    "title" : "Platinum"
+  },
+  {
+    "logos" : [ {
+      "order" : 0,
+      "logoUrl" : "../images/logos/civica.png",
+      "name" : "Civica",
+      "url" : "https://www.civica.com/en-gb/"
+    }],
+    "order" : 2,
+    "title" : "Gold"
+  },
+  {
+    "logos" : [ {
+      "order" : 0,
+      "logoUrl" : "../images/logos/mcs.png",
+      "name" : "MCS Group",
+      "url" : "https://www.mcsgroup.jobs/"
+    },
+    {
+      "order" : 1,
+      "logoUrl" : "../images/logos/stripe.svg",
+      "name" : "Stripe",
+      "url" : "https://stripe.com/ie"
+    },
+    {
+      "order" : 2,
+      "logoUrl" : "../images/logos/hubspot.svg",
+      "name" : "Hubspot",
+      "url" : "https://www.hubspot.com"
+    }],
+    "order" : 3,
+    "title" : "Silver"
+  }  ],
+  "schedule" : {
+    "2020-02-29" : {
+      "dateReadable" : "29th Of February",
+      "timeslots" : [ {
+        "endTime" : "10:00",
+        "sessions" : [ {
+          "items" : [ 100 ]
+        } ],
+        "startTime" : "9:00"
+      }, {
+        "endTime" : "10:15",
+        "sessions" : [ {
+          "items" : [ 101 ]
+        } ],
+        "startTime" : "10:00"
+      }, {
+        "endTime" : "11:00",
+        "sessions" : [ {
+          "items" : [ 102 ]
+        } ],
+        "startTime" : "10:15"
+      }, {
+        "endTime" : "12:00",
+        "sessions" : [ {
+          "items" : [ 104 ]
+        }, {
+          "items" : [ 105 ]
+        } ,
+        {
+          "extend": 2,
+          "items" : [ 106 ]
+        } ],
+        "startTime" : "11:15"
+      },
+      {
+        "endTime" : "13:00",
+        "sessions" : [ {
+          "items" : [ 108 ]
+        },
+        {
+          "items" : [ 109 ]
+        } ],
+        "startTime" : "12:15"
+      }, {
+        "endTime" : "14:00",
+        "sessions" : [ {
+          "items" : [ 110 ]
+        } ],
+        "startTime" : "13:00"
+      }, {
+        "endTime" : "14:45",
+        "sessions" : [ {
+          "items" : [ 111 ]
+        }, {
+          "items" : [ 112 ]
+        }, {
+          "extend" : 2,
+          "items" : [ 113 ]
+        } ],
+        "startTime" : "14:00"
+      }, {
+        "endTime" : "15:45",
+        "sessions" : [ {
+          "items" : [ 114 ]
+        },
+        {
+          "extend" : 3,
+          "items" : [ 115 ]
+        }],
+        "startTime" : "15:00"
+      },
+      {
+        "endTime" : "16:45",
+        "sessions" : [ {
+          "items" : [ 116 ]
+        }],
+        "startTime" : "15:30"
+      },
+       {
+        "endTime" : "16:45",
+        "sessions" : [ {
+          "items" : [ 117 ]
+        } ],
+        "startTime" : "16:00"
+      },
+      {
+        "endTime" : "17:00",
+        "sessions" : [ {
+          "items" : [ 118 ]
+        }],
+        "startTime" : "16:45"
+      } ],
+      "tracks" : [ {
+        "title" : "Expo hall"
+      }, {
+        "title" : "Conference hall"
+      }, {
+        "title" : "Workshops hall"
+      } ]
+    }
+  },
+  "sessions" : {
+    "100" : {
+      "description" : "Help yourself to a bite to eat and a cup of coffee, courtesy of Microsoft!",
+      "tags" : [ "Food" ],
+      "title" : "Breakfast"
+        },
+    "101" : {
+      "description" : "Opening Speech",
+      "speakers" : [ "sistem"],
+      "tags" : [ "Speakers" ],
+      "title" : "Opening Speech"
+    },
+    "102" : {
+      "description" : "In this talk, Sarah will share her advice for graduates starting out in the fast-paced and rapidly changing technology sector.  Drawing on the latest research, along with anecdotes from her own experiences, Sarah will share insights on what it takes not only to succeed – but to thrive in the future of work",
+      "speakers" : [ "sarah" ],
+      "tags" : [ "Speakers" ],
+      "title" : "Tips to thrive in the Future of Work"
+    },
+    "104" : {
+      "description" : "Join Graham as he talks through the makeup of a product team and how the Product Manager fits into it. Learn all about the day to day of Product Management and how to get there.",
+      "speakers" : [ "graham" ],
+      "tags" : [ "Speakers" ],
+      "title" : "What does a Product Manager actually do?"
+    },
+    "105" : {
+      "description" : "Featuring a variety of disabled tech entrepreneurs and accessibility experts, this panel will be discussing the importance of disability accessibility and providing helpful insight on how you can make your products and work more accessible as a future software developer",
+      "speakers" : [ "nicole", "damian" ,"gearoid", "matt", "stephen" ],
+      "tags" : [ "Panels" ],
+      "title" : "Accessibility in Tech"
+    },
+    "106" : {
+      "description" : "TBC",
+      "speakers" : [ "anon4" ],
+      "tags" : [ "Workshops" ],
+      "title" : "Microsoft Workshop"
+    },
+    "108" : {
+      "description" : "TBC",
+      "speakers" : [ "anon4" ],
+      "tags" : [ "Speakers" ],
+      "title" : "Google (SRE)"
+       },
+    "109" : {
+      "description" : "Women in Tech Panel",
+      "extend" : 2,
+      "speakers" : [ "lauren", "claire", "olivia", "patak", "barbara" ],
+      "tags" : [ "Panels" ],
+      "title" : "Women in Tech Panel"
+    },
+    "110" : {
+      "description" : "Your Lunch on the day of SISTEM is provided courtesy of Mastercard!",
+      "tags" : [ "Food" ],
+      "title" : "Lunch"
+        },
+    "111" : {
+      "description" : "TBC",
+      "speakers" : [ "anon4" ],
+      "tags" : [ "Speakers" ],
+      "title" : "Mastercard Lightning talks"
+    },
+    "112" : {
+      "description" : "A panel of industry professionals discuss the ins and outs of the gaming industry and what it takes to be a professional game developer. We will talk about working in the gaming industry as well as the bleeding edge of game dev technologies, followed by a Q&A session",
+      "speakers" : [ "anon4" ],
+      "tags" : [ "Panels" ],
+      "title" : "Gaming Panel"
+    },
+    "113" : {
+      "description" : "Mastercard Workshop",
+      "tags" : [ "Workshops" ],
+      "title" : "Mastercard Workshop"
+    },
+    "114" : {
+      "description" : "BrainWaveBank are developing a machine learning powered neuro-informatics platform in order to make objective assessment of neurocognitive function convenient, affordable and available to anyone, anywhere.  I will present the challenges, successes and lessons learned during the path to developing a medical device which integrates hardware development, gamification, analytics and ML/AI.",
+      "speakers" : [ "tim" ],
+      "tags" : [ "Speakers" ],
+      "title" : "When hardware meets software, a meeting of minds…"
+    },
+    "115" : {
+      "description" : "Lightning Talks",
+      "speakers" : [ "anon4" ],
+      "tags" : [ "Lightning" ],
+      "title" : "Lightning Talks"
+        },
+    "116" : {
+      "description" : "AI and Machine Learning are right up there as one of the most exciting areas of modern technology. Whilst this exciting technology has been applied to a number of interesting problems, it remains a very challenging area to break into!To this end, our workshop aims to pull back the curtain on AI and Machine Learning and give a practical introduction to help you get started! We’ll take you through the end to end process of building a machine learning model that can be used to detect animals in an image! By the end of this workshop, you’ll have built your first machine learning model and will have the skills needed to start exploring this area further!",
+      "tags" : [ "Workshops" ],
+      "title" : "Civica: “Guess the animal!” - An introduction to image classification using Machine Learning"
+    },
+    "117" : {
+      "description" : "Cian is an SRE for Demonware's data pipeline team working on metrics, logs and game events systems. In this talk he be delving into the world of Observability and what it is. He will speak on why you should care about observability in your programs and how to use it.",
+      "speakers" : [ "butler" ],
+      "tags" : [ "Speakers" ],
+      "title" : "Observability - a buzz word or something you should care about?"
+    },
+    "118" : {
+      "description" : "Closing Speech",
+      "speakers" : [ "sistem" ],
+      "tags" : [ "Speakers" ],
+      "title" : "Closing Speech"
+    }
+  },
+  "speakers" : {
+    "anon1" : {
+      "bio" : "To be Announced",
+      "company" : "To Be Announced",
+      "companyLogo" : "/images/logos/sistem_black.svg",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/sistem_black.svg?alt=media&token=c77d34de-2359-43ef-b94a-4aa6b1c0f6b2",
+      "country" : "Dublin, Ireland",
+      "featured" : false,
+      "name" : "To be Announced",
+      "photo" : "/images/people/adrian_kajda.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/avatar-placeholder.png?alt=media&token=97d2d337-0549-4274-a163-689fd3aef54b",
+      "shortBio" : "To be Announced",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/DITNetsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/TUCompSoc",
+        "name" : "Facebook"
+      } ],
+      "order" : 0,
+      "title" : "TBC"
+    },
+    "lauren" : {
+      "bio" : "Final year Computer Science student at Queen's University Belfast with a passion for community and technology. Founder of Corgi Undergraduate Women in Tech Belfast and committee member of Queen's Computing Society. Soon-to-be graduate Software Engineer at Kainos.",
+      "company" : "",
+      "companyLogo" : "/images/logos/kainos.png",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/kainos.png?alt=media&token=ab999384-0322-41ea-9a19-393857cdfe0e",
+      "country" : "Belfast, Northern Ireland",
+      "featured" : true,
+      "name" : "Lauren Taylor",
+      "photo" : "/images/people/lauren.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/lauren.jpeg?alt=media&token=a98064f6-05be-422c-ade2-7256682d2d2c",
+      "shortBio" : "Final year Computer Science student at Queen's University Belfast",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/lornidon",
+        "name" : "Twitter"
+      } ],
+      "order" : 1,
+      "title" : "TBC"
+    },
+    "graham" : {
+      "bio" : "Product Manager, HubSpot, Dublin",
+      "company" : "HubSpot",
+      "companyLogo" : "/images/logos/hubspot.svg",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/hubspot.svg?alt=media&token=413e1341-0674-49f9-bf6b-2c1ccd7d41f1",
+      "country" : "Dublin, Ireland",
+      "featured" : true,
+      "name" : "Graham O'Connor",
+      "photo" : "/images/people/graham.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/graham.jpg?alt=media&token=4f3ade9f-59a0-404b-9b32-a1b2f2b8d637",
+      "shortBio" : "Product Manager, HubSpot, Dublin",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/grahamoconnor7",
+        "name" : "Twitter"
+      }, {
+        "icon" : "linkedin",
+        "link" : "https://www.linkedin.com/in/graham-oconnor/",
+        "name" : "LinkedIn"
+      } ],
+      "order" : 1,
+      "title" : "Product Manager, HubSpot, Dublin"
+    },
+    "claire" : {
+      "bio" : "Claire is a Senior AI engineer and a core member of the AI practice at Kainos. She works with a wide range of ML tools and techniques, including NLP, computer vision and model deployment, to improve customer and user experience in production services. ",
+      "company" : "Kainos",
+      "companyLogo" : "/images/logos/kainos.png",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/kainos.png?alt=media&token=ab999384-0322-41ea-9a19-393857cdfe0e",
+      "country" : "Belfast, Northern Ireland",
+      "featured" : true,
+      "name" : "Claire Houston",
+      "photo" : "/images/people/claire.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/claire.jpg?alt=media&token=5ee051ca-11cd-4f50-9189-601c755031e7",
+      "shortBio" : "Claire is a Senior AI engineer and a core member of the AI practice at Kainos",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/chouston885?lang=en",
+        "name" : "Twitter"
+      }],
+      "order" : 3,
+      "title" : "Senior AI Engineer"
+    },
+    "sarah" : {
+      "bio" : "Sarah Cunningham is Vice President of Mastercard’s Dublin Technology Hub where she is focused on growing the impact of Mastercard’s Dublin operation.Over her 20-year career, Sarah has held various Strategy, Marketing, Innovation Management and Leadership positions in companies including Mastercard, Google, CapGemini and Accenture.Sarah is a staunch advocate for diversity and inclusion in the workplace and passionate about mentoring and coaching the future generation of up-and-coming talent.In her spare time, Sarah enjoys hiking with her husband. She has hiked in the Himalayas, Lesotho, Peru (the Inca Trail), Spain (a leg of the Camino), the Alps and of course … Ireland!",
+      "company" : "Mastercard",
+      "companyLogo" : "/images/logos/mastercard.svg",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/mastercard.svg?alt=media&token=2882df20-0a75-4488-be2f-f8fa38e88877",
+      "country" : "Dublin, Ireland",
+      "featured" : true,
+      "name" : "Sarah Cunningham",
+      "photo" : "/images/people/sarah.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/sarah.jpg?alt=media&token=b41f0cd3-7945-4d4d-b0ec-8bd5516eaeef",
+      "shortBio" : "Sarah Cunningham is Vice President of Mastercard’s Dublin Technology Hub",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/mcirlstaff",
+        "name" : "Twitter"
+      },
+      {
+        "icon" : "linkedin",
+        "link" : "https://www.linkedin.com/company/mastercard/",
+        "name" : "LinkedIn"
+      }],
+      "order" : 4,
+      "title" : "Vice President of Mastercard’s Dublin Technology Hub"
+    },
+    "tim" : {
+      "bio" : "BrainWaveBank are developing a machine learning powered neuro-informatics platform in order to make objective assessment of neurocognitive function convenient, affordable and available to anyone, anywhere.  I will present the challenges, successes and lessons learned during the path to developing a medical device which integrates hardware development, gamification, analytics and ML/AI.      ",
+      "company" : "BrainwaveBank",
+      "country" : "Belfast – Innovation Centre",
+      "featured" : true,
+      "name" : "Timothy Davison",
+      "photo" : "/images/people/tim.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/tim.jpg?alt=media&token=d8060fa3-93c0-49e9-8258-3d7f3a02fb77",
+      "shortBio" : "",
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/brainwavebank?lang=en",
+        "name" : "Twitter"
+      }],
+      "order" : 4,
+      "title" : "CTO BrainWaveBank"
+    },
+    "butler" : {
+      "bio" : "",
+      "company" : "Demonware",
+      "companyLogo" : "/images/logos/dw.png",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/dw.png?alt=media&token=c1d44fb7-b3ce-4fb7-9248-c700d9db3d67",
+      "country" : "Dublin, Ireland",
+      "featured" : false,
+      "name" : "Cian Butler",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/butler.png?alt=media&token=bb67e828-7c12-4c71-8424-8e957acd264c",
+      "shortBio" : "",
+      "order" : 5
+    },
+    "olivia" : {
+      "bio" : "",
+      "company" : "Mastercard",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/mastercard.svg?alt=media&token=2882df20-0a75-4488-be2f-f8fa38e88877",
+      "country" : "Dublin, Ireland",
+      "name" : "Olivia Leonard",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/olivia.jpg?alt=media&token=ca1f9bd8-fa77-47dd-99dc-61e61cd1f4a9",
+      "shortBio" : "",
+      "order" : 6
+    },
+    "patak" : {
+      "bio" : "",
+      "company" : "Zendesk",
+      "companyLogoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/zendesk.svg?alt=media&token=e02c91ed-1927-4c42-81aa-853cc4ffcc85",
+      "country" : "Dublin, Ireland",
+      "name" : "Sheeka Patak",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/patak.png?alt=media&token=69cb45d9-9329-4ea8-ab35-990da62456ef",
+      "shortBio" : "",
+      "order" : 7
+    },
+    "barbara" : {
+      "bio" : "CTO Ding.com",
+      "company" : "Ding.com",
+      "country" : "Dublin, Ireland",
+      "name" : "Barbara McCarthy",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/barbara.png?alt=media&token=e1a32221-deb2-41cd-8d99-0f7ca592eae8",
+      "shortBio" : "CTO Ding.com",
+      "order" : 8
+    },
+    "gearoid" : {
+      "bio" : "MyAccessHub Founder",
+      "company" : "MyAccessHub",
+      "country" : "Dublin, Ireland",
+      "name" : "Gearoid Kearney",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/gearoid.png?alt=media&token=8fad7d30-7a46-4be0-80d0-fbe1fb6a3a64",
+      "shortBio" : "MyAccessHub Founder",
+      "order" : 9
+    },
+    "stephen" : {
+      "bio" : "Microsoft Accessibility Lead",
+      "company" : "Microsoft",
+      "country" : "Dublin, Ireland",
+      "name" : "Stephen Howell",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/stephen.png?alt=media&token=afa4c969-90b0-483b-b9aa-0ddccb030b05",
+      "shortBio" : "Microsoft Accessibility Lead",
+      "order" : 10
+    },
+    "nicole" : {
+      "bio" : "",
+      "company" : "UCD",
+      "country" : "Dublin, Ireland",
+      "name" : "Nicole McCabe",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/avatar-placeholder.png?alt=media&token=97d2d337-0549-4274-a163-689fd3aef54b",
+      "shortBio" : "",
+      "order" : 11
+    },
+    "damian" : {
+      "bio" : "Board of National Disability Authority",
+      "company" : "TU Dublin",
+      "country" : "Dublin, Ireland",
+      "name" : "Damian Gordon",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/damien.png?alt=media&token=6e975699-8208-4d37-b0f5-5161e7d621ec",
+      "shortBio" : "Board of National Disability Authority",
+      "order" : 12
+    },
+    "matt" : {
+      "bio" : "CEO - Access Earth",
+      "company" : "Access Earth",
+      "country" : "Dublin, Ireland",
+      "name" : "Matt McCann",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/matt.png?alt=media&token=c5512742-a060-4876-857d-8aa29c110f68",
+      "shortBio" : "CEO - Access Earth",
+      "order" : 13
+    },
+    "sistem" : {
+      "bio" : "Your Favourite SISTEM TEAM!!!",
+      "company" : "SISTEM",
+      "country" : "Dublin, Ireland",
+      "name" : "SISTEM Team",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/favicon.ico?alt=media&token=4f82d257-51c7-44eb-b587-0ff397272703",
+      "shortBio" : "Your Favourite SISTEM TEAM!!!",
+      "order" : 14
+    }
+
+
+  },
+  "team" : [ {
+    "members" : [ {
+      "name" : "TU Dublin Computer Society",
+      "photo" : "/images/people/tudublin.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/tudublin.png?alt=media&token=850d3ea8-40b9-4863-842a-41d1943a7e8c",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/TUCompSoc",
+        "name" : "Facebook"
+      }, {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/DITNetsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://netsoc.dit.ie",
+        "name" : "Blog"
+      } ],
+      "order" : 0,
+      "title" : "Technological University Dublin"
+    }, {
+      "name" : "Redbrick DCU",
+      "photo" : "/images/people/dcu.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/dcu.png?alt=media&token=fd65db62-a9db-4eec-b18e-afb599dd1297",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/dcuredbrick/",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/RedbrickDCU",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://www.redbrick.dcu.ie/",
+        "name" : "Blog"
+      }],
+      "order" : 1,
+      "title" : "Dublin City University"
+    }, {
+      "name" : "UCD NetSoc",
+      "photo" : "/images/people/ucd.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/ucd.png?alt=media&token=9d0448a6-ad11-47b0-bdf6-9b6d6a41c9bf",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/ucdnetsoc",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/ucdnetsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "http://netsoc.com/",
+        "name" : "Blog"
+      }],
+      "order" : 2,
+      "title" : "University College Dublin"
+    }, {
+      "name" : "Trinity DUCSS",
+      "photo" : "/images/people/ducss.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/ducss.png?alt=media&token=dcef190d-4ff5-47c8-9bd4-92c7b637103e",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/ducss.ie/",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/ducss",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://ducss.ie/",
+        "name" : "Blog"
+      }],
+      "order" : 3,
+      "title" : "Trinity College"
+    }, {
+      "name" : "Maynooth Computer Society",
+      "photo" : "/images/people/maynooth.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/maynooth.png?alt=media&token=dc7cea86-0a6e-4f61-bda2-e26a8f04cec7",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/MUCSSoc/",
+        "name" : "Facebook"
+      },
+      {
+        "icon" : "website",
+        "link" : "https://mucss.ie/",
+        "name" : "Blog"
+      }],
+      "order" : 4,
+      "title" : "Maynooth University"
+    },{
+      "name" : "UCC Netsoc",
+      "photo" : "/images/people/ucc.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/ucc.png?alt=media&token=f66cbab3-a1d8-4084-83be-65671e8886b8",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/NetsocUCC/",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/UCCNetsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://netsoc.co/rk/",
+        "name" : "Blog"
+      }],
+      "order" : 5,
+      "title" : "University College Cork"
+    }, {
+      "name" : "Queen's Computing Society",
+      "photo" : "/images/people/queens.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/queens.png?alt=media&token=36d05817-0908-4e7d-a1da-fecb4a59f067",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/QCSQUB/",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/qcsqub?lang=en",
+        "name" : "Twitter"
+      }],
+      "order" : 6,
+      "title" : "Queens University Belfast"
+    }, {
+      "name" : "Trinity NetSoc",
+      "photo" : "/images/people/netsoctrinity.png",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/netsoctcd.png?alt=media&token=09edd2c9-4796-443b-a1aa-5c6562eb054f",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/dunetsoc",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/netsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://www.netsoc.tcd.ie/",
+        "name" : "Blog"
+      }],
+      "order" : 7,
+      "title" : "Trinity College"
+    },
+    {
+      "name" : "NUIG Computer Society",
+      "photo" : "/images/people/nuig.jpg",
+      "photoUrl" : "https://firebasestorage.googleapis.com/v0/b/sistem-ff0d4.appspot.com/o/nuig.jpg?alt=media&token=e94f13a6-b0bd-494b-92f4-2f4e1fb9dd1f",
+      "socials" : [ {
+        "icon" : "facebook",
+        "link" : "https://www.facebook.com/nuigcompsoc",
+        "name" : "Facebook"
+      } , {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/nuigcompsoc",
+        "name" : "Twitter"
+      }, {
+        "icon" : "website",
+        "link" : "https://compsoc.ie/",
+        "name" : "Blog"
+      }],
+      "order" : 8,
+      "title" : "NUI Galway"
+    } ],
+    "title" : "Organising Committee"
+      }],
+  "tickets" : [ {
+    "available" : true,
+    "currency" : "€",
+    "ends" : "",
+    "info" : "",
+    "name" : "Standard",
+    "price" : 10,
+    "soldOut" : false,
+    "starts" : "",
+    "url" : "https://ti.to/sistem/2020/"
+  },
+  {
+    "available" : true,
+    "currency" : "€",
+    "ends" : "",
+    "info" : "",
+    "name" : "Standard + Tshirt",
+    "price" : 20,
+    "soldOut" : false,
+    "starts" : "",
+    "url" : "https://ti.to/sistem/2020/"
+  } ],
+  "triggers" : {
+    "images" : false
+  },
+  "videos" : [ {
+    "speakers" : "Yonatan Levin",
+    "thumbnail" : "https://firebasestorage.googleapis.com/v0/b/hoverboard-firebase.appspot.com/o/images%2Fsessions%2F2017%2FGDG-(65).jpg?alt=media&token=f25f04cf-9a10-42ed-b2ff-e41fad910c39",
+    "title" : "Making mistakes and building products from 1st to 30M users",
+    "youtubeId" : "hUY8jg9-ieE"
+  } ],
+  "previousSpeakers": {
+    "adrian_kajda" : {
+      "bio" : "Creator of Fuelio app. Fuelio was his hooby project started in 2012. Three years later the app was aquired by Sygic.",
+      "company" : "Sygic",
+      "companyLogo" : "https://dfua16.firebaseapp.com//images/logos/sygic.svg",
+      "country" : "Poland",
+      "id" : "adrian_kajda",
+      "name" : "Adrian Kajda",
+      "order" : 6,
+      "photoUrl" : "https://dfua16.firebaseapp.com//images/people/adrian_kajda.jpg",
+      "sessions" : {
+        "2016" : [ {
+          "presentation" : "https://speakerdeck.com/gdglviv/adrian-kajda-fuelio-success-story",
+          "tags" : [ "Android" ],
+          "title" : "Fuelio. Success story",
+          "videoId" : "qK7ysoohsaM"
+        } ]
+      },
+      "socials" : [  ],
+      "title" : "Product Manager/Developer"
+    },
+    "aleksander_piotrowski" : {
+      "bio" : "Became a mobile developer after long run as a backend developer. Because of age, holding senior positions from the day one as an Android programmer. Serial hackathon winner, or at least contender ;-)",
+      "company" : "Applause",
+      "companyLogo" : "https://storage.googleapis.com/dfua17.appspot.com/images/logos/applause.png",
+      "country" : "Poland",
+      "id" : "aleksander_piotrowski",
+      "name" : "Aleksander Piotrowski",
+      "order" : 0,
+      "photoUrl" : "https://storage.googleapis.com/dfua17.appspot.com/images/people/aleksander_piotrowski.jpg",
+      "sessions" : {
+        "2016" : [ {
+          "presentation" : "https://speakerdeck.com/gdglviv/aleksander-piotrowski-android-tool-chain-and-run-time-improvements-in-n",
+          "tags" : [ "Android" ],
+          "title" : "Android tool-chain and run-time improvements in N",
+          "videoId" : "WqULb6bdwwg"
+        } ],
+        "2017" : [ {
+          "presentation" : "https://speakerdeck.com/gdglviv/aleksander-piotrowski-is-there-a-room-for-room",
+          "tags" : [ "Android", "Room" ],
+          "title" : "Is there a room for Room?",
+          "videoId" : "BHiKSnOaoh4"
+        } ]
+      },
+      "socials" : [ {
+        "icon" : "twitter",
+        "link" : "https://twitter.com/pelotasplus",
+        "name" : "Twitter"
+      }, {
+        "icon" : "linkedin",
+        "link" : "https://linkedin.com/in/pelotasplus",
+        "name" : "LinkedIn"
+      }, {
+        "icon" : "facebook",
+        "link" : "https://facebook.com/pelotasplus",
+        "name" : "Facebook"
+      }, {
+        "icon" : "github",
+        "link" : "https://github.com/pelotasplus",
+        "name" : "GitHub"
+      } ],
+      "title" : "Code monkey"
+    }
+
+  }
+}
+
+

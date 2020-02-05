@@ -18,7 +18,7 @@
                   case 'installed':
                     if (!navigator.serviceWorker.controller && toastActions) {
                       toastActions.showToast({
-                        message: 'Caching complete! Future visits will work offline.',
+                        message: '{$ cachingComplete $}',
                       });
                     }
                     break;
@@ -44,9 +44,9 @@
 
         if (toastActions) {
           toastActions.showToast({
-            message: 'A new version of this app is available.',
+            message: '{$ newVersionAvailable $}',
             action: {
-              title: 'Refresh',
+              title: '{$ refresh $}',
               callback: tapHandler,
             },
             duration: 0,

@@ -1,0 +1,20 @@
+{
+  "name": "good-map",
+  "main": "good-map.js",
+  "homepage": "https://github.com/keanulee/good-map",
+  "authors": [
+    "Keanu Lee"
+  ],
+  "description": "A simple custom element wrapper for Google Maps JavaScript API",
+  "license": "MIT",
+  "version": "0.0.1",
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.1",
+    "commit": "d17bd14c3d07e4f4be0ac35d3a5b177dc4a8a69e"
+  },
+  "_source": "https://github.com/keanulee/good-map.git",
+  "_target": "^0.0.1",
+  "_originalSource": "keanulee/good-map"
+}
