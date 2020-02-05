@@ -1,0 +1,27 @@
+{
+  "name": "ua-parser-js",
+  "version": "0.7.20",
+  "authors": [
+    "Faisal Salman <f@faisalman.com>"
+  ],
+  "private": false,
+  "main": "src/ua-parser.js",
+  "ignore": [
+    "build",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "homepage": "https://github.com/faisalman/ua-parser-js",
+  "_release": "0.7.20",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.7.20",
+    "commit": "a88934fadf2393f3757f1e8b9966d8c0244120b1"
+  },
+  "_source": "https://github.com/faisalman/ua-parser-js.git",
+  "_target": "^0.7.14",
+  "_originalSource": "ua-parser-js"
+}

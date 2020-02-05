@@ -1,17 +1,133 @@
-<html><head></head><body><dom-module id="team-page">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../../bower_components/plastic-image/plastic-image.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../mixins/redux-mixin.html">
+<link rel="import" href="../elements/shared-styles.html">
+
+<dom-module id="team-page">
   <template>
-    <style include="shared-styles flex flex-alignment">:host{display:block;}.description-wrapper{background-color:var(--secondary-background-color);width:100%;overflow:hidden;}.team-title{font-size:30px;line-height:2.5;}.team-block{display:grid;grid-template-columns:1fr;grid-gap:24px;margin-bottom:32px;}.member{padding:16px 0;min-width:300px;}.photo{flex:none;width:96px;height:96px;background-color:var(--contrast-additional-background-color);border-radius:50%;overflow:hidden;transform:translateZ(0);border-radius:50%;border:5px solid var(--contrast-additional-background-color);}.member-details{color:var(--primary-text-color);margin-left:16px;}.name{padding-left:6px;line-height:1.2;}.activity{font-size:16px;padding-left:6px;}.social-icon{--paper-icon-button:{padding:6px;width:32px;height:32px;};color:var(--secondary-text-color);transition:transform var(--animation);}.social-icon:hover{transform:scale(1.1);}@media (min-width: 640px){.team-block{grid-template-columns:repeat(2, 1fr);}.member{padding:32px 0;}}@media (min-width: 812px){.photo{width:115px;height:115px;}}@media (min-width: 1024px){.team-block{grid-template-columns:repeat(3, 1fr);}.photo{width:128px;height:128px;}}</style>
+    <style include="shared-styles flex flex-alignment">
+      :host {
+        display: block;
+      }
 
-    <polymer-helmet title="Team | SISTEM 2020" description="Get more info about organizers" active="[[active]]"></polymer-helmet>
+      .description-wrapper {
+          background-color: var(--secondary-background-color);
+          width: 100%;
+          overflow: hidden;
+      }
 
-    <hero-block background-image="" background-color="#fff" font-color="#424242" active="[[active]]">
-      <div class="hero-title">Team</div>
-      <p class="hero-description"></p>
+      .team-title {
+        font-size: 30px;
+        line-height: 2.5;
+      }
+
+      .team-block {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 24px;
+        margin-bottom: 32px;
+      }
+
+      .member {
+        padding: 16px 0;
+        min-width: 300px;
+      }
+
+      .photo {
+        flex: none;
+        width: 96px;
+        height: 96px;
+        background-color: var(--contrast-additional-background-color);
+        border-radius: 50%;
+        overflow: hidden;
+        transform: translateZ(0);
+        border-radius: 50%;
+        border: 5px solid var(--contrast-additional-background-color);
+      }
+
+      .member-details {
+        color: var(--primary-text-color);
+        margin-left: 16px;
+      }
+
+      .name {
+        padding-left: 6px;
+        line-height: 1.2;
+      }
+
+      .activity {
+        font-size: 16px;
+        padding-left: 6px;
+      }
+
+      .social-icon {
+        --paper-icon-button: {
+          padding: 6px;
+          width: 32px;
+          height: 32px;
+        };
+
+        color: var(--secondary-text-color);
+        transition: transform var(--animation);
+      }
+
+      .social-icon:hover {
+        transform: scale(1.1);
+      }
+
+      @media (min-width: 640px) {
+        .team-block {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+         .member {
+          padding: 32px 0;
+        }
+      }
+
+      @media (min-width: 812px) {
+        .photo {
+          width: 115px;
+          height: 115px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .team-block {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+         .photo {
+          width: 128px;
+          height: 128px;
+        }
+      }
+
+    </style>
+
+    <polymer-helmet
+      title="{$ heroSettings.team.title $} | {$ title $}"
+      description="{$ heroSettings.team.metaDescription $}"
+      active="[[active]]"
+    ></polymer-helmet>
+
+    <hero-block
+      background-image="{$ heroSettings.team.background.image $}"
+      background-color="{$ heroSettings.team.background.color $}"
+      font-color="{$ heroSettings.team.fontColor $}"
+      active="[[active]]"
+    >
+      <div class="hero-title">{$ heroSettings.team.title $}</div>
+      <p class="hero-description">{$ heroSettings.team.description $}</p>
     </hero-block>
 
     <div class="description-wrapper">
-      <div class="container" layout="" horizontal="" justified="">
-        <marked-element class="description" markdown="Irish Networking and Computer Societies have been around since the 90's, providing Students with the tools and skills they need to succeed in Industry. SISTEM is a collaboration of 9 Societies from around Ireland. ">
+      <div class="container" layout horizontal justified>
+        <marked-element class="description" markdown="{$ team.description $}">
           <div slot="markdown-html"></div>
         </marked-element>
       </div>
@@ -23,11 +139,15 @@
 
         <div class="team-block">
           <template is="dom-repeat" items="[[team.members]]" as="member">
-            <div class="member" layout="" horizontal="">
-              <plastic-image class="photo" srcset="[[member.photoUrl]]" sizing="cover" lazy-load="" preload="" fade="">
+            <div class="member" layout horizontal>
+              <plastic-image
+                class="photo"
+                srcset="[[member.photoUrl]]"
+                sizing="cover"
+                lazy-load preload fade>
               </plastic-image>
 
-              <div class="member-details" layout="" vertical="" center-justified="" start="">
+              <div class="member-details" layout vertical center-justified start>
                 <h2 class="name">[[member.name]]</h2>
                 <div class="activity">[[member.title]]</div>
                 <div class="contacts">
@@ -83,4 +203,3 @@
   </script>
 </dom-module>
 
-</body></html>
