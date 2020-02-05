@@ -1,9 +1,2366 @@
-<link rel="import" href="../bower_components/iron-dropdown/iron-dropdown-scroll-manager.html">
-<link rel="import" href="elements/toast-element.html">
-<link rel="import" href="elements/video-dialog.html">
-<link rel="import" href="elements/dialogs/speaker-details.html">
-<link rel="import" href="elements/dialogs/previous-speaker-details.html">
-<link rel="import" href="elements/dialogs/session-details.html">
-<link rel="import" href="elements/dialogs/subscribe-dialog.html">
-<link rel="import" href="elements/dialogs/signin-dialog.html">
-<link rel="import" href="elements/polymer-helmet.html">
+<html><head></head><body><div hidden="" by-polymer-bundler=""><dom-module id="paper-toast" assetpath="../bower_components/paper-toast/">
+  <template>
+    <style>:host{display:block;position:fixed;background-color:var(--paper-toast-background-color, #323232);color:var(--paper-toast-color, #f1f1f1);min-height:48px;min-width:288px;padding:16px 24px;box-sizing:border-box;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26);border-radius:2px;margin:12px;font-size:14px;cursor:default;-webkit-transition:-webkit-transform 0.3s, opacity 0.3s;transition:transform 0.3s, opacity 0.3s;opacity:0;-webkit-transform:translateY(100px);transform:translateY(100px);@apply --paper-font-common-base;}:host(.capsule){border-radius:24px;}:host(.fit-bottom){width:100%;min-width:0;border-radius:0;margin:0;}:host(.paper-toast-open){opacity:1;-webkit-transform:translateY(0px);transform:translateY(0px);}</style>
+
+    <span id="label">{{text}}</span>
+    <slot></slot>
+  </template>
+
+  <script>
+    (function() {
+    'use strict';
+
+    // Keeps track of the toast currently opened.
+    var currentToast = null;
+
+    Polymer({
+      is: 'paper-toast',
+
+      behaviors: [Polymer.IronOverlayBehavior],
+
+      properties: {
+        /**
+         * The element to fit `this` into.
+         * Overridden from `Polymer.IronFitBehavior`.
+         */
+        fitInto: {type: Object, value: window, observer: '_onFitIntoChanged'},
+
+        /**
+         * The orientation against which to align the dropdown content
+         * horizontally relative to `positionTarget`.
+         * Overridden from `Polymer.IronFitBehavior`.
+         */
+        horizontalAlign: {type: String, value: 'left'},
+
+        /**
+         * The orientation against which to align the dropdown content
+         * vertically relative to `positionTarget`.
+         * Overridden from `Polymer.IronFitBehavior`.
+         */
+        verticalAlign: {type: String, value: 'bottom'},
+
+        /**
+         * The duration in milliseconds to show the toast.
+         * Set to `0`, a negative number, or `Infinity`, to disable the
+         * toast auto-closing.
+         */
+        duration: {type: Number, value: 3000},
+
+        /**
+         * The text to display in the toast.
+         */
+        text: {type: String, value: ''},
+
+        /**
+         * Overridden from `IronOverlayBehavior`.
+         * Set to false to enable closing of the toast by clicking outside it.
+         */
+        noCancelOnOutsideClick: {type: Boolean, value: true},
+
+        /**
+         * Overridden from `IronOverlayBehavior`.
+         * Set to true to disable auto-focusing the toast or child nodes with
+         * the `autofocus` attribute` when the overlay is opened.
+         */
+        noAutoFocus: {type: Boolean, value: true}
+      },
+
+      listeners: {'transitionend': '__onTransitionEnd'},
+
+      /**
+       * Read-only. Deprecated. Use `opened` from `IronOverlayBehavior`.
+       * @property visible
+       * @deprecated
+       */
+      get visible() {
+        Polymer.Base._warn('`visible` is deprecated, use `opened` instead');
+        return this.opened;
+      },
+
+      /**
+       * Read-only. Can auto-close if duration is a positive finite number.
+       * @property _canAutoClose
+       */
+      get _canAutoClose() {
+        return this.duration > 0 && this.duration !== Infinity;
+      },
+
+      created: function() {
+        this._autoClose = null;
+        Polymer.IronA11yAnnouncer.requestAvailability();
+      },
+
+      /**
+       * Show the toast. Without arguments, this is the same as `open()` from
+       * `IronOverlayBehavior`.
+       * @param {(Object|string)=} properties Properties to be set before opening the toast.
+       * e.g. `toast.show('hello')` or `toast.show({text: 'hello', duration: 3000})`
+       */
+      show: function(properties) {
+        if (typeof properties == 'string') {
+          properties = {text: properties};
+        }
+        for (var property in properties) {
+          if (property.indexOf('_') === 0) {
+            Polymer.Base._warn(
+                'The property "' + property + '" is private and was not set.');
+          } else if (property in this) {
+            this[property] = properties[property];
+          } else {
+            Polymer.Base._warn('The property "' + property + '" is not valid.');
+          }
+        }
+        this.open();
+      },
+
+      /**
+       * Hide the toast. Same as `close()` from `IronOverlayBehavior`.
+       */
+      hide: function() {
+        this.close();
+      },
+
+      /**
+       * Called on transitions of the toast, indicating a finished animation
+       * @private
+       */
+      __onTransitionEnd: function(e) {
+        // there are different transitions that are happening when opening and
+        // closing the toast. The last one so far is for `opacity`.
+        // This marks the end of the transition, so we check for this to determine
+        // if this is the correct event.
+        if (e && e.target === this && e.propertyName === 'opacity') {
+          if (this.opened) {
+            this._finishRenderOpened();
+          } else {
+            this._finishRenderClosed();
+          }
+        }
+      },
+
+      /**
+       * Overridden from `IronOverlayBehavior`.
+       * Called when the value of `opened` changes.
+       */
+      _openedChanged: function() {
+        if (this._autoClose !== null) {
+          this.cancelAsync(this._autoClose);
+          this._autoClose = null;
+        }
+        if (this.opened) {
+          if (currentToast && currentToast !== this) {
+            currentToast.close();
+          }
+          currentToast = this;
+          this.fire('iron-announce', {text: this.text});
+          if (this._canAutoClose) {
+            this._autoClose = this.async(this.close, this.duration);
+          }
+        } else if (currentToast === this) {
+          currentToast = null;
+        }
+        Polymer.IronOverlayBehaviorImpl._openedChanged.apply(this, arguments);
+      },
+
+      /**
+       * Overridden from `IronOverlayBehavior`.
+       */
+      _renderOpened: function() {
+        this.classList.add('paper-toast-open');
+      },
+
+      /**
+       * Overridden from `IronOverlayBehavior`.
+       */
+      _renderClosed: function() {
+        this.classList.remove('paper-toast-open');
+      },
+
+      /**
+       * @private
+       */
+      _onFitIntoChanged: function(fitInto) {
+        this.positionTarget = fitInto;
+      }
+
+      /**
+       * Fired when `paper-toast` is opened.
+       *
+       * @event 'iron-announce'
+       * @param {{text: string}} detail Contains text that will be announced.
+       */
+    });
+    })();
+  </script>
+</dom-module>
+<dom-module id="toast-element" assetpath="elements/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{display:block;}paper-toast{user-select:none;}paper-toast[fit-bottom]{width:100%;min-width:0;border-radius:0;margin:0;}.toast-action{margin-left:24px;color:var(--accent-color);text-transform:uppercase;font-weight:600;cursor:pointer;white-space:nowrap;user-select:none;}</style>
+
+    <paper-toast id="toast" duration="[[toast.duration]]" text="[[toast.message]]" opened="[[toast.visible]]" on-tap="_handleTap" fit-bottom$="[[viewport.isPhone]]" layout="" horizontal="" justified="" center="">
+
+      <span class="toast-action" hidden$="[[!toast.action]]" on-tap="_handleAction">
+        [[toast.action.title]]
+      </span>
+
+    </paper-toast>
+
+  </template>
+
+  <script>
+
+    class ToastElement extends ReduxMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      static get is() {
+        return 'toast-element';
+      }
+
+      static get properties() {
+        return {
+          toast: {
+            type: Object,
+            statePath: 'toast',
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+        };
+      }
+
+      _handleTap() {
+        this.toast.action && this.toast.action.callback();
+        toastActions.hideToast();
+      }
+
+      _handleAction() {
+        if (this.toast.action) {
+          this.toast.action.callback();
+          toastActions.hideToast();
+        }
+      }
+    }
+
+    window.customElements.define(ToastElement.is, ToastElement);
+
+  </script>
+</dom-module>
+
+<dom-module id="iron-localstorage" assetpath="../bower_components/iron-localstorage/"></dom-module>
+<script>
+
+  Polymer({
+    is: 'iron-localstorage',
+
+    properties: {
+      /**
+       * localStorage item key
+       */
+      name: {
+        type: String,
+        value: ''
+      },
+      /**
+       * The data associated with this storage.
+       * If set to null item will be deleted.
+       * @type {*}
+       */
+      value: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * If true: do not convert value to JSON on save/load
+       */
+      useRaw: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Value will not be saved automatically if true. You'll have to do it manually with `save()`
+       */
+      autoSaveDisabled: {
+        type: Boolean,
+        value: false
+      },
+      /**
+       * Last error encountered while saving/loading items
+       */
+      errorMessage: {
+        type: String,
+        notify: true
+      },
+
+      /** True if value has been loaded */
+      _loaded: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    observers: [
+      '_debounceReload(name,useRaw)',
+      '_trySaveValue(autoSaveDisabled)',
+      '_trySaveValue(value.*)'
+    ],
+
+    ready: function() {
+      this._boundHandleStorage = this._handleStorage.bind(this);
+    },
+
+    attached: function() {
+      window.addEventListener('storage', this._boundHandleStorage);
+    },
+
+    detached: function() {
+      window.removeEventListener('storage', this._boundHandleStorage);
+    },
+
+    _handleStorage: function(ev) {
+      if (ev.key == this.name) {
+        this._load(true);
+      }
+    },
+
+    _trySaveValue: function() {
+      if (this.autoSaveDisabled === undefined || this._doNotSave) {
+        return;
+      }
+
+      if (this._loaded && !this.autoSaveDisabled) {
+        this.debounce('save', this.save);
+      }
+    },
+
+    _debounceReload: function() {
+      if (this.name !== undefined && this.useRaw !== undefined) {
+        this.debounce('reload', this.reload);
+      }
+    },
+
+    /**
+     * Loads the value again. Use if you modify
+     * localStorage using DOM calls, and want to
+     * keep this element in sync.
+     */
+    reload: function() {
+      this._loaded = false;
+      this._load();
+    },
+
+    /**
+     * loads value from local storage
+     * @param {boolean=} externalChange true if loading changes from a different window
+     */
+    _load: function(externalChange) {
+      try {
+        var v = window.localStorage.getItem(this.name);
+      } catch (ex) {
+        this.errorMessage = ex.message;
+
+        this._error("Could not save to localStorage.  Try enabling cookies for this page.", ex);
+      };
+
+      if (v === null) {
+        this._loaded = true;
+        this._doNotSave = true;  // guard for save watchers
+        this.value = null;
+        this._doNotSave = false;
+        this.fire('iron-localstorage-load-empty', { externalChange: externalChange}, {composed: true});
+      } else {
+        if (!this.useRaw) {
+          try { // parse value as JSON
+            v = JSON.parse(v);
+          } catch(x) {
+            this.errorMessage = "Could not parse local storage value";
+            Polymer.Base._error("could not parse local storage value", v);
+            v = null;
+          }
+        }
+        this._loaded = true;
+        this._doNotSave = true;
+        this.value = v;
+        this._doNotSave = false;
+        this.fire('iron-localstorage-load', { externalChange: externalChange}, {composed: true});
+      }
+    },
+
+    /**
+     * Saves the value to localStorage. Call to save if autoSaveDisabled is set.
+     * If `value` is null or undefined, deletes localStorage.
+     */
+    save: function() {
+      var v = this.useRaw ? this.value : JSON.stringify(this.value);
+      try {
+        if (this.value === null || this.value === undefined) {
+          window.localStorage.removeItem(this.name);
+        } else {
+          window.localStorage.setItem(this.name, /** @type {string} */ (v));
+        }
+      }
+      catch(ex) {
+        // Happens in Safari incognito mode,
+        this.errorMessage = ex.message;
+        Polymer.Base._error("Could not save to localStorage. Incognito mode may be blocking this action", ex);
+      }
+    }
+
+    /**
+     * Fired when value loads from localStorage.
+     *
+     * @event iron-localstorage-load
+     * @param {{externalChange:boolean}} detail -
+     *     externalChange: true if change occured in different window.
+     */
+
+    /**
+     * Fired when loaded value does not exist.
+     * Event handler can be used to initialize default value.
+     *
+     * @event iron-localstorage-load-empty
+     * @param {{externalChange:boolean}} detail -
+     *     externalChange: true if change occured in different window.
+     */
+  });
+
+</script>
+<script>
+(function() {
+  "use strict";
+  /**
+   * `Polymer.IronJsonpLibraryBehavior` loads a jsonp library.
+   * Multiple components can request same library, only one copy will load.
+   *
+   * Some libraries require a specific global function be defined.
+   * If this is the case, specify the `callbackName` property.
+   *
+   * You should use an HTML Import to load library dependencies
+   * when possible instead of using this element.
+   *
+   * @hero hero.svg
+   * @demo demo/index.html
+   * @polymerBehavior
+   */
+  Polymer.IronJsonpLibraryBehavior = {
+
+    properties: {
+      /**
+       * True if library has been successfully loaded
+       */
+      libraryLoaded: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        readOnly: true
+      },
+      /**
+       * Not null if library has failed to load
+       */
+      libraryErrorMessage: {
+        type: String,
+        value: null,
+        notify: true,
+        readOnly: true
+      }
+      // Following properties are to be set by behavior users
+      /**
+       * Library url. Must contain string `%%callback%%`.
+       *
+       * `%%callback%%` is a placeholder for jsonp wrapper function name
+       *
+       * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
+       * @property libraryUrl
+       */
+      /**
+       * Set if library requires specific callback name.
+       * Name will be automatically generated if not set.
+       * @property callbackName
+       */
+      /**
+       * name of event to be emitted when library loads. Standard is `api-load`
+       * @property notifyEvent
+       */
+      /**
+       * event with name specified in `notifyEvent` attribute
+       * will fire upon successful load2
+       * @event `notifyEvent`
+       */
+    },
+
+    observers: [
+      '_libraryUrlChanged(libraryUrl)'
+    ],
+
+    _libraryUrlChanged: function(libraryUrl) {
+      // can't load before ready because notifyEvent might not be set
+      if (this._isReady && this.libraryUrl)
+        this._loadLibrary();
+    },
+
+    _libraryLoadCallback: function(err, result) {
+      if (err) {
+        Polymer.Base._warn("Library load failed:", err.message);
+        this._setLibraryErrorMessage(err.message);
+      }
+      else {
+        this._setLibraryErrorMessage(null);
+        this._setLibraryLoaded(true);
+        if (this.notifyEvent)
+          this.fire(this.notifyEvent, result, {composed: true});
+      }
+    },
+
+    /** loads the library, and fires this.notifyEvent upon completion */
+    _loadLibrary: function() {
+      LoaderMap.require(
+        this.libraryUrl,
+        this._libraryLoadCallback.bind(this),
+        this.callbackName
+      );
+    },
+
+    ready: function() {
+      this._isReady = true;
+      if (this.libraryUrl)
+        this._loadLibrary();
+    }
+  };
+
+  /**
+   * LoaderMap keeps track of all Loaders
+   */
+  var LoaderMap = {
+    apiMap: {}, // { hash -> Loader }
+
+    /**
+     * @param {Function} notifyCallback loaded callback fn(result)
+     * @param {string} jsonpCallbackName name of jsonpcallback. If API does not provide it, leave empty. Optional.
+     */
+    require: function(url, notifyCallback, jsonpCallbackName) {
+
+      // make hashable string form url
+      var name = this.nameFromUrl(url);
+
+      // create a loader as needed
+      if (!this.apiMap[name])
+        this.apiMap[name] = new Loader(name, url, jsonpCallbackName);
+
+      // ask for notification
+      this.apiMap[name].requestNotify(notifyCallback);
+    },
+
+    nameFromUrl: function(url) {
+      return url.replace(/[\:\/\%\?\&\.\=\-\,]/g, '_') + '_api';
+    }
+  };
+
+  /** @constructor */
+  var Loader = function(name, url, callbackName) {
+    this.notifiers = [];  // array of notifyFn [ notifyFn* ]
+
+    // callback is specified either as callback name
+    // or computed dynamically if url has callbackMacro in it
+    if (!callbackName) {
+      if (url.indexOf(this.callbackMacro) >= 0) {
+        callbackName = name + '_loaded';
+        url = url.replace(this.callbackMacro, callbackName);
+      } else {
+        this.error = new Error('IronJsonpLibraryBehavior a %%callback%% parameter is required in libraryUrl');
+        // TODO(sjmiles): we should probably fallback to listening to script.load
+        return;
+      }
+    }
+    this.callbackName = callbackName;
+    window[this.callbackName] = this.success.bind(this);
+    this.addScript(url);
+  };
+
+  Loader.prototype = {
+
+    callbackMacro: '%%callback%%',
+    loaded: false,
+
+    addScript: function(src) {
+      var script = document.createElement('script');
+      script.src = src;
+      script.onerror = this.handleError.bind(this);
+      var s = document.querySelector('script') || document.body;
+      s.parentNode.insertBefore(script, s);
+      this.script = script;
+    },
+
+    removeScript: function() {
+      if (this.script.parentNode) {
+        this.script.parentNode.removeChild(this.script);
+      }
+      this.script = null;
+    },
+
+    handleError: function(ev) {
+      this.error = new Error("Library failed to load");
+      this.notifyAll();
+      this.cleanup();
+    },
+
+    success: function() {
+      this.loaded = true;
+      this.result = Array.prototype.slice.call(arguments);
+      this.notifyAll();
+      this.cleanup();
+    },
+
+    cleanup: function() {
+      delete window[this.callbackName];
+    },
+
+    notifyAll: function() {
+      this.notifiers.forEach( function(notifyCallback) {
+        notifyCallback(this.error, this.result);
+      }.bind(this));
+      this.notifiers = [];
+    },
+
+    requestNotify: function(notifyCallback) {
+      if (this.loaded || this.error) {
+        notifyCallback( this.error, this.result);
+      } else {
+        this.notifiers.push(notifyCallback);
+      }
+    }
+  };
+})();
+</script>
+
+
+<script>
+  Polymer({
+
+    is: 'iron-jsonp-library',
+
+    behaviors: [ Polymer.IronJsonpLibraryBehavior ],
+
+    properties: {
+      /**
+       * Library url. Must contain string `%%callback%%`.
+       *
+       * `%%callback%%` is a placeholder for jsonp wrapper function name
+       *
+       * Ex: https://maps.googleapis.com/maps/api/js?callback=%%callback%%
+       */
+      libraryUrl: String,
+      /**
+       * Set if library requires specific callback name.
+       * Name will be automatically generated if not set.
+       */
+      callbackName: String,
+      /**
+       * event with name specified in 'notifyEvent' attribute
+       * will fire upon successful load
+       */
+      notifyEvent: String
+      /**
+       * event with name specified in 'notifyEvent' attribute
+       * will fire upon successful load
+       * @event `notifyEvent`
+       */
+
+    }
+  });
+
+</script>
+<script>
+  (function() {
+    'use strict';
+
+    Polymer({
+
+      is: 'google-youtube-api',
+
+      behaviors: [
+        Polymer.IronJsonpLibraryBehavior
+      ],
+
+      properties: {
+
+        /** @private */
+        libraryUrl:  {
+          type: String,
+          value: 'https://www.youtube.com/iframe_api'
+        },
+
+        /**
+         * Fired when the API library is loaded and available.
+         * @event api-load
+         */
+        /**
+         * Name of event fired when library loads.
+         */
+        notifyEvent:  {
+          type: String,
+          value: 'api-load'
+        },
+
+        callbackName:  {
+          type: String,
+          value: 'onYouTubeIframeAPIReady'
+        }
+
+      },
+
+      get api() {
+        return window.YT;
+      }
+
+    });
+  })();
+</script>
+<dom-module id="google-youtube" assetpath="../bower_components/google-youtube/">
+  <template>
+    <style>:host{display:block;}:host([fluid]){width:100%;max-width:100%;position:relative;}:host([fluid]) iframe,
+      :host([fluid]) #thumbnail{vertical-align:bottom;position:absolute;top:0px;left:0px;width:100%;height:100%;}iframe{@apply --google-youtube-iframe;}#container{max-width:100%;max-height:100%;@apply --google-youtube-container;}#thumbnail{width:100%;height:100%;cursor:pointer;@apply --google-youtube-thumbnail;}</style>
+    <div id="container" style$="{{_computeContainerStyle(width, height)}}">
+      <template is="dom-if" if="{{thumbnail}}">
+        <img id="thumbnail" src$="{{thumbnail}}" title="YouTube video thumbnail." alt="YouTube video thumbnail." on-tap="_handleThumbnailTap">
+      </template>
+
+      <template is="dom-if" if="{{!thumbnail}}">
+        <template is="dom-if" if="[[shouldLoadApi]]">
+          <google-youtube-api on-api-load="_apiLoad"></google-youtube-api>
+        </template>
+      </template>
+
+      
+      <iron-localstorage name="google-youtube-playsupported" value="{{_playsupportedLocalStorage}}" on-iron-localstorage-load="_useExistingPlaySupportedValue" on-iron-localstorage-load-empty="_determinePlaySupported">
+      </iron-localstorage>
+
+      <div id="player"></div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'google-youtube',
+      /**
+      * Fired when the YouTube player is fully initialized and ready for use.
+      *
+      * @event google-youtube-ready
+      */
+
+      /**
+      * Fired when the state of the player changes. `e.detail.data` is set to one of
+      * [the documented](https://developers.google.com/youtube/iframe_api_reference#onStateChange)
+      * states.
+      *
+      * @event google-youtube-state-change
+      */
+
+      /**
+      * Fired when playback fails due to an error. `e.detail.data` is set to one of
+      * [the documented](https://developers.google.com/youtube/iframe_api_reference#onError)
+      * error codes.
+      *
+      * @event google-youtube-error
+      */
+
+      properties: {
+        /**
+        * Sets the id of the video to play. Changing this attribute will trigger a call
+        * to load a new video into the player (if `this.autoplay` is set to `1` and `playsupported` is true)
+        * or cue a new video otherwise.
+        *
+        * The underlying YouTube embed will not be added to the page unless
+       * `videoId` or `list` property is set.
+        *
+        * You can [search for videos programmatically](https://developers.google.com/youtube/v3/docs/search/list)
+        * using the YouTube Data API, or just hardcode known video ids to display on your page.
+        */
+        videoId: {
+          type: String,
+          value: '',
+          observer: '_videoIdChanged'
+        },
+
+        /**
+        * The list parameter, in conjunction with the listType parameter, identifies the content that will load in the player.
+        * If the listType parameter value is search, then the list parameter value specifies the search query.
+        * If the listType parameter value is user_uploads, then the list parameter value identifies the YouTube channel whose uploaded videos will be loaded.
+        * If the listType parameter value is playlist, then the list parameter value specifies a YouTube playlist ID. In the parameter value, you need to prepend the playlist ID with the letters PL as shown in the example below.
+        *
+        * See https://developers.google.com/youtube/player_parameters#list
+        */
+        list: {
+          type: String,
+          value: ''
+        },
+
+        /**
+        * See https://developers.google.com/youtube/player_parameters#listtype
+        */
+        listType: String,
+
+        /**
+        * Decides whether YouTube API should be loaded.
+        */
+        shouldLoadApi: {
+          type: Boolean,
+          computed: '_computeShouldLoadApi(list, videoId)'
+        },
+
+        /**
+        * Whether programmatic `<video>.play()` for initial playback is supported in the current browser.
+        *
+        * Most mobile browsers [do not support](https://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/Device-SpecificConsiderations/Device-SpecificConsiderations.html#//apple_ref/doc/uid/TP40009523-CH5-SW1) autoplaying or scripted playback of videos.
+        * If you attempt to automatically initiate playback of a `<google-youtube>`, e.g. by calling the `play()` method before
+        * playback has initially begun, the YouTube Player will enter an unrecoverable "stuck" state.
+        * To protect against this, check the value of `playsupported` and don't call `play()` if it is set to `false`.
+        * (You can hide/disable your custom play button, etc.)
+        *
+        * The `playsupported` value is determined at runtime, by dynamically creating a `<video>` element with an
+        * inlined data source and calling `play()` on it. (Inspired by [Modernizr](https://github.com/Modernizr/Modernizr/blob/master/feature-detects/video/autoplay.js).)
+        *
+        * If you would rather not incur the minimal overhead involved in going through this process, you can explicitly set
+        * `playsupported` to `true` or `false` when initializing `<google-youtube>`. This is only recommended if you know that
+        * your web app will never (or only) be used on mobile browsers.
+        */
+        playsupported: {
+          type: Boolean,
+          value: null,
+          notify: true
+        },
+
+        /**
+        * "1" if video should start automatically
+        */
+        autoplay: {
+          type: Number,
+          value: 0
+        },
+        /**
+        * Whether playback has started.
+        *
+        * This defaults to `false` and is set to `true` once the first 'playing' event is fired by
+        * the underlying YouTube Player API.
+        *
+        * Once set to `true`, it will remain that way indefinitely.
+        * Paused/buffering/ended events won't cause `playbackstarted` to reset to `false`.
+        * Nor will loading a new video into the player.
+        */
+        playbackstarted: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        /**
+        * Sets the height of the player on the page.
+        * Accepts anything valid for a CSS measurement, e.g. '200px' or '50%'.
+        * If the unit of measurement is left off, 'px' is assumed.
+        */
+        height: {
+          type: String,
+          value: '270px'
+        },
+
+        /**
+        * Sets the width of the player on the page.
+        * Accepts anything valid for a CSS measurement, e.g. '200px' or '50%'.
+        * If the unit of measurement is left off, 'px' is assumed.
+        */
+        width: {
+          type: String,
+          value:'480px'
+        },
+
+        /**
+        * Exposes the current player state.
+        * Using this attribute is an alternative to listening to `google-youtube-state-change` events,
+        * and can simplify the logic in templates with conditional binding.
+        *
+        * The [possible values](https://developers.google.com/youtube/iframe_api_reference#onStateChange):
+        *   - -1 (unstarted)
+        *   - 0 (ended)
+        *   - 1 (playing)
+        *   - 2 (paused)
+        *   - 3 (buffering)
+        *   - 5 (video cued)
+        */
+        state: {
+          type: Number,
+          value: -1,
+          notify: true
+        },
+
+        /**
+        * Exposes the current playback time, in seconds.
+        *
+        * You can divide this value by the `duration` to determine the playback percentage.
+        */
+        currenttime: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+
+        /**
+        * Exposes the video duration, in seconds.
+        *
+        * You can divide the `currenttime` to determine the playback percentage.
+        *
+        * @attribute duration
+        * @type number
+        */
+        duration: {
+          type: Number,
+          value: 1, // To avoid divide-by-zero errors if used before video is cued.
+          notify: true
+        },
+
+        /**
+        * Exposes the current playback time, formatted as a (HH:)MM:SS string.
+        */
+        currenttimeformatted: {
+          type: String,
+          value: '0:00',
+          notify: true
+        },
+
+        /**
+        * Exposes the video duration, formatted as a (HH:)MM:SS string.
+        */
+        durationformatted: {
+          type: String,
+          value: '0:00', // To avoid divide-by-zero errors if used before video is cued.
+          notify: true
+        },
+
+        /**
+        * The fraction of the bytes that have been loaded for the current video, in the range [0-1].
+        */
+        fractionloaded: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+
+        /**
+        * A shorthand to enable a set of player attributes that, used together, simulate a "chromeless" YouTube player.
+        *
+        * Equivalent to setting the following attributes:
+        * - `controls="0"`
+        * - `modestbranding="1"`
+        * - `showinfo="0"`
+        * - `iv_load_policy="3"`
+        * - `rel="0"`
+        *
+        * The "chromeless" player has minimal YouTube branding in cued state, and the native controls
+        * will be disabled during playback. Creating your own custom play/pause/etc. controls is recommended.
+        */
+        chromeless: {
+          type: Boolean,
+          value: false
+        },
+        /**
+        * The URL of an image to use as a custom thumbnail.
+        *
+        * This is optional; if not provided, the standard YouTube embed (which uses the thumbnail associated
+        * with the video on YouTube) will be used.
+        *
+        * If `thumbnail` is set, than an `<img>` containing the thumbnail will be used in lieu of the actual
+        * YouTube embed. When the thumbnail is clicked, the `<img>` is swapped out for the actual YouTube embed,
+        * which will have [`autoplay=1`](https://developers.google.com/youtube/player_parameters#autoplay) set by default (in additional to any other player parameters specified on this element).
+        *
+        * Please note that `autoplay=1` won't actually autoplay videos on mobile browsers, so two taps will be required
+        * to play the video there. Also, on desktop browsers, setting `autoplay=1` will prevent the playback
+        * from [incrementing the view count](https://support.google.com/youtube/answer/1714329) for the video.
+        */
+        thumbnail: {
+          type: String,
+          value: ''
+        },
+
+        /**
+        * If `fluid` is set, then the player will set its width to 100% to fill
+        * the parent container, while adding `padding-top` to preserve the
+        * aspect ratio provided by `width` and `height`. If `width` and `height`
+        * have not been set, the player will fall back to a 16:9 aspect ratio.
+        * This is useful for responsive designs where you don't want to
+        * introduce letterboxing on your video.
+        */
+        fluid: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+        * Returns the player's current volume, an integer between 0 and 100.
+        * Note that `getVolume()` will return the volume even if the player is muted.
+        */
+        volume: {
+          type: Number,
+          value: 100,
+          notify: true
+        },
+
+        /**
+        * This function retrieves the playback rate of the currently playing video.
+        * The default playback rate is 1, which indicates that the video is playing at normal speed.
+        * Playback rates may include values like `0.25`, `0.5`, `1`, `1.5`, and `2`.
+        */
+        playbackrate: {
+          type: Number,
+          value: 1,
+          notify: true
+        },
+
+        /**
+        * This function retrieves the actual video quality of the current video.
+        * Possible return values are `highres`, `hd1080`, `hd720`, `large`, `medium` and `small`.
+        * It will also return `undefined` if there is no current video.
+        */
+        playbackquality: {
+          type: String,
+          value: '',
+          notify: true
+        }
+
+      },
+
+      _computeContainerStyle: function(width, height) {
+        return 'width:' + width + '; height:' + height;
+      },
+
+      _computeShouldLoadApi: function(videoId, list) {
+        return Boolean(videoId || list);
+      },
+
+      _useExistingPlaySupportedValue: function() {
+        this.playsupported = this._playsupportedLocalStorage;
+      },
+
+      /**
+      * Detects whether programmatic <video>.play() is supported in the current browser.
+      *
+      * This is triggered via on-ironlocalstorage-load-empty. The logic is:
+      * - If playsupported is explicitly set to true or false on the element, use that.
+      * - Otherwise, if there's a cached value in localStorage, use that.
+      * - Otherwise, create a hidden <video> element and call play() on it:
+      *   - If playback starts, playsupported is true.
+      *   - If playback doesn't start (within 500ms), playsupported is false.
+      *   - Whatever happens, cache the result in localStorage.
+      */
+      _determinePlaySupported: function() {
+        // If playsupported isn't already being overridden by the page using this component,
+        // then attempt to determine if it's supported.
+        // This is deliberately checking with ==, to match either undefined or null.
+        if (this.playsupported == null) {
+          // Run a new playback test.
+          var timeout;
+          var videoElement = document.createElement('video');
+
+          if ('play' in videoElement) {
+            videoElement.id = 'playtest';
+            // Some browsers will refuse to play videos with 'display: none' set,
+            // so position the video well offscreen instead.
+            // Modify the .style property directly instead of using CSS to work around polyfill
+            // issues; see https://github.com/GoogleWebComponents/google-youtube/issues/49
+            videoElement.style.position = 'absolute';
+            videoElement.style.top = '-9999px';
+            videoElement.style.left = '-9999px';
+
+            var mp4Source = document.createElement('source');
+            mp4Source.src = "data:video/mp4;base64,AAAAFGZ0eXBNU05WAAACAE1TTlYAAAOUbW9vdgAAAGxtdmhkAAAAAM9ghv7PYIb+AAACWAAACu8AAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAnh0cmFrAAAAXHRraGQAAAAHz2CG/s9ghv4AAAABAAAAAAAACu8AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAFAAAAA4AAAAAAHgbWRpYQAAACBtZGhkAAAAAM9ghv7PYIb+AAALuAAANq8AAAAAAAAAIWhkbHIAAAAAbWhscnZpZGVBVlMgAAAAAAABAB4AAAABl21pbmYAAAAUdm1oZAAAAAAAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAVdzdGJsAAAAp3N0c2QAAAAAAAAAAQAAAJdhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAFAAOABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAAEmNvbHJuY2xjAAEAAQABAAAAL2F2Y0MBTUAz/+EAGGdNQDOadCk/LgIgAAADACAAAAMA0eMGVAEABGjuPIAAAAAYc3R0cwAAAAAAAAABAAAADgAAA+gAAAAUc3RzcwAAAAAAAAABAAAAAQAAABxzdHNjAAAAAAAAAAEAAAABAAAADgAAAAEAAABMc3RzegAAAAAAAAAAAAAADgAAAE8AAAAOAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA4AAAAOAAAAFHN0Y28AAAAAAAAAAQAAA7AAAAA0dXVpZFVTTVQh0k/Ou4hpXPrJx0AAAAAcTVREVAABABIAAAAKVcQAAAAAAAEAAAAAAAAAqHV1aWRVU01UIdJPzruIaVz6ycdAAAAAkE1URFQABAAMAAAAC1XEAAACHAAeAAAABBXHAAEAQQBWAFMAIABNAGUAZABpAGEAAAAqAAAAASoOAAEAZABlAHQAZQBjAHQAXwBhAHUAdABvAHAAbABhAHkAAAAyAAAAA1XEAAEAMgAwADAANQBtAGUALwAwADcALwAwADYAMAA2ACAAMwA6ADUAOgAwAAABA21kYXQAAAAYZ01AM5p0KT8uAiAAAAMAIAAAAwDR4wZUAAAABGjuPIAAAAAnZYiAIAAR//eBLT+oL1eA2Nlb/edvwWZflzEVLlhlXtJvSAEGRA3ZAAAACkGaAQCyJ/8AFBAAAAAJQZoCATP/AOmBAAAACUGaAwGz/wDpgAAAAAlBmgQCM/8A6YEAAAAJQZoFArP/AOmBAAAACUGaBgMz/wDpgQAAAAlBmgcDs/8A6YEAAAAJQZoIBDP/AOmAAAAACUGaCQSz/wDpgAAAAAlBmgoFM/8A6YEAAAAJQZoLBbP/AOmAAAAACkGaDAYyJ/8AFBAAAAAKQZoNBrIv/4cMeQ==";
+            videoElement.appendChild(mp4Source);
+
+            var webmSource = document.createElement('source');
+            webmSource.src = "data:video/webm;base64,GkXfo49CgoR3ZWJtQoeBAUKFgQEYU4BnAQAAAAAAF60RTZt0vE27jFOrhBVJqWZTrIIQA027jFOrhBZUrmtTrIIQbE27jFOrhBFNm3RTrIIXmU27jFOrhBxTu2tTrIIWs+xPvwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFUmpZuQq17GDD0JATYCjbGliZWJtbCB2MC43LjcgKyBsaWJtYXRyb3NrYSB2MC44LjFXQY9BVlNNYXRyb3NrYUZpbGVEiYRFnEAARGGIBc2Lz1QNtgBzpJCy3XZ0KNuKNZS4+fDpFxzUFlSua9iu1teBAXPFhL4G+bmDgQG5gQGIgQFVqoEAnIEAbeeBASMxT4Q/gAAAVe6BAIaFVl9WUDiqgQEj44OEE95DVSK1nIN1bmTgkbCBULqBPJqBAFSwgVBUuoE87EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB9DtnVB4eeBAKC4obaBAAAAkAMAnQEqUAA8AABHCIWFiIWEiAICAAamYnoOC6cfJa8f5Zvda4D+/7YOf//nNefQYACgnKGWgQFNANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQKbANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQPoANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQU1ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQaDANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQfQANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQkdANEBAAEQEBRgAGFgv9AAIiGAAPuC/rOgnKGWgQprANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQu4ANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ0FANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgQ5TANEBAAEQEAAYABhYL/QACIhgAPuC/rKgnKGWgQ+gANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRDtANEBAAEQEAAYABhYL/QACIhgAPuC/rOgnKGWgRI7ANEBAAEQEAAYABhYL/QACIhgAPuC/rIcU7trQOC7jLOBALeH94EB8YIUzLuNs4IBTbeH94EB8YIUzLuNs4ICm7eH94EB8YIUzLuNs4ID6LeH94EB8YIUzLuNs4IFNbeH94EB8YIUzLuNs4IGg7eH94EB8YIUzLuNs4IH0LeH94EB8YIUzLuNs4IJHbeH94EB8YIUzLuNs4IKa7eH94EB8YIUzLuNs4ILuLeH94EB8YIUzLuNs4INBbeH94EB8YIUzLuNs4IOU7eH94EB8YIUzLuNs4IPoLeH94EB8YIUzLuNs4IQ7beH94EB8YIUzLuNs4ISO7eH94EB8YIUzBFNm3SPTbuMU6uEH0O2dVOsghTM";
+            videoElement.appendChild(webmSource);
+
+            document.body.appendChild(videoElement);
+
+            this.async(function() {
+              // Ideally, we'll get a 'playing' event if we're on a browser that supports
+              // programmatic play().
+              videoElement.onplaying = function(e) {
+                clearTimeout(timeout);
+
+                this.playsupported = (e && e.type === 'playing') || videoElement.currentTime !== 0;
+                this._playsupportedLocalStorage = this.playsupported;
+
+                videoElement.onplaying = null;
+
+                document.body.removeChild(videoElement);
+              }.bind(this);
+
+              // If we haven't received a 'playing' event within 500ms, then we're most likely on a browser that doesn't
+              // support programmatic plays. Do a final check after 500ms and set this.playsupported at that point.
+              timeout = setTimeout(videoElement.onplaying, 500);
+
+              // Try to initiate playback...
+              videoElement.play();
+            });
+          } else {
+            // If there's no play() method then we know that it's not supported.
+            this.playsupported = false;
+            this._playsupportedLocalStorage = false;
+          }
+        }
+      },
+
+      /**
+      * Sets fluid width/height.
+      *
+      * If the fluid attribute is set, the aspect ratio of the video will
+      * be inferred (if set in pixels), or assumed to be 16:9. The element
+      * will give itself enough top padding to force the player to use the
+      * correct aspect ratio, even as the screen size changes.
+      *
+      */
+      ready: function() {
+        if (this.hasAttribute('fluid')) {
+          var ratio = parseInt(this.height, 10) / parseInt(this.width, 10);
+          if (isNaN(ratio)) {
+            ratio = 9/16;
+          }
+          ratio *= 100;
+          this.width = '100%';
+          this.height = 'auto';
+          this.$.container.style['padding-top'] = ratio + '%';
+        }
+      },
+
+      /**
+      * Clean up the underlying Player `<iframe>` when we're removed from the DOM.
+      */
+      detached: function() {
+        if (this._player) {
+          this._player.destroy();
+        }
+      },
+
+      /**
+      * Plays the current video.
+      *
+      * Note that on certain mobile browsers, playback
+      * [can't be initiated programmatically](https://developers.google.com/youtube/iframe_api_reference#Mobile_considerations).
+      *
+      * If `this.playsupported` is not `true`, calling `play()` will have no effect.
+      *
+      * @method play
+      */
+      play: function() {
+        if (this._player && this._player.playVideo && this.playsupported) {
+          this._player.playVideo();
+        }
+      },
+
+      /**
+      * Modifies the volume of the current video.
+      *
+      * Developers should take care not to break expected user experience by programmatically
+      * modifying the volume on mobile browsers.
+      * Note that the YouTube player, in addition, does not display volume controls in a
+      * mobile environment.
+      *
+      * @method setVolume
+      * @param {number} volume The new volume, an integer between 0 (muted) and 100 (loudest).
+      */
+      setVolume: function(volume) {
+        if (this._player && this._player.setVolume) {
+          this._player.setVolume(volume);
+        }
+      },
+
+      /**
+      * Mutes the current video.
+      *
+      * Developers should take care not to break expected user experience by programmatically
+      * modifying the volume on mobile browsers.
+      * Note that the YouTube player, in addition, does not display volume controls in a
+      * mobile environment.
+      *
+      * @method mute
+      */
+      mute: function() {
+        if (this._player && this._player.mute) {
+          this._player.mute();
+        }
+      },
+
+      /**
+      * Unmutes the current video.
+      *
+      * Developers should take care not to break expected user experience by programmatically
+      * modifying the volume on mobile browsers.
+      * Note that the YouTube player, in addition, does not display volume controls in a
+      * mobile environment.
+      *
+      * @method unMute
+      */
+      unMute: function() {
+        if (this._player && this._player.unMute) {
+          this._player.unMute();
+        }
+      },
+
+      /**
+      * Pauses the current video.
+      *
+      * @method pause
+      */
+      pause: function() {
+        if (this._player && this._player.pauseVideo) {
+          this._player.pauseVideo();
+        }
+      },
+
+      /**
+      * Skips ahead (or back) to the specified number of seconds.
+      *
+      * @method seekTo
+      * @param {number} seconds Number of seconds to seek to.
+      */
+      seekTo: function(seconds) {
+        if (this._player && this._player.seekTo) {
+          this._player.seekTo(seconds, true);
+
+          // Explicitly call _updatePlaybackStats() to ensure that the new playback info is
+          // reflected in the bound attributes.
+          // The 100ms delay is somewhat arbitrary, but the YouTube player does need time to
+          // update its internal state following the call to player.seekTo().
+          this.async(function() {
+            this._updatePlaybackStats();
+          }, 100);
+        }
+      },
+
+      /**
+      * This function sets the suggested playback rate for the current video.
+      * If the playback rate changes, it will only change for the video that is already cued or being played.
+      * If you set the playback rate for a cued video, that rate will still be in effect when the `playVideo` function is called or the user initiates playback directly through the player controls.
+      * In addition, calling functions to cue or load videos or playlists (`cueVideoById`, `loadVideoById`, etc.) will reset the playback rate to 1.
+      *
+      * Calling this function does not guarantee that the playback rate will actually change.
+      * However, if the playback rate does change, the `onPlaybackRateChange` event will fire, and your code should respond to the event rather than the fact that it called the `setPlaybackRate` function.
+      *
+      * The `getAvailablePlaybackRates` method will return the possible playback rates for the currently playing video.
+      * However, if you set the `suggestedRate` parameter to a non-supported integer or float value, the player will round that value down to the nearest supported value in the direction of 1.
+      *
+      * @method setPlaybackRate
+      * @param {number} suggestedRate Playback rate for the current video.
+      */
+      setPlaybackRate: function(suggestedRate) {
+        if(this._player && this._player.setPlaybackRate) {
+          this._player.setPlaybackRate(suggestedRate);
+        }
+      },
+
+      /**
+      * This function sets the suggested video quality for the current video.
+      * The function causes the video to reload at its current position in the new quality.
+      * If the playback quality does change, it will only change for the video being played.
+      * Calling this function does not guarantee that the playback quality will actually change.
+      * However, if the playback quality does change, the `onPlaybackQualityChange` event will fire, and your code should respond to the event rather than the fact that it called the `setPlaybackQuality` function.
+      *
+      * The `suggestedQuality` parameter value can be `small`, `medium`, `large`, `hd720`, `hd1080`, `highres` or `default`.
+      * We recommend that you set the parameter value to default, which instructs YouTube to select the most appropriate playback quality, which will vary for different users, videos, systems and other playback conditions.
+      *
+      * When you suggest a playback quality for a video, the suggested quality will only be in effect for that video.
+      * You should select a playback quality that corresponds to the size of your video player.
+      * For example, if your page displays a `1280px` by `720px` video player, a `hd720` quality video will actually look better than an `hd1080` quality video.
+      * We recommend calling the `getAvailableQualityLevels()` function to determine which quality levels are available for a video.
+      *
+      * The list below shows the playback quality levels that correspond to different standard player sizes.
+      * We recommend that you set the height of your video player to one of the values listed below and that you size your player to use 16:9 aspect ratio.
+      * As stated above, even if you choose a standard player size, we also recommend that you set the `suggestedQuality` parameter value to default to enable YouTube to select the most appropriate playback quality.
+      *
+      * - `small`: Player height is 240px, and player dimensions are at least 320px by 240px for 4:3 aspect ratio.
+      * - `medium`: Player height is 360px, and player dimensions are 640px by 360px (for 16:9 aspect ratio) or 480px by 360px (for 4:3 aspect ratio).
+      * - `large`: Player height is 480px, and player dimensions are 853px by 480px (for 16:9 aspect ratio) or 640px by 480px (for 4:3 aspect ratio).
+      * - `hd720`: Player height is 720px, and player dimensions are 1280px by 720px (for 16:9 aspect ratio) or 960px by 720px (for 4:3 aspect ratio).
+      * - `hd1080`: Player height is 1080px, and player dimensions are 1920px by 1080px (for 16:9 aspect ratio) or 1440px by 1080px (for 4:3 aspect ratio).
+      * - `highres`: Player height is greater than 1080px, which means that the player's aspect ratio is greater than 1920px by 1080px.
+      * - `default`: YouTube selects the appropriate playback quality. This setting effectively reverts the quality level to the default state and nullifies any previous efforts to set playback quality using the `cueVideoById`, `loadVideoById` or `setPlaybackQuality` functions.
+      *
+      * If you call the `setPlaybackQuality` function with a `suggestedQuality` level that is not available for the video, then the quality will be set to the next lowest level that is available.
+      * For example, if you request a quality level of large, and that is unavailable, then the playback quality will be set to medium (as long as that quality level is available).
+      *
+      * In addition, setting `suggestedQuality` to a value that is not a recognized quality level is equivalent to setting `suggestedQuality` to default.
+      *
+      * @method setPlaybackQuality
+      * @param {string} suggestedQuality Playback quality for the current video.
+      */
+      setPlaybackQuality: function(suggestedQuality) {
+        if(this._player && this._player.setPlaybackQuality) {
+          this._player.setPlaybackQuality(suggestedQuality);
+        }
+      },
+
+      _videoIdChanged: function() {
+        if (!this.videoId) {
+          return;
+        }
+
+        this.currenttime = 0;
+        this.currenttimeformatted = this._toHHMMSS(0);
+        this.fractionloaded = 0;
+        this.duration = 1;
+        this.durationformatted = this._toHHMMSS(0);
+
+        if (!this._player || !this._player.cueVideoById) {
+          this._pendingVideoId = this.videoId;
+        } else {
+          // Figure out whether we should cue or load (which will autoplay) the next video.
+          if (this.playsupported && this.attributes['autoplay'] && this.attributes['autoplay'].value == '1') {
+            this._player.loadVideoById(this.videoId);
+          } else {
+            this._player.cueVideoById(this.videoId);
+          }
+        }
+      },
+
+      _player: null,
+      __updatePlaybackStatsInterval: null,
+      _pendingVideoId: '',
+
+      _apiLoad: function() {
+        // Establish some defaults. Attributes set on the google-youtube element
+        // can override defaults, or specify additional player parameters. See
+        // https://developers.google.com/youtube/player_parameters
+        var playerVars = {
+          playsinline: 1,
+          controls: 2,
+          autohide: 1,
+          // This will (intentionally) be overwritten if this.attributes['autoplay'] is set.
+          autoplay: this.autoplay
+        };
+
+        if (this.chromeless) {
+          playerVars.controls = 0;
+          playerVars.modestbranding = 1;
+          playerVars.showinfo = 0;
+          // Disable annotations.
+          playerVars.iv_load_policy = 3;
+          // Disable related videos on the end screen.
+          playerVars.rel = 0;
+        }
+
+        for (var i = 0; i < this.attributes.length; i++) {
+          var attribute = this.attributes[i];
+          playerVars[attribute.nodeName] = attribute.value;
+        }
+
+        this._player = new YT.Player(this.$.player, {
+          videoId: this.videoId,
+          width: '100%',
+          height: '100%',
+          playerVars: playerVars,
+          events: {
+            onReady: function(e) {
+              if (this._pendingVideoId && this._pendingVideoId != this.videoId) {
+                this._player.cueVideoById(this._pendingVideoId);
+                this._pendingVideoId = '';
+              }
+
+              this.fire('google-youtube-ready', e);
+            }.bind(this),
+            onStateChange: function(e) {
+              this.state = e.data;
+
+              // The YouTube Player API only exposes playback data about a video once
+              // playback has begun.
+              if (this.state == 1) {
+                this.playbackstarted = true;
+
+                // After playback has begun, play() can always be used to resume playback if the video is paused.
+                this.playsupported = true;
+
+                this.duration = this._player.getDuration();
+                this.durationformatted = this._toHHMMSS(this.duration);
+
+                if (!this.__updatePlaybackStatsInterval) {
+                  this.__updatePlaybackStatsInterval = setInterval(this._updatePlaybackStats.bind(this), 1000);
+                }
+              } else {
+                // We only need to update the stats if the video is playing.
+                if (this.__updatePlaybackStatsInterval) {
+                  clearInterval(this.__updatePlaybackStatsInterval);
+                  this.__updatePlaybackStatsInterval = null;
+                }
+              }
+
+              this.fire('google-youtube-state-change', e);
+            }.bind(this),
+            onPlaybackQualityChange: function(e) {
+              this.playbackquality = e.data;
+            }.bind(this),
+            onPlaybackRateChange: function(e) {
+              this.playbackrate = e.data;
+            }.bind(this),
+            onError: function(e) {
+              // Set the player state to 0 ('ended'), since playback will have stopped.
+              this.state = 0;
+
+              this.fire('google-youtube-error', e);
+            }.bind(this)
+          }
+        });
+      },
+
+      _updatePlaybackStats: function() {
+        this.currenttime = Math.round(this._player.getCurrentTime());
+        this.currenttimeformatted = this._toHHMMSS(this.currenttime);
+        this.fractionloaded = this._player.getVideoLoadedFraction();
+        this.volume = this._player.getVolume();
+      },
+
+      _toHHMMSS: function(totalSeconds) {
+        var hours = Math.floor(totalSeconds / 3600);
+        totalSeconds -= hours * 3600;
+        var minutes = Math.floor(totalSeconds / 60);
+        var seconds = Math.round(totalSeconds - (minutes * 60));
+
+        var hourPortion = '';
+        if (hours > 0) {
+          hourPortion += hours + ':';
+
+          if (minutes < 10) {
+            minutes = '0' + minutes;
+          }
+        }
+
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+
+        return hourPortion + minutes + ':' + seconds;
+      },
+
+      _handleThumbnailTap: function() {
+        this.autoplay = 1;
+        this.thumbnail = '';
+      }
+    });
+  </script>
+</dom-module>
+
+<script>
+  (function() {
+  'use strict';
+
+  /**
+  Use `Polymer.PaperDialogBehavior` and `paper-dialog-shared-styles.html` to
+  implement a Material Design dialog.
+
+  For example, if `<paper-dialog-impl>` implements this behavior:
+
+      <paper-dialog-impl>
+          <h2>Header</h2>
+          <div>Dialog body</div>
+          <div class="buttons">
+              <paper-button dialog-dismiss>Cancel</paper-button>
+              <paper-button dialog-confirm>Accept</paper-button>
+          </div>
+      </paper-dialog-impl>
+
+  `paper-dialog-shared-styles.html` provide styles for a header, content area, and
+  an action area for buttons. Use the `<h2>` tag for the header and the `buttons`
+  class for the action area. You can use the `paper-dialog-scrollable` element (in
+  its own repository) if you need a scrolling content area.
+
+  Use the `dialog-dismiss` and `dialog-confirm` attributes on interactive controls
+  to close the dialog. If the user dismisses the dialog with `dialog-confirm`, the
+  `closingReason` will update to include `confirmed: true`.
+
+  ### Accessibility
+
+  This element has `role="dialog"` by default. Depending on the context, it may be
+  more appropriate to override this attribute with `role="alertdialog"`.
+
+  If `modal` is set, the element will prevent the focus from exiting the element.
+  It will also ensure that focus remains in the dialog.
+
+  @hero hero.svg
+  @demo demo/index.html
+  @polymerBehavior Polymer.PaperDialogBehavior
+  */
+  Polymer.PaperDialogBehaviorImpl = {
+
+    hostAttributes: {'role': 'dialog', 'tabindex': '-1'},
+
+    properties: {
+
+      /**
+       * If `modal` is true, this implies `no-cancel-on-outside-click`,
+       * `no-cancel-on-esc-key` and `with-backdrop`.
+       */
+      modal: {type: Boolean, value: false},
+
+      __readied: {type: Boolean, value: false}
+
+    },
+
+    observers: ['_modalChanged(modal, __readied)'],
+
+    listeners: {'tap': '_onDialogClick'},
+
+    /**
+     * @return {void}
+     */
+    ready: function() {
+      // Only now these properties can be read.
+      this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+      this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+      this.__prevWithBackdrop = this.withBackdrop;
+      this.__readied = true;
+    },
+
+    _modalChanged: function(modal, readied) {
+      // modal implies noCancelOnOutsideClick, noCancelOnEscKey and withBackdrop.
+      // We need to wait for the element to be ready before we can read the
+      // properties values.
+      if (!readied) {
+        return;
+      }
+
+      if (modal) {
+        this.__prevNoCancelOnOutsideClick = this.noCancelOnOutsideClick;
+        this.__prevNoCancelOnEscKey = this.noCancelOnEscKey;
+        this.__prevWithBackdrop = this.withBackdrop;
+        this.noCancelOnOutsideClick = true;
+        this.noCancelOnEscKey = true;
+        this.withBackdrop = true;
+      } else {
+        // If the value was changed to false, let it false.
+        this.noCancelOnOutsideClick =
+            this.noCancelOnOutsideClick && this.__prevNoCancelOnOutsideClick;
+        this.noCancelOnEscKey =
+            this.noCancelOnEscKey && this.__prevNoCancelOnEscKey;
+        this.withBackdrop = this.withBackdrop && this.__prevWithBackdrop;
+      }
+    },
+
+    _updateClosingReasonConfirmed: function(confirmed) {
+      this.closingReason = this.closingReason || {};
+      this.closingReason.confirmed = confirmed;
+    },
+
+    /**
+     * Will dismiss the dialog if user clicked on an element with dialog-dismiss
+     * or dialog-confirm attribute.
+     */
+    _onDialogClick: function(event) {
+      // Search for the element with dialog-confirm or dialog-dismiss,
+      // from the root target until this (excluded).
+      var path = Polymer.dom(event).path;
+      for (var i = 0, l = path.indexOf(this); i < l; i++) {
+        var target = path[i];
+        if (target.hasAttribute &&
+            (target.hasAttribute('dialog-dismiss') ||
+             target.hasAttribute('dialog-confirm'))) {
+          this._updateClosingReasonConfirmed(
+              target.hasAttribute('dialog-confirm'));
+          this.close();
+          event.stopPropagation();
+          break;
+        }
+      }
+    }
+
+  };
+
+  /** @polymerBehavior */
+  Polymer.PaperDialogBehavior =
+      [Polymer.IronOverlayBehavior, Polymer.PaperDialogBehaviorImpl];
+  })();
+</script>
+<dom-module id="video-dialog" assetpath="elements/">
+  <template>
+    <style include="positioning">:host{margin:0;padding:0;}.video-wrapper{z-index:6;overflow:hidden;}.go-back-icon{margin:16px;z-index:7;width:40px;height:40px;color:#fff;opacity:0.6;background-color:#000;border-radius:50%;display:block;transition:opacity var(--animation);}.go-back-icon:hover{opacity:0.9;}.video{padding:0;}</style>
+
+    <div class="toolbar">
+      <paper-icon-button class="go-back-icon" icon="hoverboard:close" on-tap="_closeSelf" dialog-dismiss=""></paper-icon-button>
+    </div>
+    <div class="video-wrapper">
+      <google-youtube id="video" class="video" video-id="[[youtubeId]]" width="100%" height="100%" autohide="1" chromeless="[[disableControls]]" fit="">
+      </google-youtube>
+    </div>
+
+  </template>
+
+  <script>
+    class VideoDialog extends ReduxMixin(
+        Polymer.mixinBehaviors([Polymer.PaperDialogBehavior], Polymer.Element)
+    ) {
+      static get is() {
+        return 'video-dialog';
+      }
+
+      static get properties() {
+        return {
+          videoTitle: String,
+          opened: {
+            type: Boolean,
+            observer: 'videoDialogActionMade',
+          },
+          youtubeId: String,
+          disableControls: {
+            type: Boolean,
+            value: false,
+          },
+        };
+      }
+
+      videoDialogActionMade() {
+        if (this.opened) {
+          if (this.withBackdrop) {
+            this.backdropElement.open();
+          }
+          this.$.video.play();
+        }
+        else {
+          this.$.video.seekTo(0);
+          this.$.video.pause();
+          this.backdropElement.close();
+          this.opened = false;
+        }
+      }
+
+      _closeSelf() {
+        uiActions.toggleVideoDialog({
+          opened: false,
+          disableControls: false,
+          youtubeId: '',
+          title: '',
+        });
+      }
+    }
+
+    window.customElements.define(VideoDialog.is, VideoDialog);
+  </script>
+</dom-module>
+<dom-module id="dialog-styles" assetpath="elements/dialogs/">
+  <template>
+    <style>:host{margin:0;display:block;height:100%;width:100%;background:#fff;color:var(--primary-text-color);box-shadow:var(--box-shadow);}app-header{background-color:var(--additional-background-color);}app-toolbar{padding:0;height:auto;}.dialog-container{margin:0 auto;width:100%;max-width:584px;}.close-icon{margin:24px 24px 24px;cursor:pointer;}.header-content,
+      .content{padding:24px;}.content{min-height:100%;}.header-content{position:relative;}.name{line-height:1.2;}.tag{margin-top:8px;}.float-button{position:fixed;right:24px;bottom:24px;}.content{position:relative;font-size:15px;line-height:1.87;}.meta-info{line-height:1.6;}.description{margin:24px 0 32px;}.action{margin-right:16px;color:var(--primary-text-color);cursor:pointer;user-select:none;}.action iron-icon{margin-right:4px;--iron-icon-width:18px;--iron-icon-height:18px;}.additional-sections{margin-top:32px;}.section{margin-top:16px;display:block;color:var(--primary-text-color);}.section-photo{margin-right:16px;width:48px;height:48px;background-color:var(--secondary-background-color);border-radius:50%;overflow:hidden;transform:translateZ(0);}.section-primary-text{margin-bottom:4px;line-height:1.2;}.section-secondary-text{font-size:12px;line-height:1;}@media (min-width: 812px){:host{height:70%;width:720px;}.close-icon{margin:16px;position:absolute;top:-8px;right:-48px;--iron-icon-fill-color:#fff;}.header-content,
+        .content{padding:24px;}.header-content{min-height:160px;}.float-button{position:absolute;top:auto;right:0;bottom:0;transform:translate(50%, 50%);}}</style>
+  </template>
+</dom-module>
+<dom-module id="speaker-details" assetpath="elements/dialogs/">
+  <template>
+    <style include="shared-styles dialog-styles flex flex-alignment positioning">.photo{margin-right:16px;width:96px;height:96px;border-radius:50%;background-color:var(--contrast-additional-background-color);transform:translateZ(0);flex-shrink:0;}.subtitle{font-size:16px;color:var(--secondary-text-color);}.badge:not(:last-of-type)::after{margin-left:-4px;content:',';}.action{color:var(--secondary-text-color);}.section{cursor:pointer;}.tags{margin-top:8px;}</style>
+
+    <polymer-helmet title="[[speaker.name]] | SISTEM 2020" description="[[speaker.bio]]" image="[[speaker.photoUrl]]" active="[[opened]]" label1="Position" data1="[[speaker.title]], [[speaker.company]]" label2="Country" data2="[[speaker.country]]"></polymer-helmet>
+
+    <app-header-layout has-scrolling-region="">
+      <app-header slot="header" class="header" fixed="[[viewport.isTabletPlus]]">
+        <iron-icon class="close-icon" icon="hoverboard:[[_getCloseBtnIcon(viewport.isLaptopPlus)]]" on-tap="_close"></iron-icon>
+
+        <app-toolbar>
+          <div class="dialog-container header-content" layout="" horizontal="" center="">
+            <plastic-image class="photo" srcset="[[speaker.photoUrl]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+            <div>
+              <h2 class="name" flex="">[[speaker.name]]</h2>
+              <div class="subtitle">[[subtitle]]</div>
+            </div>
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="dialog-container content">
+        <h3 class="meta-info">[[companyInfo]]</h3>
+        <h3 class="meta-info" hidden$="[[isEmpty(speaker.badges)]]">
+          <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
+            <a class="badge" href$="[[badge.link]]" target="_blank" rel="noopener noreferrer" title$="[[badge.description]]">
+              [[badge.description]]
+            </a>
+          </template>
+        </h3>
+
+        <marked-element class="description" markdown="[[speaker.bio]]">
+          <div slot="markdown-html"></div>
+        </marked-element>
+
+        <div class="actions" layout="" horizontal="">
+          <template is="dom-repeat" items="[[speaker.socials]]" as="social">
+            <a class="action" href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
+              <iron-icon icon="hoverboard:[[social.icon]]"></iron-icon>
+            </a>
+          </template>
+        </div>
+
+        <div class="additional-sections" hidden$="[[!speaker.sessions.length]]">
+          <h3>Sessions</h3>
+
+          <template is="dom-repeat" items="[[speaker.sessions]]" as="session">
+            <div on-tap="_openSession" session-id$="[[session.id]]" class="section">
+              <div layout="" horizontal="" center="">
+                <div class="section-details" flex="">
+                  <div class="section-primary-text">[[session.title]]</div>
+                  <div class="section-secondary-text" hidden$="[[!session.dateReadable]]">[[session.dateReadable]],
+                    [[session.startTime]] - [[session.endTime]]
+                  </div>
+                  <div class="section-secondary-text" hidden$="[[!session.track.title]]">[[session.track.title]]</div>
+                  <div class="tags" hidden$="[[!session.tags.length]]">
+                    <template is="dom-repeat" items="[[session.tags]]" as="tag">
+                      <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+      </div>
+    </app-header-layout>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class SpeakerDetails extends UtilsFunctions(
+        // eslint-disable-next-line no-undef
+        ReduxMixin(SessionsHoC(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element)))
+    ) {
+      static get is() {
+        return 'speaker-details';
+      }
+
+      static get properties() {
+        return {
+          speaker: {
+            type: Object,
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          disabledSchedule: {
+            type: Boolean,
+            value: () => JSON.parse('false'),
+          },
+          companyInfo: {
+            type: String,
+            computed: '_computeJoin(speaker.title, speaker.company)',
+          },
+          subtitle: {
+            type: String,
+            computed: '_computeJoin(speaker.country, speaker.pronouns)',
+          },
+        };
+      }
+
+      constructor() {
+        super();
+        this.addEventListener('iron-overlay-canceled', this._close);
+      }
+
+      _close() {
+        dialogsActions.closeDialog(DIALOGS.SPEAKER);
+        history.back();
+      }
+
+      _openSession(e) {
+        const sessionId = e.currentTarget.getAttribute('session-id');
+        const sessionData = this.sessionsMap[sessionId];
+
+        if (!sessionData) return;
+        dialogsActions.openDialog(DIALOGS.SESSION, sessionData);
+        dialogsActions.closeDialog(DIALOGS.SPEAKER);
+      }
+
+      _getCloseBtnIcon(isLaptopViewport) {
+        return isLaptopViewport ? 'close' : 'arrow-left';
+      }
+
+      _computeJoin(...values) {
+        return values.filter(Boolean).join(' • ');
+      }
+    }
+
+    window.customElements.define(SpeakerDetails.is, SpeakerDetails);
+  </script>
+</dom-module>
+<dom-module id="previous-speaker-details" assetpath="elements/dialogs/">
+  <template>
+    <style include="shared-styles dialog-styles flex flex-alignment positioning">.photo{margin-right:16px;width:96px;height:96px;border-radius:50%;background-color:var(--contrast-additional-background-color);transform:translateZ(0);flex-shrink:0;}.action{color:var(--secondary-text-color);}</style>
+
+    <polymer-helmet title="[[speaker.name]] | SISTEM 2020" description="[[speaker.bio]]" image="[[speaker.photoUrl]]" active="[[opened]]" label1="Position" data1="[[speaker.title]], [[speaker.company]]" label2="Country" data2="[[speaker.country]]"></polymer-helmet>
+
+    <app-header-layout has-scrolling-region="">
+      <app-header slot="header" class="header" fixed="[[viewport.isTabletPlus]]">
+        <iron-icon class="close-icon" icon="hoverboard:[[_getCloseBtnIcon(viewport.isLaptopPlus)]]" on-tap="_close"></iron-icon>
+
+        <app-toolbar>
+          <div class="dialog-container header-content" layout="" horizontal="" center="">
+            <plastic-image class="photo" srcset="[[speaker.photoUrl]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+            <h2 class="name" flex="">[[speaker.name]]</h2>
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="dialog-container content">
+        <h3 class="meta-info">[[speaker.country]]</h3>
+        <h3 class="meta-info">[[speaker.title]], [[speaker.company]]</h3>
+
+        <marked-element class="description" markdown="[[speaker.bio]]">
+          <div slot="markdown-html"></div>
+        </marked-element>
+
+        <div class="actions" layout="" horizontal="">
+          <template is="dom-repeat" items="[[speaker.socials]]" as="social">
+            <a class="action" href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
+              <iron-icon icon="hoverboard:[[social.icon]]"></iron-icon>
+            </a>
+          </template>
+        </div>
+
+        <div class="additional-sections" hidden$="[[!speaker.sessions]]">
+          <h3>Sessions</h3>
+
+          <template is="dom-repeat" items="[[_getSessions(speaker.sessions)]]" as="session">
+            <div layout="" horizontal="" center="">
+              <div class="section" flex="">
+                <div class="section-primary-text">[[session.title]]</div>
+                <div class="section-secondary-text">Year: [[session.year]]</div>
+                <div class="tags" hidden$="[[!session.tags.length]]">
+                  <template is="dom-repeat" items="[[session.tags]]" as="tag">
+                    <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+                  </template>
+                </div>
+                <div class="actions" layout="" horizontal="">
+                  <div class="action" hidden$="[[!session.videoId]]" on-tap="_openVideo" layout="" horizontal="" center="">
+                    <iron-icon icon="hoverboard:video"></iron-icon>
+                    <span>View video</span>
+                  </div>
+                  <a class="action" href$="[[session.presentation]]" hidden$="[[!session.presentation]]" target="_blank" rel="noopener noreferrer" ga-on="click" ga-event-category="previous speaker" ga-event-action="open video" ga-event-label$="[[session.title]]" layout="" horizontal="" center="">
+                    <iron-icon icon="hoverboard:presentation"></iron-icon>
+                    <span>View presentation</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+      </div>
+    </app-header-layout>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class PreviousSpeakerDetails extends UtilsFunctions(
+        ReduxMixin(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element))
+    ) {
+      static get is() {
+        return 'previous-speaker-details';
+      }
+
+      static get properties() {
+        return {
+          speaker: {
+            type: Object,
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+        };
+      }
+
+      constructor() {
+        super();
+        this.addEventListener('iron-overlay-canceled', this._close);
+      }
+
+      _close() {
+        dialogsActions.closeDialog(DIALOGS.PREVIOUS_SPEAKER);
+      }
+
+      _getCloseBtnIcon(isLaptopViewport) {
+        return isLaptopViewport ? 'close' : 'arrow-left';
+      }
+
+      _getSessions(sessions) {
+        return sessions && Object.keys(sessions)
+            .reduce((aggregator, year) => {
+              return aggregator
+                  .concat(sessions[year].map((session) => Object.assign({}, session, { year })));
+            }, [])
+            .sort((a, b) => b.year - a.year);
+      }
+
+      _openVideo(event) {
+        event.model.session && uiActions.toggleVideoDialog({
+          title: event.model.session.title,
+          youtubeId: event.model.session.videoId,
+          disableControls: true,
+          opened: true,
+        });
+      }
+    }
+
+    window.customElements.define(PreviousSpeakerDetails.is, PreviousSpeakerDetails);
+  </script>
+</dom-module>
+<dom-module id="session-details" assetpath="elements/dialogs/">
+  <template>
+    <style include="shared-styles dialog-styles flex flex-alignment positioning">.section{cursor:pointer;}</style>
+
+    <polymer-helmet title="[[session.title]] | SISTEM 2020" description="[[session.description]]" image="[[session.speakers.0.photoUrl]]" active="[[opened]]" label1="Time" data1="[[session.dateReadable]], [[session.startTime]] - [[session.endTime]]" label2="Content level" data2="[[session.complexity]]"></polymer-helmet>
+
+    <app-header-layout has-scrolling-region="">
+      <app-header slot="header" class="header" fixed="[[viewport.isTabletPlus]]">
+        <iron-icon class="close-icon" icon="hoverboard:[[_getCloseBtnIcon(viewport.isLaptopPlus)]]" on-tap="_close"></iron-icon>
+        <app-toolbar>
+          <div class="dialog-container header-content" layout="" vertical="" end-justified="">
+            <h2 class="name">[[session.title]]</h2>
+            <div class="tags" hidden$="[[!session.tags.length]]">
+              <template is="dom-repeat" items="[[session.tags]]" as="tag">
+                <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+              </template>
+            </div>
+
+            <div class="float-button">
+              <paper-fab icon="hoverboard:[[_getFeaturedSessionIcon(featuredSessions, session.id)]]" hidden$="[[!viewport.isLaptopPlus]]" on-tap="_toggleFeaturedSession"></paper-fab>
+            </div>
+          </div>
+        </app-toolbar>
+      </app-header>
+
+      <div class="dialog-container content">
+        <div class="float-button">
+          <paper-fab icon="hoverboard:[[_getFeaturedSessionIcon(featuredSessions, session.id)]]" hidden$="[[viewport.isLaptopPlus]]" on-tap="_toggleFeaturedSession"></paper-fab>
+        </div>
+        <h3 class="meta-info" hidden$="[[disabledSchedule]]">[[session.dateReadable]], [[session.startTime]] - [[session.endTime]]</h3>
+        <h3 class="meta-info" hidden$="[[disabledSchedule]]">[[session.track.title]]</h3>
+        <h3 class="meta-info" hidden$="[[!session.complexity]]">Content level:
+          [[session.complexity]]</h3>
+
+        <marked-element class="description" markdown="[[session.description]]">
+          <div slot="markdown-html"></div>
+        </marked-element>
+
+        <div class="actions" layout="" horizontal="">
+          <a class="action" href$="[[session.presentation]]" hidden$="[[!session.presentation]]" target="_blank" rel="noopener noreferrer" layout="" horizontal="" center="">
+            <iron-icon icon="hoverboard:presentation"></iron-icon>
+            <span>View presentation</span>
+          </a>
+          <div class="action" hidden$="[[!session.videoId]]" on-tap="_openVideo" layout="" horizontal="" center="">
+            <iron-icon icon="hoverboard:video"></iron-icon>
+            View video
+          </div>
+        </div>
+
+        <div class="additional-sections" hidden$="[[!session.speakers.length]]">
+          <h3>Speakers</h3>
+
+          <template is="dom-repeat" items="[[session.speakers]]" as="speaker">
+            <div class="section" on-tap="_openSpeaker" speaker-id$="[[speaker.id]]">
+              <div layout="" horizontal="" center="">
+                <plastic-image class="section-photo" srcset="[[speaker.photoUrl]]" sizing="cover" lazy-load="" preload="" fade=""></plastic-image>
+
+                <div class="section-details" flex="">
+                  <div class="section-primary-text">[[speaker.name]]</div>
+                  <div class="section-secondary-text">[[speaker.company]] / [[speaker.country]]</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </app-header-layout>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line no-undef
+    class SessionDetails extends UtilsFunctions(SpeakersHoC(
+        ReduxMixin(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element))
+    )) {
+      static get is() {
+        return 'session-details';
+      }
+
+      static get properties() {
+        return {
+          disabledSchedule: {
+            type: Boolean,
+            value: () => JSON.parse('false'),
+          },
+          session: {
+            type: Object,
+          },
+          viewport: {
+            type: Object,
+            statePath: 'ui.viewport',
+          },
+          user: {
+            type: Object,
+            statePath: 'user',
+          },
+          featuredSessions: {
+            type: Object,
+            statePath: 'sessions.featured',
+          },
+          currentSpeaker: {
+            type: String,
+            statePath: 'routing.subRoute',
+          },
+        };
+      }
+
+      constructor() {
+        super();
+        this.addEventListener('iron-overlay-canceled', this._close);
+      }
+
+      _close() {
+        dialogsActions.closeDialog(DIALOGS.SESSION);
+        history.back();
+      }
+
+      _openSpeaker(e) {
+        const speakerId = e.currentTarget.getAttribute('speaker-id');
+        const speakerData = this.speakersMap[speakerId];
+
+        if (!speakerData) return;
+        dialogsActions.openDialog(DIALOGS.SPEAKER, speakerData);
+        dialogsActions.closeDialog(DIALOGS.SESSION);
+      }
+
+      _getCloseBtnIcon(isLaptopViewport) {
+        return isLaptopViewport ? 'close' : 'arrow-left';
+      }
+
+      _openVideo() {
+        uiActions.toggleVideoDialog({
+          title: this.session.title,
+          youtubeId: this.session.videoId,
+          disableControls: true,
+          opened: true,
+        });
+      }
+
+      _toggleFeaturedSession(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!this.user.signedIn) {
+          toastActions.showToast({
+            message: 'Sign in to save sessions',
+            action: {
+              title: 'Sign in',
+              callback: () => {
+                dialogsActions.openDialog(DIALOGS.SIGNIN);
+              },
+            },
+          });
+          return;
+        }
+        const sessions = Object.assign({}, this.featuredSessions, {
+          [this.session.id]: !this.featuredSessions[this.session.id] ? true : null,
+        });
+
+        this.dispatch(sessionsActions.setUserFeaturedSessions(this.user.uid, sessions));
+      }
+
+      _getFeaturedSessionIcon(featuredSessions, sessionId) {
+        return featuredSessions && featuredSessions[sessionId] ? 'bookmark-check' : 'bookmark-plus';
+      }
+    }
+
+    window.customElements.define(SessionDetails.is, SessionDetails);
+  </script>
+</dom-module>
+<dom-module id="subscribe-dialog" assetpath="elements/dialogs/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{margin:0;display:block;width:85%;max-width:420px;background:var(--primary-background-color);box-shadow:var(--box-shadow);--paper-input-container-focus-color:var(--default-primary-color);--paper-input-container-color:var(--secondary-text-color);}.dialog-header{margin-bottom:24px;padding:32px 32px 16px;background:var(--default-primary-color);color:#fff;font-size:20px;line-height:1.5;}paper-input{margin:16px 32px 0;}paper-input:first-of-type{margin-top:0;}.action-buttons{margin:32px 24px 24px;}.close-button{color:var(--secondary-text-color);}.general-error{margin:0 32px;color:var(--error-color);}</style>
+
+    <div class="dialog-content" layout="" vertical="">
+      <div class="dialog-header">[[title]]</div>
+      <div hidden$="[[!errorOccurred]]" class="general-error">An error has occurred. Please, try again later.</div>
+      <paper-input id="firstFieldInput" on-touchend="_focus" label="[[firstFieldLabel]]" value="{{firstFieldValue}}" autocomplete="off" autofocus="false">
+      </paper-input>
+      <paper-input id="secondFieldInput" on-touchend="_focus" label="[[secondFieldLabel]]" value="{{secondFieldValue}}" autocomplete="off" autofocus="false">
+      </paper-input>
+      <paper-input id="emailInput" on-touchend="_focus" label="Email Address *" value="{{email}}" required="" auto-validate$="[[validate]]" error-message="Please enter a valid email address." autocomplete="off" autofocus="false">
+      </paper-input>
+      <div class="action-buttons" layout="" horizontal="" justified="">
+        <paper-button class="close-button" on-tap="_closeDialog">Close
+        </paper-button>
+
+        <paper-button on-tap="_subscribe" ga-on="click" ga-event-category="attendees" ga-event-action="subscribe" ga-event-label="subscribe block" primary="">
+         [[submitLabel]]
+        </paper-button>
+      </div>
+
+    </div>
+
+
+  </template>
+
+  <script>
+
+    class SubscribeDialog extends ReduxMixin(
+        Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element)
+    ) {
+      static get is() {
+        return 'subscribe-dialog';
+      }
+
+      static get properties() {
+        return {
+          ui: {
+            type: Object,
+            statePath: 'ui',
+          },
+          subscribed: {
+            type: Boolean,
+            statePath: 'subscribed',
+          },
+          validate: {
+            type: Boolean,
+            value: true,
+          },
+          errorOccurred: {
+            type: Boolean,
+            value: false,
+          },
+          keyboardOpened: {
+            type: Boolean,
+            value: false,
+          },
+          secondFieldValue: String,
+          firstFieldValue: String,
+          initialHeight: Number,
+          title: String,
+          submitLabel: String,
+          firstFieldLabel: String,
+          secondFieldLabel: String,
+        };
+      }
+
+      static get observers() {
+        return [
+          '_handleDialogToggled(opened, data)',
+          '_handleSubscribed(subscribed)',
+        ];
+      }
+
+      ready() {
+        super.ready();
+        this.initialHeight = window.innerHeight;
+      }
+
+      constructor() {
+        super();
+        this.addEventListener('iron-overlay-canceled', this._close);
+        this.addEventListener('iron-resize', this._resize);
+        window.addEventListener('resize', this._windowResize.bind(this));
+      }
+
+      _close() {
+        dialogsActions.closeDialog(DIALOGS.SUBSCRIBE);
+      }
+
+      _handleSubscribed(subscribed) {
+        if (subscribed) {
+          this._closeDialog();
+        }
+      }
+
+      _handleDialogToggled(opened, data) {
+        if (data) {
+          this.errorOccurred = data.errorOccurred;
+        }
+
+        this.title = data.title || 'Get the latest updates and news about Sistem sent to your inbox.';
+        this.submitLabel = data.submitLabel || ' Subscribe';
+        this.firstFieldLabel = data.firstFieldLabel || 'First Name';
+        this.secondFieldLabel = data.secondFieldLabel || 'Last Name';
+        this._prefillFields(data);
+      }
+
+      _subscribe() {
+        const emailInput = this.shadowRoot.querySelector('#emailInput');
+
+        if (!emailInput.validate() || !this._validateEmail(emailInput.value)) {
+          emailInput.invalid = true;
+          return;
+        }
+
+        this.data.submit({
+          email: this.email,
+          firstFieldValue: this.firstFieldValue,
+          secondFieldValue: this.secondFieldValue,
+        });
+      }
+
+      _validateEmail(email) {
+        /* eslint-disable */
+        const emailRegularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegularExpression.test(email);
+        /* eslint-enable */
+      }
+
+      _closeDialog() {
+        dialogsActions.closeDialog(DIALOGS.SUBSCRIBE);
+      }
+
+      _prefillFields(userData) {
+        this.validate = false;
+        const firstField = this.shadowRoot.querySelector('#firstFieldInput');
+        const secondField = this.shadowRoot.querySelector('#secondFieldInput');
+        const emailInput = this.shadowRoot.querySelector('#emailInput');
+        firstField.value = userData ? userData.firstFieldValue : '';
+        secondField.value = userData ? userData.secondFieldValue : '';
+        firstField.focus();
+        firstField.blur();
+        secondField.focus();
+        secondField.blur();
+        emailInput.blur();
+        emailInput.value = '';
+        emailInput.invalid = false;
+        this.validate = true;
+      }
+
+      _focus(e) {
+        e.target.focus();
+      }
+
+      _windowResize() {
+        this.keyboardOpened = this.ui.viewport.isPhone &&
+          window.innerHeight < this.initialHeight - 100;
+      }
+
+      _resize(e) {
+        if (this.keyboardOpened) {
+          const header = this.shadowRoot.querySelector('.dialog-header');
+          const headerHeight = header.offsetHeight;
+
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              this.style.maxHeight = `${this.initialHeight}px`;
+              this.style.top = `-${headerHeight}px`;
+            });
+          }, 10);
+        }
+      }
+    }
+
+    window.customElements.define(SubscribeDialog.is, SubscribeDialog);
+  </script>
+</dom-module>
+<dom-module id="signin-dialog" assetpath="elements/dialogs/">
+  <template>
+    <style include="shared-styles flex flex-alignment">:host{margin:0 auto;display:block;padding:24px 32px;background:var(--primary-background-color);box-shadow:var(--box-shadow);border-radius:var(--border-radius);}.dialog-content{margin:0 auto;}.sign-in-button{margin:16px 0;display:block;color:var(--primary-text-color);}.merge-content .subtitle,
+      .merge-content .explanation{margin-bottom:16px;}.icon-twitter{color:var(--twitter-color);}.icon-facebook{color:var(--facebook-color);}</style>
+
+    <div class="dialog-content">
+      <div class="initial-signin" hidden$="[[isMergeState]]">
+        
+        <paper-button class="sign-in-button" on-tap="_signIn" provider-url="https://accounts.google.com" ga-on="click" ga-event-category="attendees" ga-event-action="sign-in" ga-event-label="signIn dialog - google" flex="">
+          <iron-icon class="icon-google" icon="hoverboard:google"></iron-icon>
+          <span provider-url="https://accounts.google.com">Sign in with Google</span>
+        </paper-button>
+        
+        <paper-button class="sign-in-button" on-tap="_signIn" provider-url="https://www.facebook.com" ga-on="click" ga-event-category="attendees" ga-event-action="sign-in" ga-event-label="signIn dialog - facebook" flex="">
+          <iron-icon class="icon-facebook" icon="hoverboard:facebook"></iron-icon>
+          <span provider-url="https://www.facebook.com">Sign in with Facebook</span>
+        </paper-button>
+        
+        <paper-button class="sign-in-button" on-tap="_signIn" provider-url="https://twitter.com" ga-on="click" ga-event-category="attendees" ga-event-action="sign-in" ga-event-label="signIn dialog - twitter" flex="">
+          <iron-icon class="icon-twitter" icon="hoverboard:twitter"></iron-icon>
+          <span provider-url="https://twitter.com">Sign in with Twitter</span>
+        </paper-button>
+        
+      </div>
+      <div class="merge-content" hidden$="[[!isMergeState]]">
+        <h3 class="subtitle">You already have an account</h3>
+        <div class="explanation">
+          <div class="row-1">You've already used <b>[[email]]</b>.</div>
+          <div class="row-2">Sign in with [[providerCompanyName]] to continue.</div>
+        </div>
+
+        <div class="action-button" layout="" horizontal="" end-justified="">
+          <paper-button class="merge-button" on-tap="_mergeAccounts" ga-on="click" ga-event-category="attendees" ga-event-action="merge account" ga-event-label$="signIn merge account dialog -[[providerCompanyName]]" primary="">
+          <span>Sign in with [[providerCompanyName]]</span>
+        </paper-button>
+        </div>
+
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+
+    // eslint-disable-next-line max-len
+    class SigninDialog extends ReduxMixin(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element)) {
+      static get is() {
+        return 'signin-dialog';
+      }
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            statePath: 'user',
+          },
+          isMergeState: {
+            type: Boolean,
+            value: false,
+          },
+          email: String,
+          providerCompanyName: String,
+        };
+      }
+
+      constructor() {
+        super();
+        this.addEventListener('iron-overlay-canceled', this._close);
+      }
+
+      static get observers() {
+        return [
+          '_userChanged(user)',
+        ];
+      }
+
+      _userChanged(user) {
+        dialogsActions.closeDialog(DIALOGS.SIGNIN);
+        if (!user.signedIn) {
+          if (user.initialProviderId && user.pendingCredential) {
+            this.isMergeState = true;
+            this.email = user.email;
+            this.providerCompanyName = helperActions.getProviderCompanyName(user.initialProviderId);
+            dialogsActions.openDialog(DIALOGS.SIGNIN);
+          }
+        }
+      }
+
+      _mergeAccounts() {
+        userActions.mergeAccounts(this.user.initialProviderId, this.user.pendingCredential);
+        dialogsActions.closeDialog(DIALOGS.SIGNIN);
+        this.isMergeState = false;
+      }
+
+      _close() {
+        this.isMergeState = false;
+        dialogsActions.closeDialog(DIALOGS.SIGNIN);
+      }
+
+      _signIn(event) {
+        const providerUrl = event.target.getAttribute('provider-url');
+        userActions.signIn(providerUrl);
+      }
+    }
+
+    window.customElements.define(SigninDialog.is, SigninDialog);
+  </script>
+</dom-module>
+</div></body></html>

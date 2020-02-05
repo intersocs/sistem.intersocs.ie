@@ -1,97 +1,14 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-
-<link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/marked-element/marked-element.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/plastic-image/plastic-image.html">
-
-<link rel="import" href="../mixins/utils-functions.html">
-<link rel="import" href="../mixins/redux-mixin.html">
-<link rel="import" href="../elements/shared-styles.html">
-<link rel="import" href="../elements/posts-list.html">
-
-<dom-module id="post-page">
+<html><head></head><body><dom-module id="post-page">
   <template>
-    <style include="shared-styles flex flex-alignment">
-      :host {
-        display: block;
-      }
-
-      .post {
-        margin-bottom: 32px;
-      }
-
-      .date {
-        font-size: 12px;
-        text-transform: uppercase;
-        color: var(--secondary-text-color);
-      }
-
-      .suggested-posts {
-        margin: 24px 0 -20px;
-        padding-top: 24px;
-        background-color: var(--primary-background-color);
-      }
-
-      [slot="markdown-html"] {
-        font-size: 18px;
-        line-height: 1.8;
-        color: var(--primary-text-color);
-      }
-
-      [slot="markdown-html"] h1,
+    <style include="shared-styles flex flex-alignment">:host{display:block;}.post{margin-bottom:32px;}.date{font-size:12px;text-transform:uppercase;color:var(--secondary-text-color);}.suggested-posts{margin:24px 0 -20px;padding-top:24px;background-color:var(--primary-background-color);}[slot="markdown-html"]{font-size:18px;line-height:1.8;color:var(--primary-text-color);}[slot="markdown-html"] h1,
       [slot="markdown-html"] h2,
-      [slot="markdown-html"] h3 {
-        margin: 48px 0 16px;
-      }
+      [slot="markdown-html"] h3{margin:48px 0 16px;}[slot="markdown-html"] p{margin-top:0;margin-bottom:24px;}[slot="markdown-html"] plastic-image{margin:32px 0 8px -16px;--iron-image-width:calc(100% + 32px);width:calc(100% + 32px);min-height:200px;background-color:var(--secondary-background-color);}@media (min-width: 640px){[slot="markdown-html"] plastic-image{min-height:400px;}.suggested-posts{margin-top:48px;padding-bottom:36px;}}</style>
 
-      [slot="markdown-html"] p {
-        margin-top: 0;
-        margin-bottom: 24px;
-      }
+    <polymer-helmet title="[[post.title]] | SISTEM 2020" description="[[post.brief]]" image="[[post.image]]" active="[[active]]" label1="Published" data1="[[published]]"></polymer-helmet>
 
-      [slot="markdown-html"] plastic-image {
-        margin: 32px 0 8px -16px;
-        --iron-image-width: calc(100% + 32px);
-        width: calc(100% + 32px);
-        min-height: 200px;
-        background-color: var(--secondary-background-color);
-      }
+    <app-route route="[[route]]" pattern="/:id" data="{{postData}}"></app-route>
 
-      @media (min-width: 640px) {
-        [slot="markdown-html"] plastic-image {
-          min-height: 400px;
-        }
-
-        .suggested-posts {
-          margin-top: 48px;
-          padding-bottom: 36px;
-        }
-      }
-
-    </style>
-
-    <polymer-helmet
-      title="[[post.title]] | {$ title $}"
-      description="[[post.brief]]"
-      image="[[post.image]]"
-      active="[[active]]"
-      label1="{$ blog.published $}"
-      data1="[[published]]"
-    ></polymer-helmet>
-
-    <app-route
-      route="[[route]]"
-      pattern="/:id"
-      data="{{postData}}"
-    ></app-route>
-
-    <hero-block
-      background-image="[[post.image]]"
-      background-color="[[post.primaryColor]]"
-      font-color="#fff"
-      active="[[active]]"
-    >
+    <hero-block background-image="[[post.image]]" background-color="[[post.primaryColor]]" font-color="#fff" active="[[active]]">
       <div class="hero-title">[[post.title]]</div>
     </hero-block>
 
@@ -99,12 +16,12 @@
       <marked-element class="post" markdown="[[post.content]]">
         <div slot="markdown-html"></div>
       </marked-element>
-      <div class="date">{$ blog.published $}: [[getDate(post.published)]]</div>
+      <div class="date">Published: [[getDate(post.published)]]</div>
     </div>
 
     <div class="suggested-posts">
       <div class="container-narrow">
-        <h3 class="container-title">{$ blog.suggested $}</h3>
+        <h3 class="container-title">Up next</h3>
         <posts-list posts="[[suggestedPosts]]"></posts-list>
       </div>
     </div>
@@ -177,3 +94,4 @@
     window.customElements.define(PostPage.is, PostPage);
   </script>
 </dom-module>
+</body></html>

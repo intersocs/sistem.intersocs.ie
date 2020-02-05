@@ -66,7 +66,7 @@
       "featuredSessions": {
         "description": "SISTEM is Ireland's largest tech conference for students, with the mission to inspire the next generation of tech. SISTEM 2020 will take place in University College Dublin. This is our third year organising this conference and the event has grown in scale and ambition since our first edition in 2018. Over 200 of Ireland's most engaged students in computing are expected to attend this event.",
         "label": "Explore featured session",
-        "link": "https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en"
+        "link": ""
       },
       "howItWas": {
         "description": "Described by many as 'Google I/O of Ukraine', our team creates DevFest to be the best place for experience sharing in a phenomenal atmosphere.",
@@ -115,7 +115,7 @@
     "title": "DFUA'16 featured videos",
     "callToAction": {
       "label": "See all videos",
-      "link": "https://www.youtube.com/playlist?list=PLt8lEzcLNl31AouwDkbLbLARlQFwNS2en"
+      "link": ""
     }
   },
   "blog": {

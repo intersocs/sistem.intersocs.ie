@@ -1,10 +1,10 @@
 {
-  "name": "{$ title $}",
-  "short_name": "{$ webapp.shortName $}",
+  "name": "SISTEM 2020",
+  "short_name": "SISTEM",
   "start_url": "./?utm_source=web_app_manifest",
   "display": "standalone",
-  "background_color": "{$ webapp.backgroundColor $}",
-  "theme_color": "{$ webapp.themeColor $}",
+  "background_color": "#FFB500",
+  "theme_color": "#FF6DAF",
   "icons": [
     {
       "src": "images/manifest/icon-48.png",
