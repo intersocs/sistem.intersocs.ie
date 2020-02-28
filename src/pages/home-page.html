@@ -1001,7 +1001,13 @@
             <iron-icon icon="hoverboard:ticket"></iron-icon>
             Buy ticket
           </paper-button>
+          <div class="action-buttons" layout="" horizontal="" center-justified="" wrap="">
+            <paper-button class="watch-video" on-tap="_playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="hero block - view highlights">
+              <iron-icon icon="hoverboard:movie"></iron-icon>
+              View Highlights
+            </paper-button>
         </div>
+
 
         <div class="scroll-down" on-tap="_scrollNextBlock">
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Layer_2" x="0px" y="0px" viewBox="0 0 25.166666 37.8704414" enable-background="new 0 0 25.166666 37.8704414" xml:space="preserve">
@@ -1011,7 +1017,7 @@
           <i class="icon icon-arrow-down"></i>
         </div>
       </div>
-    </hero-block>
+    
     <about-block></about-block>
     <speakers-block></speakers-block>
     <tickets-block></tickets-block>
@@ -1020,7 +1026,7 @@
     <map-block></map-block>
     <partners-block></partners-block>
     <footer-block></footer-block>
-  </template>
+  </div></hero-block></template>
 
   <script>
 
@@ -1043,7 +1049,7 @@
       _playVideo() {
         uiActions.toggleVideoDialog({
           title: '',
-          youtubeId: 'TdpbgRgz6eE',
+          youtubeId: '',
           disableControls: true,
           opened: true,
         });
