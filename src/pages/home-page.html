@@ -998,9 +998,9 @@
 
 
         <div class="action-buttons" layout="" horizontal="" center-justified="" wrap="">
-          <paper-button class="watch-video" on-tap="_playVideo" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="hero block - view highlights">
+          <paper-button class="watch-video" on-tap="addNewFeature" ga-on="click" ga-event-category="video" ga-event-action="watch" ga-event-label="hero block - view highlights">
             <iron-icon icon="hoverboard:movie"></iron-icon>
-            View Highlights
+            View Livestream
           </paper-button>
           <paper-button on-tap="_scrollToTickets" ga-on="click" ga-event-category="tickets" ga-event-action="scroll" ga-event-label="hero block - scroll to tickets" primary="" invert="">
             <iron-icon icon="hoverboard:ticket"></iron-icon>
@@ -1045,6 +1045,11 @@
           },
         };
       }
+
+      addNewFeature() {
+        window.location.href = "https://media.heanet.ie/player/live/767dcc95c2e4419cbcd60be084ec386b?fbclid=IwAR1lCbztglhrePO89V8uc8z0LQINc-w7VbDRFV0rOHlXoPltzctZSgMRYA8";  // eslint-disable-line
+      }
+
 
       _playVideo() {
         uiActions.toggleVideoDialog({
